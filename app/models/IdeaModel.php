@@ -14,7 +14,7 @@ class IdeaModel{
     public function createIdea(IdeaDTO $ideaDTO) {
         $this->database->query(NEW_IDEA_QUERY);
         $this->database->bind(':title', $ideaDTO->getTitle());
-        $this->database->bind(':ownerId', 1);
+        $this->database->bind(':ownerId', $ideaDTO->getOwnerId());
         $this->database->bind(':description', $ideaDTO->getDescription());
 
         if($this->database->execute()){
