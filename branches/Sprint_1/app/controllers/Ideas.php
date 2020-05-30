@@ -48,6 +48,7 @@ class Ideas extends Controller {
             //check if errors are present
             if(empty($data[ERRORS][DESCRIPT_FIELD]) && empty($data[ERRORS][TITLE_FIELD]) && empty($data[ERRORS][CHECKED])){
                 //validated
+                $ideaDTO->setOwnerId($_SESSION['userId']);
                 $idea_id = $this->ideaModel->createIdea($ideaDTO);
                 if($idea_id){
                     foreach($_POST[CATEGORIES] as $category){
