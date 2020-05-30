@@ -1,4 +1,12 @@
 <?php
+define('IDEADTO', 'ideaDTO');
+
+define('ERRORS', 'errors');
+define('CATEGORIES', 'categories');
+define('CHECKED', 'checked');
+
+define('DESCRIPT_FIELD', 'description');
+define('TITLE_FIELD', 'title');
 
 
 class Ideas extends Controller {
