@@ -82,12 +82,25 @@ class Ideas extends Controller {
         }
     }
 
+    public function showIdea($id){
+        $idea=[IDEADTO,CATEGORIES];
+       $idea[IDEADTO] = $this->ideaModel->getIdeaByID($id);
+       if($idea[IDEADTO]) {
+           $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
+
+           $this->view('ideas/showIdea', $idea);
+       }
+       else{
+           $this->view('pages/index', null);
+       }
+
+    }
+
     public function getIdeasByOwnerId(){
-
-
         if(!isLoggedIn()){
             redirect("");
         }
+
         $data = [];
         $dto =[IDEADTO, CATEGORIES];
         $ideas = $this->ideaModel->getIdeasByOwnerId($_SESSION['userId']);
@@ -99,6 +112,6 @@ class Ideas extends Controller {
             array_push($data,$dto);
         }
 
-        $this->view('ideas/MyIdeas', $data);
+        $this->view('ideas/myIdeas', $data);
     }
 }
