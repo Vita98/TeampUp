@@ -81,4 +81,23 @@ class Ideas extends Controller {
             $this->view('ideas/newIdea', $data);
         }
     }
+
+    public function getIdeasByOwnerId($id){
+
+        if(!isLoggedIn()){
+            redirect("");
+        }
+        $data = [];
+        $dto =[IDEADTO, CATEGORIES];
+        $ideas = $this->ideaModel->getIdeasByOwnerId($id);
+        foreach ($ideas as $idea){
+            $dto[IDEADTO] = null;
+            $dto[CATEGORIES] = null;
+            $dto[IDEADTO] = $idea;
+            $dto[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea->getId());
+            array_push($data,$dto);
+        }
+
+        $this->view('ideas/MyIdeas', $data);
+    }
 }

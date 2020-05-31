@@ -1,7 +1,7 @@
 <?php
 
 define("INSERT_CATEGORYIDEA", "INSERT INTO ideacategoryassociation (idea_id, ideaCategoryModel_id) VALUES (:ideaId, :categoryId)");
-
+define("GET_CATEGORYBYIDEA", "SELECT id,description FROM ideacategoryassociation,ideacategory WHERE ideacategoryassociation.ideaCategoryModel_id = ideacategory.id AND idea_id = :ideaId  ");
 class IdeaCategoryModel{
     private $database;
 
@@ -20,6 +20,13 @@ class IdeaCategoryModel{
         $this->database->bind(":categoryId", $ideaCategoryId);
 
         return $this->database->execute();
+    }
+
+    public function getCategoryByIdea($ideaId){
+        $this->database->query(GET_CATEGORYBYIDEA);
+        $this->database->bind(":ideaId", $ideaId);
+
+        return $this->database->classesFromResultSet(IdeaCategoryDTO::class);
     }
 }
 
