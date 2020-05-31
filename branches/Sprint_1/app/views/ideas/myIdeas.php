@@ -19,7 +19,7 @@
                         <label for="firstName" class="display-5 font-weight-bolder">Lista categorie: </label>
 
                         <?php  foreach($dto[CATEGORIES] as $ideaCategory): ?>
-                            <kbd style= "color:darkslategray;" class="alert-info"><label for="description"><?php echo($ideaCategory->getDescription()) ?></label></kbd>
+                            <kbd style= "color:darkslategray;" class="alert-info"><label for="description"><?php echo $ideaCategory->getDescription(); ?></label></kbd>
                         <?php endforeach; ?>
                     </div>
                     <div class="form-group mt-3 text-right">
