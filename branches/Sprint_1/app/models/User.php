@@ -1,5 +1,6 @@
 <?php
 
+define('EMAIL_BIND_TOKEN',':email');
 
     class User {
         protected $database;
@@ -13,7 +14,7 @@
             //Bind values
             $this->database->bind(':firstName', $user->getFirstName());
             $this->database->bind(':lastName', $user->getLastName());
-            $this->database->bind(':email', $user->getEmail());
+            $this->database->bind(EMAIL_BIND_TOKEN, $user->getEmail());
             $this->database->bind(':password', $user->getPsw());
 
             return $this->database->execute();
@@ -23,16 +24,12 @@
         public function findUserByEmail($email): bool{
             $this->database->query('SELECT * FROM user WHERE email = :email');
             // Bind value
-            $this->database->bind(':email', $email);
+            $this->database->bind(EMAIL_BIND_TOKEN, $email);
 
-            $row = $this->database->single();
+            $this->database->single();
 
             // Check row
-            if($this->database->rowCount() > 0){
-                return true;
-            } else {
-                return false;
-            }
+            return ($this->database->rowCount() > 0);
         }
 
         /**
@@ -42,7 +39,7 @@
          */
         public function existUserByEmailAndPswHash(UserDTO $user){
             $this->database->query('SELECT * FROM user WHERE email = :email ');
-            $this->database->bind(':email', $user->getEmail());
+            $this->database->bind(EMAIL_BIND_TOKEN, $user->getEmail());
 
             $existUser = $this->database->classFromSingle(UserDTO::class);
 
@@ -82,7 +79,6 @@
             $this->database->bind(':lastName', $user->getLastName());
             $this->database->bind(':firstName', $user->getFirstName());
             $this->database->bind(':id', $user->getId());
-            //if(!empty($user->getPsw())) $this->database->bind(':psw', $user->getPsw());
 
             return $this->database->execute();
         }

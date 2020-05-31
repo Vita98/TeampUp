@@ -1,5 +1,27 @@
 <?php
 
+define('INDEX_PAGE','pages/index');
+define('LOGIN_PAGE','users/login');
+
+define('FIRST_NAME_KEY','firstName');
+define('LAST_NAME_KEY','lastName');
+define('EMAIL_KEY','email');
+define('CONFIRM_PSW_KEY','confirm_psw');
+define('ERRORS_KEY','errors');
+
+define('USERDTO_KEY','userDTO');
+define('USERID_KEY', "userId");
+define('USER_ABILITIES_KEY','userAbilities');
+define('OLD_PSW_KEY','old_psw');
+define('NEW_PSW_KEY','new_psw');
+
+define('REQUEST_METHOD_KEY','REQUEST_METHOD');
+
+define('ENTER_NAME_ERROR','Inserisci un nome!');
+define('PSW_LENGTH_ERROR','La password deve essere almeno di 6 caratteri');
+define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
+
+
     class Users extends Controller{
         private $userModel;
         private $abilityModel;
@@ -21,75 +43,77 @@
         public function signUp(){
             //Check if the user is logged in
             if(isLoggedIn()){
-                redirect('pages/index');
+                redirect(INDEX_PAGE);
             }
 
             //preparing the error vector
             $errors = [
-                'firstName' => '',
-                'lastName' => '',
-                'email' => '',
+                FIRST_NAME_KEY => '',
+                LAST_NAME_KEY => '',
+                EMAIL_KEY => '',
                 'psw' => '',
-                'confirm_psw' => ''
+                CONFIRM_PSW_KEY => ''
             ];
 
             $newUser = new UserDTO;
 
             //Cheching the post request
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
                 //Sanitize the POST data
                 $_POST = filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
 
                 $foundError = false;
 
                 //Validating the email
-                if(isset($_POST['email']) && !empty($_POST['email'])){
+                if(isset($_POST[EMAIL_KEY]) && !empty($_POST[EMAIL_KEY])){
                     // Check email
-                    if($this->userModel->findUserByEmail($_POST['email'])){
-                        $errors['email'] = 'Email is already taken';
+                    if($this->userModel->findUserByEmail($_POST[EMAIL_KEY])){
+                        $errors[EMAIL_KEY] = 'Email già usata!';
                         $foundError = true;
                     }
-                    $newUser->setEmail($_POST['email']);
+                    $newUser->setEmail($_POST[EMAIL_KEY]);
                 } else{
-                    $errors['email'] = 'Pleae enter email';
+                    $errors[EMAIL_KEY] = 'Inserisci una email!';
                     $foundError = true;
                 }
 
                 // Validate lastName
-                if(isset($_POST['lastName']) && !empty($_POST['lastName'])){
-                    $newUser->setLastName($_POST['lastName']);
+                if(isset($_POST[LAST_NAME_KEY]) && !empty($_POST[LAST_NAME_KEY])){
+                    $newUser->setLastName($_POST[LAST_NAME_KEY]);
                 } else {
-                    $errors['lastName'] = 'Pleae enter name';
+                    $errors[LAST_NAME_KEY] = ENTER_NAME_ERROR;
                     $foundError = true;
                 }
 
                 // Validate firstName
-                if(isset($_POST['firstName']) && !empty($_POST['firstName'])){
-                    $newUser->setFirstName($_POST['firstName']);
+                if(isset($_POST[FIRST_NAME_KEY]) && !empty($_POST[FIRST_NAME_KEY])){
+                    $newUser->setFirstName($_POST[FIRST_NAME_KEY]);
                 } else {
-                    $errors['firstName'] = 'Pleae enter name';
+                    $errors[FIRST_NAME_KEY] = ENTER_NAME_ERROR;
                     $foundError = true;
                 }
 
                 // Validate Password
                 if(isset($_POST['psw']) && !empty($_POST['psw'])){
                     if(strlen($_POST['psw']) < 6){
-                        $errors['psw'] = 'Password must be at least 6 characters';
+                        $errors['psw'] = PSW_LENGTH_ERROR;
                         $foundError = true;
-                    } else $newUser->setPsw($_POST['psw']);
+                    } else {
+                        $newUser->setPsw($_POST['psw']);
+                    }
                 } else {
-                    $errors['psw'] = 'Pleae enter password';
+                    $errors['psw'] = 'Inserisci una password!';
                     $foundError = true;
                 }
 
                 // Validate Confirm Password
                 if(isset($_POST['psw']) && !empty($_POST['psw'])){
-                    if($_POST['psw'] != $_POST['confirm_psw']) {
-                        $errors['confirm_psw'] = 'Passwords do not match';
+                    if($_POST['psw'] != $_POST[CONFIRM_PSW_KEY]) {
+                        $errors[CONFIRM_PSW_KEY] = PSW_NOT_THE_SAME_ERROR;
                         $foundError = true;
                     }
                 } else {
-                    $errors['confirm_psw'] = 'Pleae confirm password';
+                    $errors[CONFIRM_PSW_KEY] = 'Conferma la password!';
                     $foundError = true;
                 }
 
@@ -101,16 +125,18 @@
 
                     //Inserting the user into the database
                     if($this->userModel->createUser($newUser)){
-                        flash('register_success', 'You are registered and can log in');
-                        redirect('users/login');
-                    } else die("Something wenting wrong!");
+                        flash('register_success', 'Sei registrato e ora ti puoi loggare!');
+                        redirect(LOGIN_PAGE);
+                    } else {
+                        die("Qualcosa è andato storto!");
+                    }
                 }else{
                     //I'm here becouse i've found some errors
                     //Loading the view with the errors
-                    $this->view('users/signUp',["errors" => $errors, "userDTO" => $newUser]);
+                    $this->view('users/signUp',[ERRORS_KEY => $errors, USERDTO_KEY => $newUser]);
                 }
             } else {
-                $this->view('users/signUp',["errors" => $errors, "userDTO" => $newUser]);
+                $this->view('users/signUp',[ERRORS_KEY => $errors, USERDTO_KEY => $newUser]);
             }
         }
 
@@ -118,34 +144,43 @@
         public function login(){
             //Check if the user is logged in
             if(isLoggedIn()){
-                redirect('pages/index');
+                redirect(INDEX_PAGE);
             }
 
             //preparing the error vector
             $errors = [
-                'email' => '',
+                EMAIL_KEY => '',
                 'psw' => '',
             ];
 
             $newUser = new UserDTO;
 
             //Cheching the post request
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if($_SERVER[REQUEST_METHOD_KEY] == 'POST') {
                 //Sanitize the POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
                 // Validate Email
-                if(empty($_POST['email']))  $errors['email'] = 'Pleae enter email';
-                else $newUser->setEmail($_POST['email']);
+                if(empty($_POST[EMAIL_KEY])) {
+                    $errors[EMAIL_KEY] = 'Inserisci una email!';
+                } else {
+                    $newUser->setEmail($_POST[EMAIL_KEY]);
+                }
 
                 // Validate Password
-                if(empty($_POST['psw'])) $errors['psw'] = 'Please enter password';
-                else $newUser->setPsw($_POST['psw']);
+                if(empty($_POST['psw'])) {
+                    $errors['psw'] = 'Inserisci una password!';
+                }
+                else {
+                    $newUser->setPsw($_POST['psw']);
+                }
 
                 //Check for user/email
-                if(!$this->userModel->findUserByEmail($_POST['email'])) $errors['email'] = 'No user found';
+                if(!$this->userModel->findUserByEmail($_POST[EMAIL_KEY])) {
+                    $errors[EMAIL_KEY] = 'Utente non trovato!';
+                }
 
-                if(empty($errors['email']) && empty($errors['psw'])){
+                if(empty($errors[EMAIL_KEY]) && empty($errors['psw'])){
                     $loggedInUser = $this->userModel->existUserByEmailAndPswHash($newUser);
 
                     if($loggedInUser){
@@ -153,14 +188,14 @@
                         $this->createUserSession($loggedInUser);
                         redirect('');
                     } else {
-                        $errors['psw'] = 'Password incorrect';
-                        $this->view('users/login', ["errors" => $errors, "userDTO" => $newUser]);
+                        $errors['psw'] = 'Password non corretta';
+                        $this->view(LOGIN_PAGE, [ERRORS_KEY => $errors, USERDTO_KEY => $newUser]);
                     }
                 }else{
-                    $this->view('users/login',["errors" => $errors, "userDTO" => $newUser]);
+                    $this->view(LOGIN_PAGE,[ERRORS_KEY => $errors, USERDTO_KEY => $newUser]);
                 }
             }else{
-                $this->view('users/login',["errors" => $errors, "userDTO" => $newUser]);
+                $this->view(LOGIN_PAGE,[ERRORS_KEY => $errors, USERDTO_KEY => $newUser]);
             }
         }
 
@@ -169,7 +204,7 @@
          * @param UserDTO $user the logged in user instance
          */
         public function createUserSession(UserDTO $user){
-            $_SESSION['userId'] = $user->getId();
+            $_SESSION[USERID_KEY] = $user->getId();
             $_SESSION['userEmail'] = $user->getEmail();
             $_SESSION['userFirstName'] = $user->getFirstName();
         }
@@ -178,11 +213,11 @@
          * Function used to unset all the session variable for the logout
          */
         public function logout(){
-            unset($_SESSION['userId']);
+            unset($_SESSION[USERID_KEY]);
             unset($_SESSION['userEmail']);
             unset($_SESSION['userFirstName']);
             session_destroy();
-            redirect('pages/index');
+            redirect(INDEX_PAGE);
         }
 
         /**
@@ -190,14 +225,14 @@
          */
         public function myProfile(){
             if(!isLoggedIn()){
-                redirect('pages/index');
+                redirect(INDEX_PAGE);
             }
 
             //Getting all the user information
-            $user = $this->userModel->getUserById($_SESSION['userId']);
-            $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION['userId']);
+            $user = $this->userModel->getUserById($_SESSION[USERID_KEY]);
+            $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION[USERID_KEY]);
 
-            $this->view('users/myProfile',["userDTO" => $user, "userAbilities" => ((count($userAbilities) != 0) ? $userAbilities : null) ]);
+            $this->view('users/myProfile',[USERDTO_KEY => $user, USER_ABILITIES_KEY => ((count($userAbilities) != 0) ? $userAbilities : null) ]);
         }
 
         /**
@@ -205,93 +240,94 @@
          */
         public function editMyProfile(){
             if(!isLoggedIn()){
-                redirect('pages/index');
+                redirect(INDEX_PAGE);
             }
 
             //preparing the error vector
             $errors = [
-                'firstName' => '',
-                'lastName' => '',
-                'old_psw' => '',
-                'new_psw' => '',
-                'confirm_psw' => ''
+                FIRST_NAME_KEY => '',
+                LAST_NAME_KEY => '',
+                OLD_PSW_KEY => '',
+                NEW_PSW_KEY => '',
+                CONFIRM_PSW_KEY => ''
             ];
 
             //Getting all the user information
-            $user = $this->userModel->getUserById($_SESSION['userId']);
-            $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION['userId']);
+            $user = $this->userModel->getUserById($_SESSION[USERID_KEY]);
+            $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION[USERID_KEY]);
             $allAbilities = $this->abilityModel->getAllAbilities();
 
             //Cheching the post request
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if($_SERVER[REQUEST_METHOD_KEY] == 'POST') {
                 //Sanitize the POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
                 $foundError = false;
 
                 // Validate lastName
-                if(isset($_POST['lastName']) && !empty($_POST['lastName'])){
-                    $user->setLastName($_POST['lastName']);
+                if(isset($_POST[LAST_NAME_KEY]) && !empty($_POST[LAST_NAME_KEY])){
+                    $user->setLastName($_POST[LAST_NAME_KEY]);
                 } else {
-                    $errors['lastName'] = 'Pleae enter name';
+                    $errors[LAST_NAME_KEY] = ENTER_NAME_ERROR;
                     $foundError = true;
                 }
 
                 // Validate firstName
-                if(isset($_POST['firstName']) && !empty($_POST['firstName'])){
-                    $user->setFirstName($_POST['firstName']);
+                if(isset($_POST[FIRST_NAME_KEY]) && !empty($_POST[FIRST_NAME_KEY])){
+                    $user->setFirstName($_POST[FIRST_NAME_KEY]);
                 } else {
-                    $errors['firstName'] = 'Pleae enter name';
+                    $errors[FIRST_NAME_KEY] = ENTER_NAME_ERROR;
                     $foundError = true;
                 }
 
                 $oldPsw = false;
-                $newPsw = false;
 
                 //Validate old_psw
-                if(isset($_POST['old_psw']) && !empty($_POST['old_psw'])){
-                    if(strlen($_POST['old_psw']) < 6){
-                        $errors['old_psw'] = 'Password must be at least 6 characters';
+                if(isset($_POST[OLD_PSW_KEY]) && !empty($_POST[OLD_PSW_KEY])){
+                    if(strlen($_POST[OLD_PSW_KEY]) < 6){
+                        $errors[OLD_PSW_KEY] = PSW_LENGTH_ERROR;
                         $foundError = true;
                     } else {
-                        $user->setPsw($_POST['old_psw']);
+                        $user->setPsw($_POST[OLD_PSW_KEY]);
                         if (!$this->userModel->existUserByEmailAndPswHash($user)){
                             //The password is not correct
-                            $errors['old_psw'] = "Password do not match!";
+                            $errors[OLD_PSW_KEY] = PSW_NOT_THE_SAME_ERROR;
                             $foundError = true;
-                        }else $oldPsw = true;
+                        }else {
+                            $oldPsw = true;
+                        }
                     }
                 }
 
                 if ($oldPsw){
                     //Validate new_psw
-                    if(isset($_POST['new_psw']) && !empty($_POST['new_psw'])){
-                        if(strlen($_POST['new_psw']) < 6){
-                            $errors['new_psw'] = 'Password must be at least 6 characters';
+                    if(isset($_POST[NEW_PSW_KEY]) && !empty($_POST[NEW_PSW_KEY])){
+                        if(strlen($_POST[NEW_PSW_KEY]) < 6){
+                            $errors[NEW_PSW_KEY] = PSW_LENGTH_ERROR;
                             $foundError = true;
                         } else {
-                            $user->setPsw($_POST['new_psw']);
+                            $user->setPsw($_POST[NEW_PSW_KEY]);
                         }
                     }else{
-                        $errors['new_psw'] = 'You must insert a new password!';
+                        $errors[NEW_PSW_KEY] = 'Devi inserire una password!';
                         $foundError = true;
                     }
 
                     //Validate confirm_psw
-                    if(isset($_POST['confirm_psw']) && !empty($_POST['confirm_psw'])){
-                        if(strlen($_POST['confirm_psw']) < 6){
-                            $errors['confirm_psw'] = 'Password must be at least 6 characters';
+                    if(isset($_POST[CONFIRM_PSW_KEY]) && !empty($_POST[CONFIRM_PSW_KEY])){
+                        if(strlen($_POST[CONFIRM_PSW_KEY]) < 6){
+                            $errors[CONFIRM_PSW_KEY] = PSW_LENGTH_ERROR;
                             $foundError = true;
                         } else {
-                            if($_POST['new_psw'] != $_POST['confirm_psw']){
-                                $errors['confirm_psw'] = "Passwords do not match!";
+                            if($_POST[NEW_PSW_KEY] != $_POST[CONFIRM_PSW_KEY]){
+                                $errors[CONFIRM_PSW_KEY] = PSW_NOT_THE_SAME_ERROR;
                                 $foundError = true;
                             }else{
-                                $user->setPsw($_POST['new_psw']);
+                                $user->setPsw($_POST[NEW_PSW_KEY]);
                             }
                         }
                     }else{
-                        $errors['confirm_psw'] = 'You must insert the confirm password!';
+                        $errors[CONFIRM_PSW_KEY] = 'Devi inserire la password di conferma!';
                         $foundError = true;
                     }
                 }
@@ -302,7 +338,9 @@
                     if (!empty($user->getPsw())){
                         //Hashing the psw
                         $user->setPsw(password_hash($user->getPsw(),PASSWORD_BCRYPT));
-                    }else $user->setPsw('');
+                    }else {
+                        $user->setPsw('');
+                    }
 
                     //Executing the query to change the user info
                     $this->userModel->editUser($user);
@@ -320,12 +358,12 @@
                     redirect('users/myProfile');
 
                 }else{
-                    $this->view('users/editMyProfile',["errors" => $errors, "userDTO" => $user,"allAbilities" => $allAbilities, "userAbilities" => $userAbilities]);
+                    $this->view('users/editMyProfile',[ERRORS_KEY => $errors, USERDTO_KEY => $user,"allAbilities" => $allAbilities, USER_ABILITIES_KEY => $userAbilities]);
                 }
 
 
             }else{
-                $this->view('users/editMyProfile',["errors" => $errors, "userDTO" => $user,"allAbilities" => $allAbilities, "userAbilities" => $userAbilities]);
+                $this->view('users/editMyProfile',[ERRORS_KEY => $errors, USERDTO_KEY => $user,"allAbilities" => $allAbilities, USER_ABILITIES_KEY => $userAbilities]);
             }
         }
     }

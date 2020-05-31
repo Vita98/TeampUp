@@ -1,5 +1,6 @@
 <?php
 
+define('USERID_BIND_TOKEN',':userId');
 
 class Ability {
     protected $database;
@@ -10,7 +11,7 @@ class Ability {
 
     public function getAbilitiesByUserId($userId){
         $this->database->query('SELECT ability.id, ability.description FROM ability, userAbilities WHERE ability.id=userAbilities.abilityId AND userId = :userId ');
-        $this->database->bind(':userId', $userId);
+        $this->database->bind(USERID_BIND_TOKEN, $userId);
 
         return $this->database->classesFromResultSet(AbilityDTO::class);
     }
@@ -22,14 +23,14 @@ class Ability {
 
     public function dropAllAlibitiesByUserId($userId){
         $this->database->query('DELETE FROM userAbilities WHERE userId = :userId');
-        $this->database->bind(':userId', $userId);
+        $this->database->bind(USERID_BIND_TOKEN, $userId);
 
         return $this->database->execute();
     }
 
     public function addAbilityToUser($abilityId,$userId){
         $this->database->query('INSERT INTO userAbilities (userId,abilityId) VALUES (:userId, :abilityId)');
-        $this->database->bind(':userId', $userId);
+        $this->database->bind(USERID_BIND_TOKEN, $userId);
         $this->database->bind(':abilityId', $abilityId);
 
         return $this->database->execute();
