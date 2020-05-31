@@ -5,7 +5,6 @@
             <div class="container text-center p-3">
                 <label class="display-4 ">Modifica Profilo</label>
             </div>
-            <?php flash('profile_edit_success'); ?>
 
             <form action="<?php echo URLROOT; ?>/users/editMyProfile" method="post">
                 <div class="form-group">
