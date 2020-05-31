@@ -67,6 +67,26 @@
             $user->setPsw("");
             return $user;
         }
+
+        /**
+         *
+         */
+        public function editUser(UserDTO $user){
+            if (!empty($user->getPsw())){
+                $this->database->query('UPDATE user SET firstName=:firstName, lastName=:lastName, psw=:psw WHERE id = :id ');
+                $this->database->bind(':psw', $user->getPsw());
+            }else{
+                $this->database->query('UPDATE user SET firstName=:firstName, lastName=:lastName WHERE id = :id ');
+            }
+
+            $this->database->bind(':lastName', $user->getLastName());
+            $this->database->bind(':firstName', $user->getFirstName());
+            $this->database->bind(':id', $user->getId());
+            //if(!empty($user->getPsw())) $this->database->bind(':psw', $user->getPsw());
+
+            return $this->database->execute();
+        }
+
     }
 
     class UserDTO {

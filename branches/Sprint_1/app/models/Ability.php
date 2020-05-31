@@ -15,6 +15,26 @@ class Ability {
         return $this->database->classesFromResultSet(AbilityDTO::class);
     }
 
+    public function getAllAbilities(){
+        $this->database->query('SELECT * FROM ability');
+        return $this->database->classesFromResultSet(AbilityDTO::class);
+    }
+
+    public function dropAllAlibitiesByUserId($userId){
+        $this->database->query('DELETE FROM userAbilities WHERE userId = :userId');
+        $this->database->bind(':userId', $userId);
+
+        return $this->database->execute();
+    }
+
+    public function addAbilityToUser($abilityId,$userId){
+        $this->database->query('INSERT INTO userAbilities (userId,abilityId) VALUES (:userId, :abilityId)');
+        $this->database->bind(':userId', $userId);
+        $this->database->bind(':abilityId', $abilityId);
+
+        return $this->database->execute();
+    }
+
 }
 
 class AbilityDTO {
