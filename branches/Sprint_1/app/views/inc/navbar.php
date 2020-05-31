@@ -22,7 +22,7 @@
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Idee</a>
                       <div class="dropdown-menu">
-                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByOwnerId/<?php echo $_SESSION['userId']; ?>">Mie idee</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByOwnerId">Mie idee</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/newIdea">Nuova Idea</a>
                       </div>
                   </li>

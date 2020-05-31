@@ -82,14 +82,15 @@ class Ideas extends Controller {
         }
     }
 
-    public function getIdeasByOwnerId($id){
+    public function getIdeasByOwnerId(){
+
 
         if(!isLoggedIn()){
             redirect("");
         }
         $data = [];
         $dto =[IDEADTO, CATEGORIES];
-        $ideas = $this->ideaModel->getIdeasByOwnerId($id);
+        $ideas = $this->ideaModel->getIdeasByOwnerId($_SESSION['userId']);
         foreach ($ideas as $idea){
             $dto[IDEADTO] = null;
             $dto[CATEGORIES] = null;
