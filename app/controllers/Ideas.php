@@ -7,6 +7,7 @@ define('CHECKED', 'checked');
 
 define('DESCRIPT_FIELD', 'description');
 define('TITLE_FIELD', 'title');
+define('USER_ID_KEY', 'userId');
 
 
 class Ideas extends Controller {
@@ -31,7 +32,7 @@ class Ideas extends Controller {
             $data[ERRORS] = [TITLE_FIELD => "", DESCRIPT_FIELD => "", CHECKED => ""];
             $ideaDTO->setTitle(trim($_POST[TITLE_FIELD]));
             $ideaDTO->setDescription(trim($_POST[DESCRIPT_FIELD]));
-            $ideaDTO->setOwnerId($_SESSION['userId']);
+            $ideaDTO->setOwnerId($_SESSION[USER_ID_KEY]);
             $data[IDEADTO] = $ideaDTO;
             //validate title
             if(empty($ideaDTO->getTitle())){
@@ -48,7 +49,7 @@ class Ideas extends Controller {
             //check if errors are present
             if(empty($data[ERRORS][DESCRIPT_FIELD]) && empty($data[ERRORS][TITLE_FIELD]) && empty($data[ERRORS][CHECKED])){
                 //validated
-                $ideaDTO->setOwnerId($_SESSION['userId']);
+                $ideaDTO->setOwnerId($_SESSION[USER_ID_KEY]);
                 $idea_id = $this->ideaModel->createIdea($ideaDTO);
                 if($idea_id){
                     foreach($_POST[CATEGORIES] as $category){
@@ -103,7 +104,7 @@ class Ideas extends Controller {
 
         $data = [];
         $dto =[IDEADTO, CATEGORIES];
-        $ideas = $this->ideaModel->getIdeasByOwnerId($_SESSION['userId']);
+        $ideas = $this->ideaModel->getIdeasByOwnerId($_SESSION[USER_ID_KEY]);
         foreach ($ideas as $idea){
             $dto[IDEADTO] = null;
             $dto[CATEGORIES] = null;
