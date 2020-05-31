@@ -2,7 +2,7 @@
 
 define('NEW_IDEA_QUERY', "INSERT INTO idea (title, ownerId, description) " .
     "VALUES (:title, :ownerId, :description)");
-define('FIND_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
+define('GET_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
 define('GET_IDEA_BY_OWNER_ID_QUERY', "SELECT * FROM idea WHERE ownerId = :ownerId");
 
 class IdeaModel{
@@ -24,8 +24,8 @@ class IdeaModel{
         return false;
     }
 
-    public function findIdeaByID($id){
-        $this->database->query(FIND_IDEA_BY_ID_QUERY);
+    public function getIdeaByID($id){
+        $this->database->query(GET_IDEA_BY_ID_QUERY);
         $this->database->bind(":id", $id);
         return $this->database->classFromSingle(IdeaDTO::class);
     }

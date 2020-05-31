@@ -23,7 +23,7 @@
                         <?php endforeach; ?>
                     </div>
                     <div class="form-group mt-3 text-right">
-                        <a href="<?php echo URLROOT; ?>/ideas/show/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Visualizza</a>
+                        <a href="<?php echo URLROOT; ?>/ideas/showIdea/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>
