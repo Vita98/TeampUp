@@ -6,6 +6,8 @@
                 <label class="display-4 ">Il Mio Profilo</label>
             </div>
 
+            <?php flash('profile_edit_success'); ?>
+
             <div class="form-group mt-3">
                 <label for="firstName" class="display-5 font-weight-bolder">Nome: </label>
                 <label for="firstName"><?php if (isset($data['userDTO'])) echo ($data['userDTO']->getFirstName());?></label>

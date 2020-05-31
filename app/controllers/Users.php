@@ -151,6 +151,7 @@
                     if($loggedInUser){
                         //Create the session
                         $this->createUserSession($loggedInUser);
+                        redirect('');
                     } else {
                         $errors['psw'] = 'Password incorrect';
                         $this->view('users/login', ["errors" => $errors, "userDTO" => $newUser]);
@@ -171,8 +172,6 @@
             $_SESSION['userId'] = $user->getId();
             $_SESSION['userEmail'] = $user->getEmail();
             $_SESSION['userFirstName'] = $user->getFirstName();
-
-            redirect('');
         }
 
         /**
@@ -314,8 +313,11 @@
                         $this->abilityModel->addAbilityToUser($ability,$user->getId());
                     }
 
+                    //updating the session
+                    $this->createUserSession($user);
+
                     flash('profile_edit_success', 'Modifiche apportate con successo!');
-                    redirect('users/editMyProfile');
+                    redirect('users/myProfile');
 
                 }else{
                     $this->view('users/editMyProfile',["errors" => $errors, "userDTO" => $user,"allAbilities" => $allAbilities, "userAbilities" => $userAbilities]);
