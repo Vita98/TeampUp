@@ -97,7 +97,7 @@
                 if(!$foundError){
 
                     //Hashing the psw
-                    $newUser->setPsw(password_hash($newUser->getPsw(),PASSWORD_DEFAULT));
+                    $newUser->setPsw(password_hash($newUser->getPsw(),PASSWORD_BCRYPT));
 
                     //Inserting the user into the database
                     if($this->userModel->createUser($newUser)){
@@ -199,6 +199,132 @@
             $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION['userId']);
 
             $this->view('users/myProfile',["userDTO" => $user, "userAbilities" => ((count($userAbilities) != 0) ? $userAbilities : null) ]);
+        }
+
+        /**
+         *
+         */
+        public function editMyProfile(){
+            if(!isLoggedIn()){
+                redirect('pages/index');
+            }
+
+            //preparing the error vector
+            $errors = [
+                'firstName' => '',
+                'lastName' => '',
+                'old_psw' => '',
+                'new_psw' => '',
+                'confirm_psw' => ''
+            ];
+
+            //Getting all the user information
+            $user = $this->userModel->getUserById($_SESSION['userId']);
+            $userAbilities = $this->abilityModel->getAbilitiesByUserId($_SESSION['userId']);
+            $allAbilities = $this->abilityModel->getAllAbilities();
+
+            //Cheching the post request
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Sanitize the POST data
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+                $foundError = false;
+
+                // Validate lastName
+                if(isset($_POST['lastName']) && !empty($_POST['lastName'])){
+                    $user->setLastName($_POST['lastName']);
+                } else {
+                    $errors['lastName'] = 'Pleae enter name';
+                    $foundError = true;
+                }
+
+                // Validate firstName
+                if(isset($_POST['firstName']) && !empty($_POST['firstName'])){
+                    $user->setFirstName($_POST['firstName']);
+                } else {
+                    $errors['firstName'] = 'Pleae enter name';
+                    $foundError = true;
+                }
+
+                $oldPsw = false;
+                $newPsw = false;
+
+                //Validate old_psw
+                if(isset($_POST['old_psw']) && !empty($_POST['old_psw'])){
+                    if(strlen($_POST['old_psw']) < 6){
+                        $errors['old_psw'] = 'Password must be at least 6 characters';
+                        $foundError = true;
+                    } else {
+                        $user->setPsw($_POST['old_psw']);
+                        if (!$this->userModel->existUserByEmailAndPswHash($user)){
+                            //The password is not correct
+                            $errors['old_psw'] = "Password do not match!";
+                            $foundError = true;
+                        }else $oldPsw = true;
+                    }
+                }
+
+                if ($oldPsw){
+                    //Validate new_psw
+                    if(isset($_POST['new_psw']) && !empty($_POST['new_psw'])){
+                        if(strlen($_POST['new_psw']) < 6){
+                            $errors['new_psw'] = 'Password must be at least 6 characters';
+                            $foundError = true;
+                        } else {
+                            $user->setPsw($_POST['new_psw']);
+                        }
+                    }else{
+                        $errors['new_psw'] = 'You must insert a new password!';
+                        $foundError = true;
+                    }
+
+                    //Validate confirm_psw
+                    if(isset($_POST['confirm_psw']) && !empty($_POST['confirm_psw'])){
+                        if(strlen($_POST['confirm_psw']) < 6){
+                            $errors['confirm_psw'] = 'Password must be at least 6 characters';
+                            $foundError = true;
+                        } else {
+                            if($_POST['new_psw'] != $_POST['confirm_psw']){
+                                $errors['confirm_psw'] = "Passwords do not match!";
+                                $foundError = true;
+                            }else{
+                                $user->setPsw($_POST['new_psw']);
+                            }
+                        }
+                    }else{
+                        $errors['confirm_psw'] = 'You must insert the confirm password!';
+                        $foundError = true;
+                    }
+                }
+
+                if (!$foundError){
+                    //Executing the query to send the data
+                    //The selected Abilities are inside the $_POST['abilities'] with the id
+                    if (!empty($user->getPsw())){
+                        //Hashing the psw
+                        $user->setPsw(password_hash($user->getPsw(),PASSWORD_BCRYPT));
+                    }else $user->setPsw('');
+
+                    //Executing the query to change the user info
+                    $this->userModel->editUser($user);
+
+                    //executing the query to change the abilities
+                    $this->abilityModel->dropAllAlibitiesByUserId($user->getId());
+                    foreach ($_POST['abilities'] as $ability){
+                        $this->abilityModel->addAbilityToUser($ability,$user->getId());
+                    }
+
+                    flash('profile_edit_success', 'Modifiche apportate con successo!');
+                    redirect('users/editMyProfile');
+
+                }else{
+                    $this->view('users/editMyProfile',["errors" => $errors, "userDTO" => $user,"allAbilities" => $allAbilities, "userAbilities" => $userAbilities]);
+                }
+
+
+            }else{
+                $this->view('users/editMyProfile',["errors" => $errors, "userDTO" => $user,"allAbilities" => $allAbilities, "userAbilities" => $userAbilities]);
+            }
         }
     }
 

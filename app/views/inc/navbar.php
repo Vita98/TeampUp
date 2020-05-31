@@ -16,7 +16,7 @@
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Profilo</a>
                       <div class="dropdown-menu">
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/myProfile">Visualizza Profilo</a>
-                          <a class="dropdown-item" href="#">Modifica Profilo</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/editMyProfile">Modifica Profilo</a>
                       </div>
                   </li>
                   <li class="nav-item dropdown">

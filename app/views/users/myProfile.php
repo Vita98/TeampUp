@@ -3,7 +3,7 @@
     <div class="row">
         <div class="container bg-light rounded mt-5 col-md-10">
             <div class="container text-center">
-                <label class="display-3 ">Il Mio Profilo</label>
+                <label class="display-4 ">Il Mio Profilo</label>
             </div>
 
             <div class="form-group mt-3">
@@ -25,7 +25,7 @@
                     <kbd><label for="description"><?php echo($userAbility->getDescription()) ?></label></kbd>
                 <?php endforeach; ?>
                 <?php else : ?>
-                    <label>L'utente non ha abilità associate!</label>
+                    <label>Non hai associato nessuna abilità!</label>
                 <?php endif; ?>
 
             </div>
