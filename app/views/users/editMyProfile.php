@@ -5,11 +5,11 @@ define('IS_INVALID_CLASS',"is-invalid");
 ?>
 
     <div class="row">
-        <div class="container bg-light rounded mt-3 col-md-10">
-            <div class="container text-center p-3">
-                <label class="display-4 ">Modifica Profilo</label>
-            </div>
-
+        <div class="container text-center ">
+            <label class="display-4 ">Modifica Profilo</label>
+            <p>In questa sezione è possibile modificare i dati del profilo</p>
+        </div>
+        <div class="container bg-light border rounded mt-3 col-md-10 p-5">
             <form action="<?php echo URLROOT; ?>/users/editMyProfile" method="post">
                 <div class="form-group">
                     <div class="row">
@@ -96,7 +96,7 @@ define('IS_INVALID_CLASS',"is-invalid");
                 </div>
 
                 <div class="row">
-                    <div class="col p-5">
+                    <div class="col mt-5">
                         <input type="submit" value="Modifica" class="btn btn-success btn-block">
                     </div>
                 </div>
