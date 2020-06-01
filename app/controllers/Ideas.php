@@ -1,5 +1,6 @@
 <?php
 define('IDEADTO', 'ideaDTO');
+define('USERDTO', 'UserDTO');
 
 define('ERRORS', 'errors');
 define('CATEGORIES', 'categories');
@@ -16,10 +17,12 @@ define('IDEA_EDIT_NEW_VIEW', 'ideas/newIdea');
 class Ideas extends Controller {
     private $ideaModel;
     private $categoryModel;
+    private $userModel;
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->categoryModel = $this->model(IdeaCategoryModel::class);
+        $this->userModel = $this->model(User::class);
     }
 
     public function newIdea(){
@@ -57,16 +60,17 @@ class Ideas extends Controller {
     }
 
     public function showIdea($id){
-        $idea=[IDEADTO,CATEGORIES];
-        $idea[IDEADTO] = $this->ideaModel->getIdeaByID($id);
-        if($idea[IDEADTO]) {
-            $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
+        $idea=[IDEADTO,CATEGORIES,USERDTO];
+       $idea[IDEADTO] = $this->ideaModel->getIdeaByID($id);
 
-            $this->view('ideas/showIdea', $idea);
-        }
-        else{
-            $this->view('pages/index', null);
-        }
+       if($idea[IDEADTO]) {
+           $idea[USERDTO] = $this->userModel->getUserById($idea[IDEADTO]->getOwnerId());
+           $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
+           $this->view('ideas/showIdea', $idea);
+       }
+       else{
+           $this->view('pages/index', null);
+       }
 
     }
 

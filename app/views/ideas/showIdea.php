@@ -34,7 +34,8 @@
                     <?php endforeach; ?>
                 </div>
                 <div class="col-md-3 mt-10 text-right">
-                    <label for="creationDate">Creato il <br> <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), 'd/m/Y H:i:s'); ?></strong> </label>
+                    <label>Creato da <br><strong><?php echo $data[USERDTO]->getFirstName()." ".$data[USERDTO]->getLastName() ?> </strong> </label>
+                    <label for="creationDate">il <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), 'd/m/Y H:i:s'); ?></strong> </label>
                 </div>
             </div>
             <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>

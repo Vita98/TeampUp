@@ -18,6 +18,7 @@ define('NEW_PSW_KEY','new_psw');
 define('REQUEST_METHOD_KEY','REQUEST_METHOD');
 
 define('ENTER_NAME_ERROR','Inserisci un nome!');
+define('ENTER_SURNAME_ERROR', 'Inserisci un cognome!');
 define('PSW_LENGTH_ERROR','La password deve essere almeno di 6 caratteri');
 define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
 
@@ -268,7 +269,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
                 if(isset($_POST[LAST_NAME_KEY]) && !empty($_POST[LAST_NAME_KEY])){
                     $user->setLastName($_POST[LAST_NAME_KEY]);
                 } else {
-                    $errors[LAST_NAME_KEY] = ENTER_NAME_ERROR;
+                    $errors[LAST_NAME_KEY] = ENTER_SURNAME_ERROR;
                     $foundError = true;
                 }
 
