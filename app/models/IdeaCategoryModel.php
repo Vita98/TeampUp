@@ -1,7 +1,9 @@
 <?php
-
+define("IDEA_ID_PARAM", ":ideaId");
 define("INSERT_CATEGORYIDEA", "INSERT INTO ideacategoryassociation (idea_id, ideaCategoryModel_id) VALUES (:ideaId, :categoryId)");
 define("GET_CATEGORYBYIDEA", "SELECT id,description FROM ideacategoryassociation,ideacategory WHERE ideacategoryassociation.ideaCategoryModel_id = ideacategory.id AND idea_id = :ideaId  ");
+define("DELETE_CATEGORIES_BY_IDEA", "DELETE FROM ideacategoryassociation WHERE idea_id = :ideaId");
+
 class IdeaCategoryModel{
     private $database;
 
@@ -16,7 +18,7 @@ class IdeaCategoryModel{
 
     public function assCategoryIdea($ideaId, $ideaCategoryId){
         $this->database->query(INSERT_CATEGORYIDEA);
-        $this->database->bind(":ideaId", $ideaId);
+        $this->database->bind(IDEA_ID_PARAM, $ideaId);
         $this->database->bind(":categoryId", $ideaCategoryId);
 
         return $this->database->execute();
@@ -24,9 +26,15 @@ class IdeaCategoryModel{
 
     public function getCategoryByIdea($ideaId){
         $this->database->query(GET_CATEGORYBYIDEA);
-        $this->database->bind(":ideaId", $ideaId);
+        $this->database->bind(IDEA_ID_PARAM, $ideaId);
 
         return $this->database->classesFromResultSet(IdeaCategoryDTO::class);
+    }
+
+    public function deleteByIdeaId($ideaId){
+        $this->database->query(DELETE_CATEGORIES_BY_IDEA);
+        $this->database->bind(IDEA_ID_PARAM, $ideaId);
+        return $this->database->execute();
     }
 }
 

@@ -1,24 +1,35 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-
-    <a href="<?php echo URLROOT; ?>/pages/index" class="btn btn-light"><em class="fa fa-backward"></em> Back</a>
-    <div class="card card-body bg-light mt-5">
-        <h2>Nuova idea</h2>
+    <?php $editMode = isset($data[EDITMODE]) && $data[EDITMODE]; ?>
+    <?php if($editMode): ?>
+    <div class="container text-center">
+        <label class="display-3">Modifica idea</label>
+    </div>
+    <?php else : ?>
+    <div class="container text-center">
+        <label class="display-3">Nuova idea</label>
         <p>Compila il form per aggiungere una nuova idea</p>
-        <form action="<?php echo URLROOT; ?>/ideas/newIdea" method="post">
+    </div>
+    <?php endif ?>
+
+    <div class="card card-body bg-light mt-5">
+        <?php if($editMode): ?>
+        <form action="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId() ?>" method="post">
+        <?php else: ?>
+            <form action="<?php echo URLROOT; ?>/ideas/newIdea" method="post">
+        <?php endif ?>
             <div class="form-group">
-                <label for="title">Titolo</label>
+                <strong><label for="title">Titolo*</label></strong>
                 <input type="text" placeholder = "Inserisci un titolo" name="title" class="form-control form-control-lg
-                <?php echo (!empty($data[ERRORS][TITLE_FIELD])) ? 'is-invalid' : ''; ?>"
-                       value="<?php echo $data[IDEADTO]->getTitle(); ?>">
+                <?php echo (!empty($data[ERRORS][TITLE_FIELD])) ? 'is-invalid' : ''; ?>" value="<?php echo $data[IDEADTO]->getTitle(); ?>"/>
                 <span class="invalid-feedback"><?php echo $data[ERRORS][TITLE_FIELD]; ?></span>
             </div>
             <div class="form-group">
-                <label for="description">Descrizione</label>
+                <strong><label for="description">Descrizione*</label></strong>
                 <textarea name="description" placeholder = "Inserisci una descrizione" class="form-control form-control-lg
                 <?php echo (!empty($data[ERRORS][DESCRIPT_FIELD])) ? 'is-invalid' : ''; ?>" ><?php echo $data[IDEADTO]->getDescription(); ?></textarea>
                 <span class="invalid-feedback"><?php echo $data[ERRORS][DESCRIPT_FIELD]; ?></span>
             </div>
-            <label>Categorie:</label></br>
+                <strong><label>Categorie*</label></br></strong>
             <div>
                 <?php foreach($data[CATEGORIES] as $category): ?>
                     <div class='form-check form-check-inline'>
@@ -37,7 +48,7 @@
                 <span class="invalid-feedback"> <?php echo $data[ERRORS][CHECKED]; ?> </span>
             </div>
             <br/>
-            <input type="submit" class="btn btn-success" value="Submit">
+            <input type="submit" class="btn btn-success pull-right" value="Salva">
         </form>
     </div>
 
