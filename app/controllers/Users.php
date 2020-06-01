@@ -284,17 +284,16 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
 
                 //Validate old_psw
                 if(isset($_POST[OLD_PSW_KEY]) && !empty($_POST[OLD_PSW_KEY])){
+                    $oldPsw = true;
                     if(strlen($_POST[OLD_PSW_KEY]) < 6){
                         $errors[OLD_PSW_KEY] = PSW_LENGTH_ERROR;
                         $foundError = true;
                     } else {
                         $user->setPsw($_POST[OLD_PSW_KEY]);
-                        if (!$this->userModel->existUserByEmailAndPswHash($user)){
+                        if (!$this->userModel->existUserByEmailAndPswHash($user)) {
                             //The password is not correct
                             $errors[OLD_PSW_KEY] = PSW_NOT_THE_SAME_ERROR;
                             $foundError = true;
-                        }else {
-                            $oldPsw = true;
                         }
                     }
                 }
@@ -330,6 +329,9 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
                         $errors[CONFIRM_PSW_KEY] = 'Devi inserire la password di conferma!';
                         $foundError = true;
                     }
+                }elseif (isset($_POST[NEW_PSW_KEY]) && !empty($_POST[NEW_PSW_KEY]) || isset($_POST[CONFIRM_PSW_KEY]) && !empty($_POST[CONFIRM_PSW_KEY])){
+                    $errors[OLD_PSW_KEY] = 'Devi inserire la precedente password!';
+                    $foundError = true;
                 }
 
                 if (!$foundError){

@@ -97,7 +97,7 @@ define('IS_INVALID_CLASS',"is-invalid");
 
                 <div class="row">
                     <div class="col p-5">
-                        <input type="submit" value="Modifica" class="btn btn-outline-warning btn-block">
+                        <input type="submit" value="Modifica" class="btn btn-success btn-block">
                     </div>
                 </div>
             </form>
