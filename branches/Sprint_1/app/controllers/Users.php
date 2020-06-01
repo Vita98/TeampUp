@@ -14,7 +14,7 @@ define('USERID_KEY', "userId");
 define('USER_ABILITIES_KEY','userAbilities');
 define('OLD_PSW_KEY','old_psw');
 define('NEW_PSW_KEY','new_psw');
-
+define('CHECKED', 'checked');
 define('REQUEST_METHOD_KEY','REQUEST_METHOD');
 
 define('ENTER_NAME_ERROR','Inserisci un nome!');
@@ -27,19 +27,10 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         private $userModel;
         private $abilityModel;
 
-        public function __construct(){
-
-            //Importing the user model
-            $this->model('User');
-            //Creating the UserModel Pojo instance
-            $this->userModel = new User;
-
-            //Importing the ability model
-            $this->model('Ability');
-            //Creating the UserModel Pojo instance
-            $this->abilityModel = new Ability;
+        public function __construct() {
+            $this->userModel = $this->model('User');
+            $this->abilityModel = $this->model('Ability');
         }
-
         //Function for the signUp
         public function signUp(){
             //Check if the user is logged in
@@ -368,6 +359,23 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             }else{
                 $this->view('users/editMyProfile',[ERRORS_KEY => $errors, USERDTO_KEY => $user,"allAbilities" => $allAbilities, USER_ABILITIES_KEY => $userAbilities]);
             }
+        }
+
+        public function searchUsers(){
+            //public function
+            if(!isLoggedIn()){
+                redirect("");
+            }
+            $data = [ USERDTO_KEY =>[], USER_ABILITIES_KEY => [], CHECKED => [], FIRST_NAME_KEY=> "", LAST_NAME_KEY=>"" ];
+            $data[USER_ABILITIES_KEY] = $this->abilityModel->getAllAbilities();
+            if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                $data[CHECKED] = isset($_POST[CHECKED]) && !empty($_POST[CHECKED]) ? $_POST[CHECKED] : null;
+                $data[FIRST_NAME_KEY] = isset($_POST[FIRST_NAME_KEY]) && !empty($_POST[FIRST_NAME_KEY]) ? $_POST[FIRST_NAME_KEY] : null;
+                $data[LAST_NAME_KEY] = isset($_POST[LAST_NAME_KEY]) && !empty($_POST[LAST_NAME_KEY]) ? $_POST[LAST_NAME_KEY] : null;
+                $data[USERDTO_KEY] = $this->userModel->getUsersByNameSurnameSkills("%".$_POST[FIRST_NAME_KEY]."%", "%".$_POST[LAST_NAME_KEY]."%", $data[CHECKED]);
+            }
+            $this->view("users/search", $data);
         }
     }
 

@@ -21,7 +21,7 @@ class Ideas extends Controller {
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
-        $this->categoryModel = $this->model(IdeaCategoryModel::class);
+        $this->categoryModel = $this->model("IdeaCategoryModel");
         $this->userModel = $this->model(User::class);
     }
 
@@ -98,6 +98,9 @@ class Ideas extends Controller {
             redirect("");
         }
         $ideaDTO = $this->ideaModel->getIdeaByID($id);
+        if($ideaDTO->getOwnerId() != $_SESSION[USER_ID_KEY]){
+            redirect("");
+        }
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             //Sanitize post array
             $data = $this->ideaDataFromPost([], $ideaDTO);

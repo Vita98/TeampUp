@@ -3,6 +3,7 @@
     <?php if($editMode): ?>
     <div class="container text-center">
         <label class="display-3">Modifica idea</label>
+        <p>In questa sezione è possibile modificare i dati relativi all'idea</p>
     </div>
     <?php else : ?>
     <div class="container text-center">
@@ -47,8 +48,11 @@
                 <input type="text" class= "is-invalid" hidden = "hidden"/>
                 <span class="invalid-feedback"> <?php echo $data[ERRORS][CHECKED]; ?> </span>
             </div>
-            <br/>
-            <input type="submit" class="btn btn-success pull-right" value="Salva">
+                <div class="row">
+                    <div class="col p-3 mt-4">
+                        <input type="submit" value="Salva" class="btn btn-success btn-block">
+                    </div>
+                </div>
         </form>
     </div>
 

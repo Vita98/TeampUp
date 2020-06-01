@@ -1,6 +1,11 @@
 <?php
 
 define('EMAIL_BIND_TOKEN',':email');
+define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (user " .
+                " JOIN userabilities ON user.id = userabilities.userId ) " .
+                " WHERE ( :firstName IS NULL OR user.firstName LIKE :firstName ) " .
+                " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
+                " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");
 
     class User {
         protected $database;
@@ -83,6 +88,32 @@ define('EMAIL_BIND_TOKEN',':email');
             return $this->database->execute();
         }
 
+        public function getUsersByNameSurnameSkills($firstName, $lastName, $abilities){
+            $abilitiesPlaceHolder = ":ab1";
+
+            if($abilities != null){
+                for($i = 2; $i <= count($abilities); $i++){
+                    $abilitiesPlaceHolder = $abilitiesPlaceHolder.", :ab".$i;
+                }
+            }
+
+            $searchQuery = SEARCH . "(" . $abilitiesPlaceHolder . ") )";
+
+            $this->database->query($searchQuery);
+            $this->database->bind(':firstName', $firstName);
+            $this->database->bind(':lastName', $lastName);
+
+            if($abilities != null){
+                for($i = 1; $i <= count($abilities); $i++){
+                    $this->database->bind(":ab".$i, $abilities[$i-1]);
+                }
+            } else {
+                $this->database->bind(":ab1", null);
+            }
+
+            return $this->database->classesFromResultSet(UserDTO::class);
+
+        }
     }
 
     class UserDTO {
