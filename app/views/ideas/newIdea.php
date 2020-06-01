@@ -2,12 +2,12 @@
     <?php $editMode = isset($data[EDITMODE]) && $data[EDITMODE]; ?>
     <?php if($editMode): ?>
     <div class="container text-center">
-        <label class="display-3">Modifica idea</label>
+        <label class="display-4">Modifica idea</label>
         <p>In questa sezione è possibile modificare i dati relativi all'idea</p>
     </div>
     <?php else : ?>
     <div class="container text-center">
-        <label class="display-3">Nuova idea</label>
+        <label class="display-4">Nuova idea</label>
         <p>Compila il form per aggiungere una nuova idea</p>
     </div>
     <?php endif ?>
