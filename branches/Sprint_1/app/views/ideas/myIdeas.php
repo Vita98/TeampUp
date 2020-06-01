@@ -2,7 +2,7 @@
 <div class="row">
     <div class="container rounded mt-5 col-md-8">
         <div class="container text-center">
-            <label class="display-3 ">Le mie idee</label>
+            <label class="display-4 ">Le mie idee</label>
         </div>
         <?php if(isset($data) && !empty($data)) : foreach($data as $dto): ?>
             <div class="card card-body rounded bg-light mt-5">

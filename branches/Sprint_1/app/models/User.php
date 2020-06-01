@@ -2,7 +2,7 @@
 
 define('EMAIL_BIND_TOKEN',':email');
 define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (user " .
-                " JOIN userabilities ON user.id = userabilities.userId ) " .
+                " LEFT JOIN userabilities ON user.id = userabilities.userId ) " .
                 " WHERE ( :firstName IS NULL OR user.firstName LIKE :firstName ) " .
                 " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
                 " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");

@@ -31,7 +31,10 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             $this->userModel = $this->model('User');
             $this->abilityModel = $this->model('Ability');
         }
-        //Function for the signUp
+
+        /**
+         * Function for the signUp
+         */
         public function signUp(){
             //Check if the user is logged in
             if(isLoggedIn()){
@@ -132,7 +135,9 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             }
         }
 
-        //Function for the login
+        /**
+         * Function for the login
+         */
         public function login(){
             //Check if the user is logged in
             if(isLoggedIn()){
@@ -213,7 +218,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         }
 
         /**
-         * 
+         * Function used to show all the user info
          */
         public function myProfile(){
             if(!isLoggedIn()){
@@ -228,7 +233,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         }
 
         /**
-         *
+         * Function used to modify all the user information
          */
         public function editMyProfile(){
             if(!isLoggedIn()){
@@ -361,6 +366,9 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             }
         }
 
+        /**
+         * Function used to search among users
+         */
         public function searchUsers(){
             //public function
             if(!isLoggedIn()){
