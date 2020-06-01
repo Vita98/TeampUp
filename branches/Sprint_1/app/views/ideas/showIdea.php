@@ -1,11 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    .checked{
-        color: darkorange;
-    }
-</style>
+
 <div class="row">
+
     <div class="container bg-light rounded mt-5 col-md-10">
         <div class="container text-center">
             <div class="pt-4">
@@ -18,6 +14,7 @@
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span>
             </div>
+            <?php flash("idea_message") ?>
             <hr>
             <div class="pt-3 pb-3">
                 <label for="description"><?php echo $data[IDEADTO]->getDescription();?></label>
@@ -37,12 +34,16 @@
                     <?php endforeach; ?>
                 </div>
                 <div class="col-md-3 mt-10 text-right">
-                    <label for="creationDate">Creato il <br> <strong><?php echo $data[IDEADTO]->getCreationDate()?></strong> </label>
+                    <label for="creationDate">Creato il <br> <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), 'd/m/Y H:i:s'); ?></strong> </label>
                 </div>
             </div>
-
-
-
+            <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
+            <div>
+                <div class="mt-3 mb-3 pull-right">
+                    <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Modifica</a>
+                </div>
+            </div>
+            <?php endif;?>
         </div>
     </div>
 </div>

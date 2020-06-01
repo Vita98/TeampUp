@@ -4,6 +4,7 @@ define('NEW_IDEA_QUERY', "INSERT INTO idea (title, ownerId, description) " .
     "VALUES (:title, :ownerId, :description)");
 define('GET_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
 define('GET_IDEA_BY_OWNER_ID_QUERY', "SELECT * FROM idea WHERE ownerId = :ownerId");
+define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description WHERE id = :id");
 
 class IdeaModel{
     private $database;
@@ -35,6 +36,14 @@ class IdeaModel{
         $this->database->bind(":ownerId", $id);
 
         return $this->database->classesFromResultSet(IDEADTO::class);
+    }
+
+    public function updateIdea(IdeaDTO $ideaDTO){
+        $this->database->query(UPDATE_IDEA);
+        $this->database->bind(":title", $ideaDTO->getTitle());
+        $this->database->bind(":description", $ideaDTO->getDescription());
+        $this->database->bind(":id", $ideaDTO->getId());
+        $this->database->execute();
     }
 }
 
