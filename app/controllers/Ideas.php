@@ -1,6 +1,8 @@
 <?php
 define('IDEADTO', 'ideaDTO');
 define('USERDTO', 'UserDTO');
+define('FEEDBACK_AVG','feedbackAvg');
+define('FEEDBACK','feedback');
 
 define('ERRORS', 'errors');
 define('CATEGORIES', 'categories');
@@ -18,11 +20,13 @@ class Ideas extends Controller {
     private $ideaModel;
     private $categoryModel;
     private $userModel;
+    private $feedbackModel;
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->categoryModel = $this->model("IdeaCategoryModel");
         $this->userModel = $this->model(User::class);
+        $this->feedbackModel = $this->model(Feedback::class);
     }
 
     public function newIdea(){
@@ -60,18 +64,17 @@ class Ideas extends Controller {
     }
 
     public function showIdea($id){
-        $idea=[IDEADTO,CATEGORIES,USERDTO];
-       $idea[IDEADTO] = $this->ideaModel->getIdeaByID($id);
+        $idea = $this->getAllIdeaInformation($id);
+        if (isLoggedIn()){
+            $feedback = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$id);
+            $idea[FEEDBACK] = $feedback;
+        }
 
-       if($idea[IDEADTO]) {
-           $idea[USERDTO] = $this->userModel->getUserById($idea[IDEADTO]->getOwnerId());
-           $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
-           $this->view('ideas/showIdea', $idea);
-       }
-       else{
-           $this->view('pages/index', null);
-       }
-
+        if($idea[IDEADTO]){
+            $this->view('ideas/showIdea', $idea);
+        }else{
+            $this->view('pages/index', null);
+        }
     }
 
     public function getIdeasByOwnerId(){
@@ -181,5 +184,58 @@ class Ideas extends Controller {
         $ideaDTO->setDescription(trim($_POST[DESCRIPT_FIELD]));
         $data[IDEADTO] = $ideaDTO;
         return $data;
+    }
+
+    public function newFeedback($ideaId){
+        if(!isLoggedIn()){
+            redirect('');
+        }
+
+        $idea = $this->getAllIdeaInformation($ideaId);
+        if($idea[IDEADTO]){
+
+            //Check if the requester have already submited the feedback
+            $feedback = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$ideaId);
+
+            if ($feedback){
+                $idea[FEEDBACK] = $feedback;
+                $this->view('ideas/showIdea', $idea);
+            }else{
+                if (empty($_POST['ratingInnovativity']) || empty($_POST['ratingCreativity'])){
+                    $idea['FEEDBACK_ERROR'] = true;
+                    $this->view('ideas/showIdea', $idea);
+                }else{
+                    //Informazioni del feedback inserite correttamente
+                    $innovativityVote = floatval($_POST['ratingInnovativity']) / 2;
+                    $creativityVote = floatval($_POST['ratingCreativity']) / 2;
+                    if ($this->feedbackModel->createFeedback($_SESSION[USER_ID_KEY],$ideaId,$creativityVote,$innovativityVote)){
+                        $idea = $this->getAllIdeaInformation($ideaId);
+                        $idea[FEEDBACK] = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$ideaId);;
+                        flash('feedback_message', 'Feedback registrato con successo!');
+                        $this->view('ideas/showIdea', $idea);
+                    }else{
+                        die("Qualcosa è andato storto!");
+                    }
+                }
+            }
+
+        }else{
+            $this->view('pages/index', null);
+        }
+
+    }
+
+    private function getAllIdeaInformation($id){
+        $idea=[IDEADTO,CATEGORIES,USERDTO,FEEDBACK_AVG];
+        $idea[IDEADTO] = $this->ideaModel->getIdeaByID($id);
+
+        if($idea[IDEADTO]) {
+            $idea[USERDTO] = $this->userModel->getUserById($idea[IDEADTO]->getOwnerId());
+            $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
+            $idea[FEEDBACK_AVG] = $this->feedbackModel->getAvgVoteByIdeaId($idea[IDEADTO]->getId(),BEST);
+            return $idea;
+        }else{
+            return null;
+        }
     }
 }
