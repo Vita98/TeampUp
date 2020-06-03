@@ -7,14 +7,15 @@
             <div class="pt-4">
                 <label class="display-4 "><strong><?php echo $data[IDEADTO]->getTitle();?></strong></label>
             </div>
-            <div class="pt-2 pb-3 text-center">
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-            </div>
+
+
+            <?php if (!empty($data[FEEDBACK_AVG])) {
+                $feedbackVote = $data[FEEDBACK_AVG];
+                require('starRatingFixed.php');
+            } ?>
+
             <?php flash("idea_message") ?>
+            <?php flash('feedback_message'); ?>
             <hr>
             <div class="pt-3 pb-3">
                 <label for="description"><?php echo $data[IDEADTO]->getDescription();?></label>
@@ -38,13 +39,57 @@
                     <label for="creationDate">il <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), 'd/m/Y H:i:s'); ?></strong> </label>
                 </div>
             </div>
-            <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
-            <div>
-                <div class="mt-3 mb-3 pull-right">
-                    <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Modifica</a>
+
+            <?php if(isLoggedIn()) : ?>
+            <form action="<?php echo URLROOT; ?>/ideas/newFeedback/<?php echo $data[IDEADTO]->getId(); ?>" method="post">
+                <div class="container p-4 mt-3 mb-3 border rounded <?php if(!empty($data['FEEDBACK_ERROR'])) {echo "border-danger";}?> bg-white ">
+                    <div class="row pt-1 pb-2">
+                        <div class="col-md-6">
+                            <div class="">
+                                <label><strong>Feedback innovatività: </strong></label>
+                                <div><?php
+                                    if(empty($data[FEEDBACK])){
+                                        $ratingId = 'ratingInnovativity';
+                                        require ('starRatingEditable.php');
+                                    }else{
+                                        $feedbackVote = $data[FEEDBACK]->innovativityVote;
+                                        require('starRatingFixed.php');
+                                    }?></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="">
+                                <label><strong>Feedback creatività: </strong></label>
+                                <div><?php
+                                    if(empty($data[FEEDBACK])){
+                                        $ratingId = 'ratingCreativity';
+                                        require ('starRatingEditable.php');
+                                    }else{
+                                        $feedbackVote = $data[FEEDBACK]->creativityVote;
+                                        require('starRatingFixed.php');
+                                    }?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if(empty($data[FEEDBACK])): ?>
+                        <div class="row pt-1 pb-2 d-flex justify-content-center">
+                            <div class="col-md-6"><input type="submit" value="Invia Feedback" class="btn btn-success btn-block"></div>
+                        </div>
+                    <?php endif; ?>
                 </div>
-            </div>
+            </form>
+            <?php endif; ?>
+
+            <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
+                <div class="row pt-1 pb-2">
+                    <div class="col-md-12">
+                        <div class="mt-3 mb-3 pull-right">
+                            <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Modifica</a>
+                        </div>
+                    </div>
+                </div>
             <?php endif;?>
+
         </div>
     </div>
 </div>
