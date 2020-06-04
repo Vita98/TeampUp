@@ -20,7 +20,7 @@ function clickAnimationStar(element,array){
     if(document.getElementById(element) != null){
         document.getElementById(element).addEventListener("click", function(){
 
-            found = false;
+            var found = false;
             array.forEach(function(element1){
                 if (found==false){
                     document.getElementById(element1).style["color"] = "orange";
@@ -32,7 +32,6 @@ function clickAnimationStar(element,array){
                 if (element == element1){
                     document.getElementById(element1).style["color"] = "orange";
                     document.getElementById(element1+"Input").checked = true;
-                    lastClicked = element1;
                     found = true;
                 }
             });

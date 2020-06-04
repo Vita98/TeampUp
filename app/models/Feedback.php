@@ -4,6 +4,8 @@ define('INNOVATIVITY','avgInnovativity');
 define('CREATIVITY','avgCreativity');
 define('BEST','avgVote');
 
+define('IDEAID_BIND_TOKEN',':ideaId');
+
 class Feedback {
     protected $database;
 
@@ -29,7 +31,7 @@ class Feedback {
         }
 
         $this->database->query("SELECT " . $select_op . " FROM feedback WHERE idea_id = :ideaId GROUP BY idea_id");
-        $this->database->bind(':ideaId',$ideaId);
+        $this->database->bind(IDEAID_BIND_TOKEN,$ideaId);
 
         $res = $this->database->single();
 
@@ -43,7 +45,7 @@ class Feedback {
     public function createFeedback($userId, $ideaId, $creativityVote, $innovativityVote){
         $this->database->query("INSERT INTO feedback VALUES (:userId, :ideaId, :innovativityVote, :creativityVote) ");
         $this->database->bind(':userId',$userId);
-        $this->database->bind(':ideaId',$ideaId);
+        $this->database->bind(IDEAID_BIND_TOKEN,$ideaId);
         $this->database->bind(':innovativityVote',$innovativityVote);
         $this->database->bind(':creativityVote',$creativityVote);
 
@@ -53,9 +55,9 @@ class Feedback {
     public function existFeedback($userId,$ideaId){
         $this->database->query("SELECT * FROM feedback WHERE users_id = :userId AND idea_id = :ideaId");
         $this->database->bind(':userId',$userId);
-        $this->database->bind(':ideaId',$ideaId);
+        $this->database->bind(IDEAID_BIND_TOKEN,$ideaId);
 
-        return $this->database->single();;
+        return $this->database->single();
     }
 
 }
@@ -91,7 +93,7 @@ class FeedbackDTO {
     }
 
     public function setCreativityVote($creativityVote){
-        $this->creativityVote = creativityVote;
+        $this->creativityVote = $creativityVote;
     }
 
     public function getIdeaId(){
