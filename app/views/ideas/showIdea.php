@@ -24,6 +24,9 @@
             <div class="pt-3">
                 <div class="text-left">
                     <label for="description"><strong>Fasi di realizzazione:</strong> </label>
+                    <?php foreach ($data[REALIZATION_PHASE] as $realizationPhase): ?>
+                    <kbd style= "color: darkslategray;" class="alert-info"><label for="description"><?php echo $realizationPhase->getName(); ?></label></kbd>
+                    <?php endforeach; ?>
                 </div>
 
             </div>
@@ -81,13 +84,9 @@
             <?php endif; ?>
 
             <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
-                <div class="row pt-1 pb-2">
-                    <div class="col-md-12">
-                        <div class="mt-3 mb-3 pull-right">
-                            <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Modifica</a>
-                        </div>
-                    </div>
-                </div>
+                    <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary mt-3 mb-3">Modifica idea</a>
+                    <a href="<?php echo URLROOT; ?>/realizationPhases/manageRealizationPhases/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary mt-3 mb-3">Gestisci fasi di realizzazione</a>
+                    <a href="<?php echo URLROOT; ?>/realizationPhases/newRealizationPhase/<?php echo $data[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary mt-3 mb-3">Inserisci una fase di realizzazione</a>
             <?php endif;?>
 
         </div>

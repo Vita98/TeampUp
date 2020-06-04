@@ -3,6 +3,7 @@ define('IDEADTO', 'ideaDTO');
 define('USERDTO', 'UserDTO');
 define('FEEDBACK_AVG','feedbackAvg');
 define('FEEDBACK','feedback');
+define('REALIZATION_PHASE', 'RealizationPhase');
 
 define('ERRORS', 'errors');
 define('CATEGORIES', 'categories');
@@ -20,6 +21,7 @@ class Ideas extends Controller {
     private $ideaModel;
     private $categoryModel;
     private $userModel;
+    private $realizationPhaseModel;
     private $feedbackModel;
 
     public function __construct(){
@@ -27,6 +29,7 @@ class Ideas extends Controller {
         $this->categoryModel = $this->model("IdeaCategoryModel");
         $this->userModel = $this->model(User::class);
         $this->feedbackModel = $this->model(Feedback::class);
+        $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
     }
 
     public function newIdea(){
@@ -233,6 +236,7 @@ class Ideas extends Controller {
             $idea[USERDTO] = $this->userModel->getUserById($idea[IDEADTO]->getOwnerId());
             $idea[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea[IDEADTO]->getId());
             $idea[FEEDBACK_AVG] = $this->feedbackModel->getAvgVoteByIdeaId($idea[IDEADTO]->getId(),BEST);
+            $idea[REALIZATION_PHASE] = $this->realizationPhaseModel->getRealizationPhaseByIdea($id);
             return $idea;
         }else{
             return null;
