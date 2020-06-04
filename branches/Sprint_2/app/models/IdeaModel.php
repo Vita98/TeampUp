@@ -45,6 +45,27 @@ class IdeaModel{
         $this->database->bind(":id", $ideaDTO->getId());
         $this->database->execute();
     }
+
+    public function getTopTen($voteType){
+        $select_op = "";
+        switch ($voteType){
+            case INNOVATIVITY:
+                $select_op = "AVG(feedback.innovativityVote) as avgInnovativity";
+                break;
+            case CREATIVITY:
+                $select_op = "AVG(feedback.creativityVote) as avgCreativity";
+                break;
+            case BEST:
+                $select_op = "AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) as avgVote";
+                break;
+            default:
+                return null;
+        }
+
+        $this->database->query("SELECT idea.*, ". $select_op ." FROM idea JOIN feedback ON idea.id=feedback.idea_id GROUP BY idea.id ORDER BY ".$voteType." DESC LIMIT 10");
+
+        return $this->database->resultSet();
+    }
 }
 
 class IdeaDTO {

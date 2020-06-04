@@ -3,6 +3,8 @@ define('IDEADTO', 'ideaDTO');
 define('USERDTO', 'UserDTO');
 define('FEEDBACK_AVG','feedbackAvg');
 define('FEEDBACK','feedback');
+define('IDEASDTO','ideasDTO');
+define('OWNERS','owners');
 define('REALIZATION_PHASE', 'RealizationPhase');
 
 define('ERRORS', 'errors');
@@ -16,6 +18,14 @@ define('HIDDEN_IDEA_ID_FIELD', 'hidden_id');
 define('USER_ID_KEY', 'userId');
 
 define('IDEA_EDIT_NEW_VIEW', 'ideas/newIdea');
+define('SHOW_IDEA_VIEW','ideas/showIdea');
+define('SHOW_IDEA_PATH','/ideas/showIdea/');
+
+define('BEST_IDEA_TYPE','bestIdeaType');
+define('BEST_IDEA_INNOVATIVITY','INNOVATIVITY');
+define('BEST_IDEA_CREATIVITY','CREATIVITY');
+define('BEST_IDEA','');
+
 
 class Ideas extends Controller {
     private $ideaModel;
@@ -51,7 +61,7 @@ class Ideas extends Controller {
                 if($idea_id){
                     $this->categoriesSave($_POST[CATEGORIES], $idea_id);
                     flash('idea_message', "L'idea è stata aggiunta correttamente!");
-                    redirect('ideas/showIdea/'.$idea_id);
+                    redirect(SHOW_IDEA_PATH.$idea_id);
                 }else{
                     die('Qualcosa è andato storto...');
                 }
@@ -73,10 +83,10 @@ class Ideas extends Controller {
             $idea[FEEDBACK] = $feedback;
         }
 
-        if($idea[IDEADTO]){
-            $this->view('ideas/showIdea', $idea);
+        if(!empty($idea[IDEADTO])){
+            $this->view(SHOW_IDEA_VIEW, $idea);
         }else{
-            $this->view('pages/index', null);
+            redirect('');
         }
     }
 
@@ -119,7 +129,7 @@ class Ideas extends Controller {
                 $this->categoryModel->deleteByIdeaId($ideaDTO->getId());
                 $this->categoriesSave($_POST[CATEGORIES], $ideaDTO->getId());
                 flash('idea_message', "L'idea è stata aggiornata correttamente!");
-                redirect('ideas/showIdea/'.$ideaDTO->getId());
+                redirect(SHOW_IDEA_PATH.$ideaDTO->getId());
             }else{
                 //load view with errors
                 $data = $this->loadIdeaViewData($data, $this->categoryModel->getAll(), isset($_POST[CATEGORIES]) ? $_POST[CATEGORIES] : null);
@@ -202,20 +212,18 @@ class Ideas extends Controller {
 
             if ($feedback){
                 $idea[FEEDBACK] = $feedback;
-                $this->view('ideas/showIdea', $idea);
+                $this->view(SHOW_IDEA_VIEW, $idea);
             }else{
                 if (empty($_POST['ratingInnovativity']) || empty($_POST['ratingCreativity'])){
                     $idea['FEEDBACK_ERROR'] = true;
-                    $this->view('ideas/showIdea', $idea);
+                    $this->view(SHOW_IDEA_VIEW, $idea);
                 }else{
                     //Informazioni del feedback inserite correttamente
                     $innovativityVote = floatval($_POST['ratingInnovativity']) / 2;
                     $creativityVote = floatval($_POST['ratingCreativity']) / 2;
                     if ($this->feedbackModel->createFeedback($_SESSION[USER_ID_KEY],$ideaId,$creativityVote,$innovativityVote)){
-                        $idea = $this->getAllIdeaInformation($ideaId);
-                        $idea[FEEDBACK] = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$ideaId);;
                         flash('feedback_message', 'Feedback registrato con successo!');
-                        $this->view('ideas/showIdea', $idea);
+                        redirect(SHOW_IDEA_PATH.$ideaId);
                     }else{
                         die("Qualcosa è andato storto!");
                     }
@@ -240,6 +248,50 @@ class Ideas extends Controller {
             return $idea;
         }else{
             return null;
+        }
+    }
+
+    public function bestIdeas($bestIdeaType = ''){
+
+        $ideas = null;
+        $bestIdeaTypeQuery = null;
+
+        switch ($bestIdeaType){
+            case BEST_IDEA_INNOVATIVITY:
+                $ideas = $this->ideaModel->getTopTen(INNOVATIVITY);
+                $bestIdeaTypeQuery = INNOVATIVITY;
+                break;
+            case BEST_IDEA_CREATIVITY:
+                $ideas = $this->ideaModel->getTopTen(CREATIVITY);
+                $bestIdeaTypeQuery = CREATIVITY;
+                break;
+            case BEST_IDEA:
+                $ideas = $this->ideaModel->getTopTen(BEST);
+                $bestIdeaTypeQuery = BEST;
+                break;
+            default:
+                $ideas = null;
+        }
+
+        if($ideas){
+
+            $categories = [];
+            $owners = [];
+            $avgVotes = [];
+            foreach ($ideas as $idea){
+                $singleOwner = $this->userModel->getIdeaOwner($idea->id);
+
+                $owners[$idea->id] = $singleOwner->getFirstName() . " " . $singleOwner->getLastName();
+                $categories[$idea->id] = $this->categoryModel->getCategoryByIdea($idea->id);
+                $avgVotes[$idea->id] = $this->feedbackModel->getAvgVoteByIdeaId($idea->id,$bestIdeaTypeQuery);
+            }
+            $data = [BEST_IDEA_TYPE=>$bestIdeaType,IDEASDTO=>$ideas,CATEGORIES=>$categories,OWNERS=>$owners,FEEDBACK_AVG=>$avgVotes];
+
+            $this->view('ideas/bestIdeas',$data);
+        }else{
+            /*Se inserisco come parametro un valore non valido
+              lo reindirizzo alla pagina con le idee migliori*/
+            redirect('ideas/bestIdeas/');
         }
     }
 }

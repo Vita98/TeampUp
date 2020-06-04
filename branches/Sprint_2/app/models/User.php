@@ -6,8 +6,9 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
                 " WHERE ( :firstName IS NULL OR user.firstName LIKE :firstName ) " .
                 " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
                 " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");
-define('FIRST_NAME',':firstName');
-define('LAST_NAME',':lastName');
+
+if (!defined('FIRST_NAME_KEY')) {define('FIRST_NAME_KEY','firstName');}
+if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
 
     class User {
         protected $database;
@@ -19,8 +20,8 @@ define('LAST_NAME',':lastName');
         public function createUser(UserDTO $user): bool {
             $this->database->query("INSERT INTO user (firstName, lastName, email, psw) VALUES (:firstName, :lastName, :email, :password)");
             //Bind values
-            $this->database->bind(FIRST_NAME, $user->getFirstName());
-            $this->database->bind(LAST_NAME, $user->getLastName());
+            $this->database->bind(FIRST_NAME_KEY, $user->getFirstName());
+            $this->database->bind(LAST_NAME_KEY, $user->getLastName());
             $this->database->bind(EMAIL_BIND_TOKEN, $user->getEmail());
             $this->database->bind(':password', $user->getPsw());
 
@@ -83,8 +84,8 @@ define('LAST_NAME',':lastName');
                 $this->database->query('UPDATE user SET firstName=:firstName, lastName=:lastName WHERE id = :id ');
             }
 
-            $this->database->bind(LAST_NAME, $user->getLastName());
-            $this->database->bind(FIRST_NAME, $user->getFirstName());
+            $this->database->bind(LAST_NAME_KEY, $user->getLastName());
+            $this->database->bind(FIRST_NAME_KEY, $user->getFirstName());
             $this->database->bind(':id', $user->getId());
 
             return $this->database->execute();
@@ -102,8 +103,8 @@ define('LAST_NAME',':lastName');
             $searchQuery = SEARCH . "(" . $abilitiesPlaceHolder . ") )";
 
             $this->database->query($searchQuery);
-            $this->database->bind(FIRST_NAME, $firstName);
-            $this->database->bind(LAST_NAME, $lastName);
+            $this->database->bind(FIRST_NAME_KEY, $firstName);
+            $this->database->bind(LAST_NAME_KEY, $lastName);
 
             if($abilities != null){
                 for($i = 1; $i <= count($abilities); $i++){
@@ -115,6 +116,13 @@ define('LAST_NAME',':lastName');
 
             return $this->database->classesFromResultSet(UserDTO::class);
 
+        }
+
+        public function getIdeaOwner($ideaId){
+            $this->database->query("SELECT user.* FROM idea JOIN user ON idea.ownerId=user.id WHERE idea.id = :ideaId");
+            $this->database->bind(':ideaId', $ideaId);
+
+            return $this->database->classFromSingle(UserDTO::class);
         }
     }
 

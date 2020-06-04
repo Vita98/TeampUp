@@ -1,5 +1,9 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
+<?php
+define('STAR_RATING_FIXED','starRatingFixed.php');
+?>
+
 <div class="row">
 
     <div class="container bg-light rounded mt-5 col-md-10">
@@ -11,7 +15,7 @@
 
             <?php if (!empty($data[FEEDBACK_AVG])) {
                 $feedbackVote = $data[FEEDBACK_AVG];
-                require('starRatingFixed.php');
+                require(STAR_RATING_FIXED);
             } ?>
 
             <?php flash("idea_message") ?>
@@ -56,7 +60,7 @@
                                         require ('starRatingEditable.php');
                                     }else{
                                         $feedbackVote = $data[FEEDBACK]->innovativityVote;
-                                        require('starRatingFixed.php');
+                                        require(STAR_RATING_FIXED);
                                     }?></div>
                             </div>
                         </div>
@@ -69,7 +73,7 @@
                                         require ('starRatingEditable.php');
                                     }else{
                                         $feedbackVote = $data[FEEDBACK]->creativityVote;
-                                        require('starRatingFixed.php');
+                                        require(STAR_RATING_FIXED);
                                     }?></div>
                             </div>
                         </div>
