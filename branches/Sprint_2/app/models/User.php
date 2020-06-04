@@ -6,6 +6,8 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
                 " WHERE ( :firstName IS NULL OR user.firstName LIKE :firstName ) " .
                 " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
                 " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");
+define('FIRST_NAME',':firstName');
+define('LAST_NAME',':lastName');
 
     class User {
         protected $database;
@@ -17,8 +19,8 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
         public function createUser(UserDTO $user): bool {
             $this->database->query("INSERT INTO user (firstName, lastName, email, psw) VALUES (:firstName, :lastName, :email, :password)");
             //Bind values
-            $this->database->bind(':firstName', $user->getFirstName());
-            $this->database->bind(':lastName', $user->getLastName());
+            $this->database->bind(FIRST_NAME, $user->getFirstName());
+            $this->database->bind(LAST_NAME, $user->getLastName());
             $this->database->bind(EMAIL_BIND_TOKEN, $user->getEmail());
             $this->database->bind(':password', $user->getPsw());
 
@@ -81,8 +83,8 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
                 $this->database->query('UPDATE user SET firstName=:firstName, lastName=:lastName WHERE id = :id ');
             }
 
-            $this->database->bind(':lastName', $user->getLastName());
-            $this->database->bind(':firstName', $user->getFirstName());
+            $this->database->bind(LAST_NAME, $user->getLastName());
+            $this->database->bind(FIRST_NAME, $user->getFirstName());
             $this->database->bind(':id', $user->getId());
 
             return $this->database->execute();
@@ -100,8 +102,8 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
             $searchQuery = SEARCH . "(" . $abilitiesPlaceHolder . ") )";
 
             $this->database->query($searchQuery);
-            $this->database->bind(':firstName', $firstName);
-            $this->database->bind(':lastName', $lastName);
+            $this->database->bind(FIRST_NAME, $firstName);
+            $this->database->bind(LAST_NAME, $lastName);
 
             if($abilities != null){
                 for($i = 1; $i <= count($abilities); $i++){

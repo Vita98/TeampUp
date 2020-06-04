@@ -1,3 +1,6 @@
+function updatePopup(a) {
+    document.getElementById('ModificationSaveButton').href = a;
+}
 
 /* STAR RATING*/
 
