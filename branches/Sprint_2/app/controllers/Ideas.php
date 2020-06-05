@@ -393,7 +393,7 @@ class Ideas extends Controller {
         $data[CREATIVITY] = isset($_GET[CREATIVITY]) && $_GET[CREATIVITY] != null && strlen(trim($_GET[CREATIVITY])) ? trim($_GET[CREATIVITY])/2 : null;
         $data[INNOVATIVITY] = isset($_GET[INNOVATIVITY]) && $_GET[INNOVATIVITY] != null && strlen(trim($_GET[INNOVATIVITY])) ? trim($_GET[INNOVATIVITY])/2 : null;
         $data[FEEDBACK_AVG] = isset($_GET[FEEDBACK_AVG]) && $_GET[FEEDBACK_AVG] != null && strlen(trim($_GET[FEEDBACK_AVG])) ? trim($_GET[FEEDBACK_AVG])/2 : null;
-        $data[TITLE_FIELD] = isset($_GET[TITLE_FIELD]) && $_GET[TITLE_FIELD] && strlen(trim($_GET[TITLE_FIELD])) != null ? trim($_GET[TITLE_FIELD]) : null;
+        $data[TITLE_FIELD] = isset($_GET[TITLE_FIELD]) && $_GET[TITLE_FIELD] && strlen(trim($_GET[TITLE_FIELD])) != null ? "%".trim($_GET[TITLE_FIELD])."%" : null;
         $data[CHECKED] = isset($_GET[CHECKED]) && count($_GET[CHECKED]) ? $_GET[CHECKED] : null;
         unset($_GET);
         return $data;
