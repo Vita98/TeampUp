@@ -1,12 +1,12 @@
 <?php
 
 define('CREATE_REALIZATION_PHASE_QUERY', 'INSERT INTO realizationPhase(name, ideaId) VALUES (:name, :ideaId)');
-define('INSERT_ABILITY_REALIZATION_PHASE',"INSERT INTO realizationphaseabilities(realizationphase_id,ability_id) VALUES (:realizationPhaseId, :abilityId)");
-define('GET_ABILITIES_BY_REALIZATION_PHASE', "SELECT ability.* FROM realizationphaseabilities JOIN ability WHERE realizationPhaseAbilities.ability_id = ability.id AND realizationPhase_id = :realizationPhaseId  ");
-define('GET_REALIZATION_PHASE_BY_IDEA', "SELECT * FROM realizationphase WHERE ideaId = :ideaId");
-define('UPDATE_REALIZATION_PHASE',"UPDATE realizationphase SET name = :name where id = :id");
-define('GET_REALIZATION_PHASE_BY_ID', "SELECT * FROM realizationphase WHERE id = :id");
-define('DELETE_ABILITY_BY_REALIZATION_PHASE', "DELETE FROM realizationphaseabilities WHERE realizationphase_id = :realizationphase_id");
+define('INSERT_ABILITY_REALIZATION_PHASE',"INSERT INTO realizationPhaseAbilities(realizationphase_id,ability_id) VALUES (:realizationPhaseId, :abilityId)");
+define('GET_ABILITIES_BY_REALIZATION_PHASE', "SELECT ability.* FROM realizationPhaseAbilities JOIN ability WHERE realizationPhaseAbilities.ability_id = ability.id AND realizationPhase_id = :realizationPhaseId  ");
+define('GET_REALIZATION_PHASE_BY_IDEA', "SELECT * FROM realizationPhase WHERE ideaId = :ideaId");
+define('UPDATE_REALIZATION_PHASE',"UPDATE realizationPhase SET name = :name where id = :id");
+define('GET_REALIZATION_PHASE_BY_ID', "SELECT * FROM realizationPhase WHERE id = :id");
+define('DELETE_ABILITY_BY_REALIZATION_PHASE', "DELETE FROM realizationPhaseAbilities WHERE realizationphase_id = :realizationphase_id");
 
 
 class RealizationPhaseModel

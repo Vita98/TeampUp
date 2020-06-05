@@ -1,8 +1,8 @@
 <?php
 define("IDEA_ID_PARAM", ":ideaId");
-define("INSERT_CATEGORYIDEA", "INSERT INTO ideacategoryassociation (idea_id, ideaCategoryModel_id) VALUES (:ideaId, :categoryId)");
-define("GET_CATEGORYBYIDEA", "SELECT id,description FROM ideacategoryassociation,ideacategory WHERE ideacategoryassociation.ideaCategoryModel_id = ideacategory.id AND idea_id = :ideaId  ");
-define("DELETE_CATEGORIES_BY_IDEA", "DELETE FROM ideacategoryassociation WHERE idea_id = :ideaId");
+define("INSERT_CATEGORYIDEA", "INSERT INTO ideaCategoryAssociation (idea_id, ideaCategoryModel_id) VALUES (:ideaId, :categoryId)");
+define("GET_CATEGORYBYIDEA", "SELECT id,description FROM ideaCategoryAssociation,ideaCategory WHERE ideaCategoryAssociation.ideaCategoryModel_id = ideaCategory.id AND idea_id = :ideaId  ");
+define("DELETE_CATEGORIES_BY_IDEA", "DELETE FROM ideaCategoryAssociation WHERE idea_id = :ideaId");
 
 class IdeaCategoryModel{
     private $database;
@@ -12,7 +12,7 @@ class IdeaCategoryModel{
     }
 
     public function getAll(){
-        $this->database->query("SELECT * FROM ideacategory");
+        $this->database->query("SELECT * FROM ideaCategory");
         return $this->database->classesFromResultSet(IdeaCategoryDTO::class);
     }
 
