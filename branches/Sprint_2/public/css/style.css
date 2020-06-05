@@ -34,7 +34,7 @@
     padding: .3rem .2rem;
     margin: 0;
     cursor: pointer;
-    font-family: FontAwesome,SansSerif;
+    font-family: FontAwesome, sans-serif;
     content: "\f005 "; /* full star */
 }
 

@@ -6,6 +6,18 @@ define('GET_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
 define('GET_IDEA_BY_OWNER_ID_QUERY', "SELECT * FROM idea WHERE ownerId = :ownerId");
 define('DELETE_BY_ID_QUERY', "DELETE FROM idea WHERE id = :id ");
 define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description, sponsorStartDate=:sponsorStartDate, sponsorCategoryid=:sponsorCategoryId WHERE id = :id");
+define ("SEARCH_QUERY",
+    " SELECT DISTINCT idea.* " .
+    " FROM idea LEFT JOIN ideacategoryassociation ".
+    " ON idea.id = ideacategoryassociation.idea_id LEFT JOIN feedback " .
+    " ON idea.id = feedback.idea_id WHERE " .
+    " (:ideaTitle IS NULL OR idea.title LIKE :ideaTitle) AND " .
+    " (:cat1 IS NULL OR ideacategoryassociation.ideaCategoryModel_id IN ( ");
+define ("SEARCH_QUERY_HAVING", " ) ) " .
+    " GROUP BY idea.id HAVING " .
+    " (:avgInnovativity IS NULL OR AVG(feedback.innovativityVote) >= :avgInnovativity) AND " .
+    " (:avgCreativity IS NULL OR AVG(feedback.creativityVote) >= :avgCreativity) AND " .
+    " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote)");
 
 class IdeaModel{
     private $database;
@@ -74,6 +86,36 @@ class IdeaModel{
         $this->database->query("SELECT idea.*, ". $select_op ." FROM idea JOIN feedback ON idea.id=feedback.idea_id GROUP BY idea.id ORDER BY ".$voteType." DESC LIMIT 10");
 
         return $this->database->resultSet();
+    }
+
+    public function filteredSearch($title, $categories, $avgVote, $avgInnovativity, $avgCreativity){
+
+        $catPlaceHolder = ":cat1";
+
+        if($categories != null && count($categories) > 0){
+            for($i = 2; $i <= count($categories); $i++){
+                $catPlaceHolder = $catPlaceHolder.", :cat".$i;
+            }
+        }
+
+        $query = SEARCH_QUERY . $catPlaceHolder . SEARCH_QUERY_HAVING;
+
+        $this->database->query($query);
+
+        $this->database->bind(":ideaTitle", $title );
+        $this->database->bind(":avgVote", $avgVote );
+        $this->database->bind(":avgInnovativity", $avgInnovativity );
+        $this->database->bind(":avgCreativity", $avgCreativity );
+
+        if($categories != null && count($categories) > 0){
+            for($i = 1; $i <= count($categories); $i++){
+                $this->database->bind(":cat".$i, $categories[$i-1]);
+            }
+        } else {
+            $this->database->bind(":cat1", null);
+        }
+
+        return $this->database->classesFromResultSet(IdeaDTO::class);
     }
 }
 

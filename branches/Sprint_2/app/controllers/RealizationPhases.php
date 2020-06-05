@@ -42,7 +42,7 @@ class RealizationPhases extends Controller
         }
 
         $realizationPhaseDTO = new realizationPhaseDTO;
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER[REQUEST_METHOD_KEY] == 'POST') {
             //Sanitize post array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
@@ -101,7 +101,7 @@ class RealizationPhases extends Controller
             redirect("");
         }
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $realizationPhaseDTO = $this->realizationPhaseModel->getRealizationPhaseById($_POST['id']);

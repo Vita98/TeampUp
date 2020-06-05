@@ -24,6 +24,7 @@
                       <div class="dropdown-menu">
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByOwnerId">Mie idee</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/newIdea">Nuova Idea</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/searchIdea">Ricerca Idea</a>
                       </div>
                   </li>
                   <li class="nav-item">

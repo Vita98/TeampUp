@@ -14,3 +14,4 @@
     define('DB_PASS', 'root');
     define('DB_NAME', 'mvc');
 
+    define('REQUEST_METHOD_KEY','REQUEST_METHOD');
