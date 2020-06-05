@@ -14,8 +14,6 @@ define('IDEA_ID','ideaId');
 define('IDEA_DTO','ideaDTO');
 define('USER_ID','userId');
 
-define('IDEA_MESSAGE','idea_message');
-
 define('REALIZATION_PHASE_NEW_VIEW','realizationPhases/newRealizationPhase');
 define('REALIZATION_PHASE_EDIT_VIEW','realizationPhases/editRealizationPhase');
 define('REALIZATION_PHASES_MANAGE_VIEW', 'realizationPhases/manageRealizationPhases');

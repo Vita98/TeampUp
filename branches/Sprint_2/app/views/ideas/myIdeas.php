@@ -13,7 +13,7 @@
                     </div>
                     <div class="form-group mt-3 ">
                         <label for="creationDate" class="display-5 font-weight-bolder">Data di creazione: </label>
-                        <label for="creationDate"><?php echo date_format(new DateTime($dto[IDEADTO]->getCreationDate()), 'd/m/Y H:i');?></label>
+                        <label for="creationDate"><?php echo date_format(new DateTime($dto[IDEADTO]->getCreationDate()), DATE_FORMAT);?></label>
                     </div>
                     <div class="form-group mt-3 text-left">
                         <label for="firstName" class="display-5 font-weight-bolder">Lista categorie: </label>
