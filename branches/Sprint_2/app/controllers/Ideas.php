@@ -16,6 +16,8 @@ define('DESCRIPT_FIELD', 'description');
 define('TITLE_FIELD', 'title');
 define('HIDDEN_IDEA_ID_FIELD', 'hidden_id');
 define('USER_ID_KEY', 'userId');
+define('IDEA_SPONSOR_DATE_FIELD', 'idea_sponsor_date');
+define('IDEA_SPONSOR_CATEGORY_ID_FIELD', 'idea_sponsor_category_id');
 
 define('IDEA_EDIT_NEW_VIEW', 'ideas/newIdea');
 define('SHOW_IDEA_VIEW','ideas/showIdea');
@@ -31,6 +33,7 @@ class Ideas extends Controller {
     private $ideaModel;
     private $categoryModel;
     private $userModel;
+    private $sponsorCategoryModel;
     private $realizationPhaseModel;
     private $feedbackModel;
 
@@ -38,6 +41,7 @@ class Ideas extends Controller {
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->categoryModel = $this->model("IdeaCategoryModel");
         $this->userModel = $this->model(User::class);
+        $this->sponsorCategoryModel = $this->model(SponsorCategoryModel::class);
         $this->feedbackModel = $this->model(Feedback::class);
         $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
     }
@@ -196,6 +200,83 @@ class Ideas extends Controller {
         $ideaDTO->setTitle(trim($_POST[TITLE_FIELD]));
         $ideaDTO->setDescription(trim($_POST[DESCRIPT_FIELD]));
         $data[IDEADTO] = $ideaDTO;
+        return $data;
+    }
+
+    public function sponsorIdea($id){
+        $data = $this->initSponsorCategoryViewData($id);
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $data = $this->ideaDataSponsorFromPost($data, $data[IDEADTO]);
+            $data = $this->ideaDataSponsorErrorCheck($data[IDEADTO], $data);
+
+            if(empty($data[ERRORS][IDEA_SPONSOR_DATE_FIELD]) && empty($data[ERRORS][IDEA_SPONSOR_CATEGORY_ID_FIELD])) {
+                $this->ideaModel->updateIdea($data[IDEADTO]);
+                flash('idea_message', "L'idea è stata sponsorizzata correttamente!");
+                redirect('ideas/showIdea/'.$data[IDEADTO]->getId());
+            }
+        }
+
+        $this->view('ideas/sponsorIdea',$data);
+    }
+
+    public function initSponsorCategoryViewData($ideaId) {
+        $data = [
+            CATEGORIES => $this->sponsorCategoryModel->getAll(),
+            IDEADTO => $this->ideaModel->getIdeaByID($ideaId),
+            ERRORS => [
+                IDEA_SPONSOR_DATE_FIELD => "",
+                IDEA_SPONSOR_CATEGORY_ID_FIELD => ""
+            ]
+        ];
+        return $data;
+    }
+
+    private function ideaDataSponsorFromPost($data, $ideaDTO) {
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $ideaDTO->setSponsorStartDate(trim($_POST[IDEA_SPONSOR_DATE_FIELD]));
+        if(isset($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) && is_array($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) && count($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) > 0) {
+            $ideaDTO->setSponsorCategoryId(trim($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD][0]));
+        }
+        $data[IDEADTO] = $ideaDTO;
+        return $data;
+    }
+
+    private function ideaDataSponsorErrorCheck($ideaDTO, $data) {
+        if(empty($ideaDTO->getSponsorStartDate())) {
+            $data[ERRORS][IDEA_SPONSOR_DATE_FIELD] = "Inserisci una data";
+        }else if(!$this->validateDate($ideaDTO->getSponsorStartDate())) {
+            $data[ERRORS][IDEA_SPONSOR_DATE_FIELD] = "La data inserita è errata";
+        }
+
+        if(empty($ideaDTO->getSponsorCategoryId())) {
+            $data[ERRORS][IDEA_SPONSOR_CATEGORY_ID_FIELD] = "Devi selezionare una categoria";
+        }
+
+        return $data;
+    }
+
+    private function validateDate($date, $format = 'Y-m-d') {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    }
+
+    public function deleteIdea($id) {
+        $data = $this->initDeleteIdeaViewData($id);
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $this->ideaModel->deleteIdea($data[IDEADTO]);
+            redirect('ideas/getIdeasByOwnerId');
+        }
+
+        $this->view("ideas/deleteIdea", $data);
+    }
+
+    private function initDeleteIdeaViewData($id) {
+        $data = [
+            IDEADTO => $this->ideaModel->getIdeaByID($id)
+        ];
+
         return $data;
     }
 

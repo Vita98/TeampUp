@@ -22,9 +22,24 @@
                             <kbd style= "color:darkslategray;" class="alert-info"><label for="description"><?php echo $ideaCategory->getDescription(); ?></label></kbd>
                         <?php endforeach; ?>
                     </div>
-                    <div class="form-group mt-3 text-right">
-                        <a href="<?php echo URLROOT; ?>/ideas/showIdea/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Visualizza</a>
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col mt-3">
+                                <a href="<?php echo URLROOT; ?>/ideas/showIdea/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-primary">Visualizza</a>
+                            </div>
+
+                            <div class="col mt-3">
+                                <a href="<?php echo URLROOT; ?>/ideas/sponsorIdea/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-warning">Sponsorizza</a>
+                            </div>
+
+                            <div class="col mt-3">
+                                <a href="<?php echo URLROOT; ?>/ideas/deleteIdea/<?php echo $dto[IDEADTO]->getId(); ?>" type="button" class="btn btn-danger">Rimuovi</a>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
         <?php endforeach; ?>

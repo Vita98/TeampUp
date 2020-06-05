@@ -4,7 +4,8 @@ define('NEW_IDEA_QUERY', "INSERT INTO idea (title, ownerId, description) " .
     "VALUES (:title, :ownerId, :description)");
 define('GET_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
 define('GET_IDEA_BY_OWNER_ID_QUERY', "SELECT * FROM idea WHERE ownerId = :ownerId");
-define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description WHERE id = :id");
+define('DELETE_BY_ID_QUERY', "DELETE FROM idea WHERE id = :id ");
+define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description, sponsorStartDate=:sponsorStartDate, sponsorCategoryid=:sponsorCategoryId WHERE id = :id");
 
 class IdeaModel{
     private $database;
@@ -42,6 +43,14 @@ class IdeaModel{
         $this->database->query(UPDATE_IDEA);
         $this->database->bind(":title", $ideaDTO->getTitle());
         $this->database->bind(":description", $ideaDTO->getDescription());
+        $this->database->bind(":id", $ideaDTO->getId());
+        $this->database->bind(":sponsorStartDate", $ideaDTO->getSponsorStartDate());
+        $this->database->bind(":sponsorCategoryId", $ideaDTO->getSponsorCategoryId());
+        $this->database->execute();
+    }
+
+    public function deleteIdea(IdeaDTO $ideaDTO) {
+        $this->database->query(DELETE_BY_ID_QUERY);
         $this->database->bind(":id", $ideaDTO->getId());
         $this->database->execute();
     }
@@ -188,6 +197,8 @@ class IdeaDTO {
     {
         $this->sponsorCategoryId = $sponsorCategoryId;
     }
+
+
 
 
 }
