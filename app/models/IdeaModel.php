@@ -17,7 +17,10 @@ define ("SEARCH_QUERY_HAVING", " ) ) " .
     " GROUP BY idea.id HAVING " .
     " (:avgInnovativity IS NULL OR AVG(feedback.innovativityVote) >= :avgInnovativity) AND " .
     " (:avgCreativity IS NULL OR AVG(feedback.creativityVote) >= :avgCreativity) AND " .
-    " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote)");
+    " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote) " .
+    " ORDER BY CASE WHEN (idea.sponsorEndDate >= CURRENT_TIMESTAMP() AND idea.sponsorCategoryid IS NOT NULL) " .
+    " THEN FIELD(idea.sponsorCategoryId, '3', '1') " .
+    " ELSE idea.id END ASC " );
 
 class IdeaModel{
     private $database;
@@ -125,8 +128,8 @@ class IdeaDTO {
     private $ownerId;
     private $description;
     private $creationDate;
-    private $sponsorStartDate;
-    private $sponsorCategoryId;
+    private $sponsorEndDate;
+    private $sponsorCategoryid;
 
     /**
      * @return mixed
@@ -211,34 +214,19 @@ class IdeaDTO {
     /**
      * @return mixed
      */
-    public function getSponsorStartDate()
+    public function getSponsorEndDate()
     {
-        return $this->sponsorStartDate;
-    }
-
-    /**
-     * @param mixed $sponsorStartDate
-     */
-    public function setSponsorStartDate($sponsorStartDate)
-    {
-        $this->sponsorStartDate = $sponsorStartDate;
+        return $this->sponsorEndDate;
     }
 
     /**
      * @return mixed
      */
-    public function getSponsorCategoryId()
+    public function getSponsorCategoryid()
     {
-        return $this->sponsorCategoryId;
+        return $this->sponsorCategoryid;
     }
 
-    /**
-     * @param mixed $sponsorCategoryId
-     */
-    public function setSponsorCategoryId($sponsorCategoryId)
-    {
-        $this->sponsorCategoryId = $sponsorCategoryId;
-    }
 
 
 

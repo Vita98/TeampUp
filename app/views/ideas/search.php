@@ -67,7 +67,12 @@
     </div>
 <?php elseif(!$searchMode && $data[IDEASDTO] != null) :?>
     <?php foreach($data[IDEASDTO] as $dto): ?>
-        <div class="card card-body rounded bg-light mt-5">
+        <?php if(($dto->getSponsorCategoryid() == 1 || $dto->getSponsorCategoryid() == 3) && date_format(new DateTime($dto->getSponsorEndDate()), DATE_FORMAT) >= date_format(new DateTime(), DATE_FORMAT)) :?>
+            <div class="card card-body rounded border-success mt-5"">
+            <div class="card-header bg-transparent border-success text-center"><strong>Sponsorizzata da TeamUp! fino al <?php echo date_format(new DateTime($dto->getSponsorEndDate()), DATE_FORMAT); ?></strong></div>
+        <?php else : ?>
+            <div class="card card-body rounded bg-light mt-5">
+        <?php endif; ?>
             <div class="justify-center">
                 <div class="form-group mt-3 ">
                     <label for="title" class="display-5 font-weight-bolder">Titolo: </label>
@@ -75,7 +80,7 @@
                 </div>
                 <div class="form-group mt-3 ">
                     <label for="creationDate" class="display-5 font-weight-bolder">Data di creazione: </label>
-                    <label for="creationDate"><?php echo date_format(new DateTime($dto->getCreationDate()), 'd/m/Y H:i');?></label>
+                    <label for="creationDate"><?php echo date_format(new DateTime($dto->getCreationDate()), DATE_FORMAT);?></label>
                 </div>
                 <div class="form-group mt-3 text-right">
                     <a href="<?php echo URLROOT; ?>/ideas/showIdea/<?php echo $dto->getId(); ?>" type="button" class="btn btn-primary">Visualizza</a>

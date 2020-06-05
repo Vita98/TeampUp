@@ -65,7 +65,7 @@ class Ideas extends Controller {
                 $idea_id = $this->ideaModel->createIdea($ideaDTO);
                 if($idea_id){
                     $this->categoriesSave($_POST[CATEGORIES], $idea_id);
-                    flash('idea_message', "L'idea è stata aggiunta correttamente!");
+                    flash(IDEA_MESSAGE, "L'idea è stata aggiunta correttamente!");
                     redirect(SHOW_IDEA_PATH.$idea_id);
                 }else{
                     die('Qualcosa è andato storto...');
@@ -133,7 +133,7 @@ class Ideas extends Controller {
                 $this->ideaModel->updateIdea($ideaDTO);
                 $this->categoryModel->deleteByIdeaId($ideaDTO->getId());
                 $this->categoriesSave($_POST[CATEGORIES], $ideaDTO->getId());
-                flash('idea_message', "L'idea è stata aggiornata correttamente!");
+                flash(IDEA_MESSAGE, "L'idea è stata aggiornata correttamente!");
                 redirect(SHOW_IDEA_PATH.$ideaDTO->getId());
             }else{
                 //load view with errors
@@ -213,7 +213,7 @@ class Ideas extends Controller {
 
             if(empty($data[ERRORS][IDEA_SPONSOR_DATE_FIELD]) && empty($data[ERRORS][IDEA_SPONSOR_CATEGORY_ID_FIELD])) {
                 $this->ideaModel->updateIdea($data[IDEADTO]);
-                flash('idea_message', "L'idea è stata sponsorizzata correttamente!");
+                flash(IDEA_MESSAGE, "L'idea è stata sponsorizzata correttamente!");
                 redirect('ideas/showIdea/'.$data[IDEADTO]->getId());
             }
         }
@@ -412,6 +412,5 @@ class Ideas extends Controller {
             );
         }
         $this->view("ideas/search", $data);
-
     }
 }

@@ -18,7 +18,7 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                 require(STAR_RATING_FIXED);
             } ?>
 
-            <?php flash("idea_message") ?>
+            <?php flash(IDEA_MESSAGE) ?>
             <?php flash('feedback_message'); ?>
             <hr>
             <div class="pt-3 pb-3">
@@ -43,7 +43,7 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                 </div>
                 <div class="col-md-3 mt-10 text-right">
                     <label>Creato da <br><strong><?php echo $data[USERDTO]->getFirstName()." ".$data[USERDTO]->getLastName() ?> </strong> </label>
-                    <label for="creationDate">il <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), 'd/m/Y H:i:s'); ?></strong> </label>
+                    <label for="creationDate">il <strong><?php echo date_format(new DateTime($data[IDEADTO]->getCreationDate()), DATE_FORMAT); ?></strong> </label>
                 </div>
             </div>
 

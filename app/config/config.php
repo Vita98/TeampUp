@@ -14,4 +14,7 @@
     define('DB_PASS', 'root');
     define('DB_NAME', 'mvc');
 
+    //Common Constants
     define('REQUEST_METHOD_KEY','REQUEST_METHOD');
+    define('DATE_FORMAT', "d/m/Y H:i");
+    define('IDEA_MESSAGE','idea_message');
