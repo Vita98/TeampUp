@@ -21,13 +21,14 @@ define('IDEA_SPONSOR_CATEGORY_ID_FIELD', 'idea_sponsor_category_id');
 
 define('IDEA_EDIT_NEW_VIEW', 'ideas/newIdea');
 define('SHOW_IDEA_VIEW','ideas/showIdea');
-define('SHOW_IDEA_PATH','/ideas/showIdea/');
+define('SHOW_IDEA_PATH','ideas/showIdea/');
 
 define('BEST_IDEA_TYPE','bestIdeaType');
 define('BEST_IDEA_INNOVATIVITY','INNOVATIVITY');
 define('BEST_IDEA_CREATIVITY','CREATIVITY');
 define('BEST_IDEA','');
 
+define('SEARCH_MODE', "searchMode");
 
 class Ideas extends Controller {
     private $ideaModel;
@@ -52,7 +53,7 @@ class Ideas extends Controller {
         }
 
         $ideaDTO = new IdeaDTO;
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             //Sanitize post array
             $data = $this->ideaDataFromPost([], $ideaDTO);
             //validate title
@@ -121,7 +122,7 @@ class Ideas extends Controller {
         if($ideaDTO->getOwnerId() != $_SESSION[USER_ID_KEY]){
             redirect("");
         }
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             //Sanitize post array
             $data = $this->ideaDataFromPost([], $ideaDTO);
             //validate title
@@ -206,7 +207,7 @@ class Ideas extends Controller {
     public function sponsorIdea($id){
         $data = $this->initSponsorCategoryViewData($id);
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             $data = $this->ideaDataSponsorFromPost($data, $data[IDEADTO]);
             $data = $this->ideaDataSponsorErrorCheck($data[IDEADTO], $data);
 
@@ -221,7 +222,7 @@ class Ideas extends Controller {
     }
 
     public function initSponsorCategoryViewData($ideaId) {
-        $data = [
+        return [
             CATEGORIES => $this->sponsorCategoryModel->getAll(),
             IDEADTO => $this->ideaModel->getIdeaByID($ideaId),
             ERRORS => [
@@ -229,7 +230,7 @@ class Ideas extends Controller {
                 IDEA_SPONSOR_CATEGORY_ID_FIELD => ""
             ]
         ];
-        return $data;
+
     }
 
     private function ideaDataSponsorFromPost($data, $ideaDTO) {
@@ -264,7 +265,7 @@ class Ideas extends Controller {
     public function deleteIdea($id) {
         $data = $this->initDeleteIdeaViewData($id);
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             $this->ideaModel->deleteIdea($data[IDEADTO]);
             redirect('ideas/getIdeasByOwnerId');
         }
@@ -273,11 +274,9 @@ class Ideas extends Controller {
     }
 
     private function initDeleteIdeaViewData($id) {
-        $data = [
+        return [
             IDEADTO => $this->ideaModel->getIdeaByID($id)
         ];
-
-        return $data;
     }
 
     public function newFeedback($ideaId){
@@ -374,5 +373,45 @@ class Ideas extends Controller {
               lo reindirizzo alla pagina con le idee migliori*/
             redirect('ideas/bestIdeas/');
         }
+    }
+
+    private function initSearchData(){
+        return [
+            CATEGORIES => $this->categoryModel->getAll(),
+            CHECKED => [],
+            INNOVATIVITY => null,
+            CREATIVITY => null,
+            FEEDBACK_AVG => null,
+            TITLE_FIELD => null,
+            SEARCH_MODE => false
+        ];
+    }
+
+    private function searchDataFromGet($data){
+        $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
+        $data[IDEASDTO] = [];
+        $data[CREATIVITY] = isset($_GET[CREATIVITY]) && $_GET[CREATIVITY] != null && strlen(trim($_GET[CREATIVITY])) ? trim($_GET[CREATIVITY])/2 : null;
+        $data[INNOVATIVITY] = isset($_GET[INNOVATIVITY]) && $_GET[INNOVATIVITY] != null && strlen(trim($_GET[INNOVATIVITY])) ? trim($_GET[INNOVATIVITY])/2 : null;
+        $data[FEEDBACK_AVG] = isset($_GET[FEEDBACK_AVG]) && $_GET[FEEDBACK_AVG] != null && strlen(trim($_GET[FEEDBACK_AVG])) ? trim($_GET[FEEDBACK_AVG])/2 : null;
+        $data[TITLE_FIELD] = isset($_GET[TITLE_FIELD]) && $_GET[TITLE_FIELD] && strlen(trim($_GET[TITLE_FIELD])) != null ? trim($_GET[TITLE_FIELD]) : null;
+        $data[CHECKED] = isset($_GET[CHECKED]) && count($_GET[CHECKED]) ? $_GET[CHECKED] : null;
+        unset($_GET);
+        return $data;
+    }
+    public function searchIdea(){
+        if(!isLoggedIn()){
+            redirect("");
+        }
+
+        $data = $this->initSearchData();
+
+        if(isset($_GET[SEARCH_MODE]) && $_GET[SEARCH_MODE]){
+            $data = $this->searchDataFromGet($data);
+            $data[IDEASDTO] = $this->ideaModel->filteredSearch(
+                $data[TITLE_FIELD], $data[CHECKED], $data[FEEDBACK_AVG], $data[INNOVATIVITY], $data[CREATIVITY]
+            );
+        }
+        $this->view("ideas/search", $data);
+
     }
 }

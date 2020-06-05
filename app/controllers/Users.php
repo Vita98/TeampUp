@@ -15,7 +15,7 @@ define('USER_ABILITIES_KEY','userAbilities');
 define('OLD_PSW_KEY','old_psw');
 define('NEW_PSW_KEY','new_psw');
 define('CHECKED', 'checked');
-define('REQUEST_METHOD_KEY','REQUEST_METHOD');
+//La chiave request method serve ovunque, l'ho pushata in CONFIG.PHP
 
 define('ENTER_NAME_ERROR','Inserisci un nome!');
 define('ENTER_SURNAME_ERROR', 'Inserisci un cognome!');
