@@ -206,7 +206,6 @@ class Ideas extends Controller {
 
     public function sponsorIdea($id){
         $data = $this->initSponsorCategoryViewData($id);
-
         if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             $data = $this->ideaDataSponsorFromPost($data, $data[IDEADTO]);
             $data = $this->ideaDataSponsorErrorCheck($data[IDEADTO], $data);
@@ -235,22 +234,22 @@ class Ideas extends Controller {
 
     private function ideaDataSponsorFromPost($data, $ideaDTO) {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $ideaDTO->setSponsorStartDate(trim($_POST[IDEA_SPONSOR_DATE_FIELD]));
+        $ideaDTO->setSponsorEndDate(trim($_POST[IDEA_SPONSOR_DATE_FIELD]));
         if(isset($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) && is_array($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) && count($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD]) > 0) {
-            $ideaDTO->setSponsorCategoryId(trim($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD][0]));
+            $ideaDTO->setSponsorCategoryid(trim($_POST[IDEA_SPONSOR_CATEGORY_ID_FIELD][0]));
         }
         $data[IDEADTO] = $ideaDTO;
         return $data;
     }
 
     private function ideaDataSponsorErrorCheck($ideaDTO, $data) {
-        if(empty($ideaDTO->getSponsorStartDate())) {
+        if(empty($ideaDTO->getSponsorEndDate())) {
             $data[ERRORS][IDEA_SPONSOR_DATE_FIELD] = "Inserisci una data";
-        }else if(!$this->validateDate($ideaDTO->getSponsorStartDate())) {
+        }else if(!$this->validateDate($ideaDTO->getSponsorEndDate())) {
             $data[ERRORS][IDEA_SPONSOR_DATE_FIELD] = "La data inserita è errata";
         }
 
-        if(empty($ideaDTO->getSponsorCategoryId())) {
+        if(empty($ideaDTO->getSponsorCategoryid())) {
             $data[ERRORS][IDEA_SPONSOR_CATEGORY_ID_FIELD] = "Devi selezionare una categoria";
         }
 

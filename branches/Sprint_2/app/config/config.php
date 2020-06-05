@@ -11,10 +11,10 @@
     //Database Configuration
     define('DB_HOST', 'localhost:3306');
     define('DB_USER', 'root');
-    define('DB_PASS', 'root');
-    define('DB_NAME', 'mvc');
+    define('DB_PASS', 'rootroot');
+    define('DB_NAME', 'teamUp');
 
     //Common Constants
     define('REQUEST_METHOD_KEY','REQUEST_METHOD');
-    define('DATE_FORMAT', "d/m/Y H:i");
+    define('DATE_FORMAT', "d/m/Y");
     define('IDEA_MESSAGE','idea_message');

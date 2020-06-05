@@ -8,11 +8,11 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="firstName" class="d-flex justify-content-center">Data inizio sponsorizzazione: *</label>
+                            <label for="firstName" class="d-flex justify-content-center">Data fine sponsorizzazione: *</label>
                         </div>
                         <div class="col-md-9">
-                            <input type="date" name="<?php echo IDEA_SPONSOR_DATE_FIELD ?>" class="form-control form-control-sm
-                            <?php echo (!empty($data[ERRORS][IDEA_SPONSOR_DATE_FIELD])) ? 'is-invalid' : ''; ?>" value="<?php echo $data[IDEADTO]->getSponsorStartDate(); ?>"/>
+                            <input type="date" min="<?php echo date("Y-m-d")?>" name="<?php echo IDEA_SPONSOR_DATE_FIELD ?>" class="form-control form-control-sm
+                            <?php echo (!empty($data[ERRORS][IDEA_SPONSOR_DATE_FIELD])) ? 'is-invalid' : ''; ?>" value="<?php echo $data[IDEADTO]->getSponsorEndDate(); ?>"/>
                             <span class="invalid-feedback"><?php echo $data[ERRORS][IDEA_SPONSOR_DATE_FIELD]; ?></span>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                                             id="<?php echo $category->getId()?>"
                                             name="<?php echo IDEA_SPONSOR_CATEGORY_ID_FIELD . "[]"?>"
                                             value="<?php echo $category->getId(); ?>"
-                                            <?php echo $category->getId() === $data[IDEADTO]->getSponsorCategoryId() ? "checked=checked" : ""; ?>
+                                            <?php echo $category->getId() === $data[IDEADTO]->getSponsorCategoryid() ? "checked=checked" : ""; ?>
                                             class="custom-control-input"
                                     >
                                     <label

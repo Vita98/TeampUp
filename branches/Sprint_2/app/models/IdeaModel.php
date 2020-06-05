@@ -5,7 +5,7 @@ define('NEW_IDEA_QUERY', "INSERT INTO idea (title, ownerId, description) " .
 define('GET_IDEA_BY_ID_QUERY', "SELECT * FROM idea WHERE id = :id");
 define('GET_IDEA_BY_OWNER_ID_QUERY', "SELECT * FROM idea WHERE ownerId = :ownerId");
 define('DELETE_BY_ID_QUERY', "DELETE FROM idea WHERE id = :id ");
-define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description, sponsorStartDate=:sponsorStartDate, sponsorCategoryid=:sponsorCategoryId WHERE id = :id");
+define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description, sponsorEndDate=:sponsorEndDate, sponsorCategoryid=:sponsorCategoryId WHERE id = :id");
 define ("SEARCH_QUERY",
     " SELECT DISTINCT idea.* " .
     " FROM idea LEFT JOIN ideacategoryassociation ".
@@ -19,7 +19,7 @@ define ("SEARCH_QUERY_HAVING", " ) ) " .
     " (:avgCreativity IS NULL OR AVG(feedback.creativityVote) >= :avgCreativity) AND " .
     " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote) " .
     " ORDER BY CASE WHEN (idea.sponsorEndDate >= CURRENT_TIMESTAMP() AND idea.sponsorCategoryid IS NOT NULL) " .
-    " THEN FIELD(idea.sponsorCategoryId, '3', '1') " .
+    " THEN FIELD(idea.sponsorCategoryid, '3', '1') " .
     " ELSE idea.id END ASC " );
 
 class IdeaModel{
@@ -59,8 +59,8 @@ class IdeaModel{
         $this->database->bind(":title", $ideaDTO->getTitle());
         $this->database->bind(":description", $ideaDTO->getDescription());
         $this->database->bind(":id", $ideaDTO->getId());
-        $this->database->bind(":sponsorStartDate", $ideaDTO->getSponsorStartDate());
-        $this->database->bind(":sponsorCategoryId", $ideaDTO->getSponsorCategoryId());
+        $this->database->bind(":sponsorEndDate", $ideaDTO->getSponsorEndDate());
+        $this->database->bind(":sponsorCategoryId", $ideaDTO->getSponsorCategoryid());
         $this->database->execute();
     }
 
@@ -225,6 +225,22 @@ class IdeaDTO {
     public function getSponsorCategoryid()
     {
         return $this->sponsorCategoryid;
+    }
+
+    /**
+     * @param mixed $sponsorEndDate
+     */
+    public function setSponsorEndDate($sponsorEndDate)
+    {
+        $this->sponsorEndDate = $sponsorEndDate;
+    }
+
+    /**
+     * @param mixed $sponsorCategoryid
+     */
+    public function setSponsorCategoryid($sponsorCategoryid)
+    {
+        $this->sponsorCategoryid = $sponsorCategoryid;
     }
 
 
