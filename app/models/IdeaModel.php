@@ -8,11 +8,11 @@ define('DELETE_BY_ID_QUERY', "DELETE FROM idea WHERE id = :id ");
 define('UPDATE_IDEA', "UPDATE idea SET title=:title, description=:description, sponsorEndDate=:sponsorEndDate, sponsorCategoryid=:sponsorCategoryId WHERE id = :id");
 define ("SEARCH_QUERY",
     " SELECT DISTINCT idea.* " .
-    " FROM idea LEFT JOIN ideacategoryassociation ".
-    " ON idea.id = ideacategoryassociation.idea_id LEFT JOIN feedback " .
+    " FROM idea LEFT JOIN ideaCategoryAssociation ".
+    " ON idea.id = ideaCategoryAssociation.idea_id LEFT JOIN feedback " .
     " ON idea.id = feedback.idea_id WHERE " .
     " (:ideaTitle IS NULL OR idea.title LIKE :ideaTitle) AND " .
-    " (:cat1 IS NULL OR ideacategoryassociation.ideaCategoryModel_id IN ( ");
+    " (:cat1 IS NULL OR ideaCategoryAssociation.ideaCategoryModel_id IN ( ");
 define ("SEARCH_QUERY_HAVING", " ) ) " .
     " GROUP BY idea.id HAVING " .
     " (:avgInnovativity IS NULL OR AVG(feedback.innovativityVote) >= :avgInnovativity) AND " .

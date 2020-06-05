@@ -1,5 +1,5 @@
 <?php
-define("GET_ALL_SPONSORCATEGORY", "SELECT id,description FROM sponsorcategory");
+define("GET_ALL_SPONSORCATEGORY", "SELECT id,description FROM sponsorCategory");
 
 class SponsorCategoryModel {
     private $database;
