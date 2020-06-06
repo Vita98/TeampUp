@@ -1,5 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-    <div class="container text-center">
+<div class="row">
+    <div class="container text-center mt-3">
         <label class="display-4">Nuova fase di realizzazione</label>
         <p>Compila il form per aggiungere una nuova fase di realizzazione</p>
     </div>
@@ -38,5 +39,6 @@
                 </div>
             </form>
     </div>
+</div>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>

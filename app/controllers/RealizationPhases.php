@@ -65,7 +65,7 @@ class RealizationPhases extends Controller
                         $this->realizationPhaseModel->assAbilityRealizationPhase($realizationPhase_id, $ability);
                     }
                     flash(IDEA_MESSAGE, "La fase di realizzazione è stata aggiunta correttamente!");
-                    redirect(SHOW_IDEA_VIEW . $id);
+                    redirect('realizationPhases/manageRealizationPhases/' . $id);
                 } else {
                     die('Qualcosa è andato storto...');
                 }
@@ -129,7 +129,7 @@ class RealizationPhases extends Controller
                     $this->realizationPhaseModel->assAbilityRealizationPhase($data[REALIZATION_PHASE_DTO]->getId(), $ability);
                 }
                 flash(IDEA_MESSAGE, "La fase di realizzazione è stata modificata correttamente!");
-                redirect(SHOW_IDEA_VIEW . $data[REALIZATION_PHASE_DTO]->getIdeaId());
+                redirect('realizationPhases/manageRealizationPhases/' . $data[REALIZATION_PHASE_DTO]->getIdeaId());
 
             } else {
                 $data[ABILITIES] = $this->abilityModel->getAllAbilities();
