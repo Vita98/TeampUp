@@ -5,7 +5,7 @@ define('IS_INVALID_CLASS',"is-invalid");
 ?>
 
     <div class="row">
-        <div class="container text-center ">
+        <div class="container text-center mt-3">
             <label class="display-4 ">Modifica Profilo</label>
             <p>In questa sezione è possibile modificare i dati del profilo</p>
         </div>
