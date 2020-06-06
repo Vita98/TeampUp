@@ -6,16 +6,9 @@
         <label class="display-4">Gestisci le fasi di realizzazione</label>
         <p>In questa sezione è gestire le fasi di realizzazione</p>
     </div>
-
     <div class="container bg-light rounded mt-2 col-md-10">
         <div class="container text-center">
             <div class="d-flex justify-content-center mt-4"><?php flash(IDEA_MESSAGE) ?></div>
-            <?php   if($data[REALIZATION_PHASE_DTO] == null):?>
-                <div class="alert alert-danger" role="alert">
-                    <strong>Questa idea non possiede fasi di realizzazione</strong>
-                </div>
-            <?php else :?>
-
             <div class="row mt-3 justify-content-md-center">
                 <div class="col-6 mt-3 mb-3">
                     <a href="<?php echo URLROOT; ?>/realizationPhases/newRealizationPhase/<?php echo $data[IDEA_DTO]->getId(); ?>" style="">
@@ -33,6 +26,13 @@
                 </div>
             </div>
             <hr>
+            <?php   if($data[REALIZATION_PHASE_DTO] == null):?>
+                <div class="alert alert-danger" role="alert">
+                    <strong>Questa idea non possiede fasi di realizzazione</strong>
+                </div>
+            <?php else :?>
+
+
 
             <?php foreach ($data[REALIZATION_PHASE_DTO] as $realizationPhase): ?>
 

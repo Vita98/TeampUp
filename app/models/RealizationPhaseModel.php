@@ -81,6 +81,7 @@ class RealizationPhaseDTO
     private $id;
     private $name;
     private $ideaId;
+    private $teamId;
 
     /**
      * @return mixed
@@ -128,6 +129,22 @@ class RealizationPhaseDTO
     public function setIdeaId($ideaId)
     {
         $this->ideaId = $ideaId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTeamId()
+    {
+        return $this->teamId;
+    }
+
+    /**
+     * @param mixed $teamId
+     */
+    public function setTeamId($teamId)
+    {
+        $this->teamId = $teamId;
     }
 
 
