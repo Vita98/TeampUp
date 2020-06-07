@@ -114,7 +114,10 @@
 <?php require APPROOT . '/views/inc/footer.php'; ?>
 <script>
     function init() {
-        document.getElementById("searchForm").reset();
+        var ele = document.getElementById("searchForm");
+        if(ele){
+            ele.reset();
+        }
     }
     window.onload = init;
 </script>

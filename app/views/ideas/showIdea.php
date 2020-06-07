@@ -18,6 +18,10 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
             } ?>
 
             <?php flash('feedback_message'); ?>
+            <?php flash('REQUEST_CORRECTLY_SENT'); ?>
+            <?php flash('NEW_IDEA_OK'); ?>
+            <?php flash('SPONSORIZATION_OK'); ?>
+
             <hr>
             <div class="pt-3 pb-3">
                 <label for="description"><?php echo $data[IDEADTO]->getDescription();?></label>
@@ -83,13 +87,28 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                     <?php endif; ?>
                 </div>
             </form>
+                <?php if($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId() && $data[ALLOW_SEND_REQUEST] ):?>
+                <div class="row mt-4 mb-4">
+                    <div class="col-12">
+                        <a href="#" onclick="updatePopup('<?php echo URLROOT; ?>/partecipationRequests/sendPartecipationRequest/<?php echo $data[IDEADTO]->getId(); ?>/true')"  data-toggle="modal" data-target="#exampleModalCenter">
+                            <div class="row d-flex justify-content-center">
+                                <svg class="bi bi-person-plus-fill" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+                                </svg>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">Richiedi di partecipare</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <?php endif; ?>
             <?php endif; ?>
 
             <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
-            <div class="row">
-
-
-                <div class="col-6 mt-3 ">
+            <div class="row mb-3">
+                <div class="col-4 mt-3 ">
                     <a href="<?php echo URLROOT; ?>/ideas/editIdea/<?php echo $data[IDEADTO]->getId(); ?>" style="">
                         <div class="row d-flex justify-content-center">
                             <svg class="bi bi-pencil" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +121,20 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                         </div>
                     </a>
                 </div>
-                <div class="col-6 mt-3 ">
+                <div class="col-4 mt-3 ">
+                    <a href="<?php echo URLROOT; ?>/partecipationRequests/manageIdeaPartecipants/<?php echo $data[IDEADTO]->getId(); ?>" style="color:gray">
+                        <div class="row d-flex justify-content-center">
+                            <svg class="bi bi-person-square" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            </svg>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">Gestione Partecipanti</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-4 mt-3 ">
                     <a href="<?php echo URLROOT; ?>/realizationPhases/manageRealizationPhases/<?php echo $data[IDEADTO]->getId(); ?>" style="color:gray">
                         <div class="row d-flex justify-content-center">
                             <svg class="bi bi-gear" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -122,5 +154,13 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
         </div>
     </div>
 </div>
+
+<?php
+$popUpData['modal-title'] = "Sei sicuro?";
+$popUpData['modal-body'] = "Sei sicuro di voler inviare la richiesta di partecipazione?";
+$popUpData['modal-primary'] = "Invia";
+$popUpData['modal-secondary'] = "Annulla";
+require_once APPROOT.'/views/inc/pop-Up.php';
+?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
