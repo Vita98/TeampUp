@@ -369,7 +369,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         /**
          * Function used to search among users
          */
-        public function searchUsers(){
+        private function searchUsers(){
             //public function
             if(!isLoggedIn()){
                 redirect("");

@@ -4,7 +4,7 @@
 
     <div class="container text-center mt-3">
         <label class="display-4">Gestisci le fasi di realizzazione</label>
-        <p>In questa sezione è gestire le fasi di realizzazione</p>
+        <p>In questa sezione è possibile gestire le fasi di realizzazione</p>
     </div>
     <div class="container bg-light rounded mt-2 col-md-10">
         <div class="container text-center">

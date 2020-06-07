@@ -67,10 +67,14 @@ if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
             $this->database->bind(':id', $id);
 
             $user = $this->database->classFromSingle(UserDTO::class);
+            if($user){
+                //Removing the psw from the result
+                $user->setPsw("");
+                return $user;
+            }else{
+                return false;
+            }
 
-            //Removing the psw from the result
-            $user->setPsw("");
-            return $user;
         }
 
         /**

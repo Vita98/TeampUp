@@ -29,6 +29,7 @@ define('BEST_IDEA_CREATIVITY','CREATIVITY');
 define('BEST_IDEA','');
 
 define('SEARCH_MODE', "searchMode");
+define('ALLOW_SEND_REQUEST','allow_send_req');
 
 class Ideas extends Controller {
     private $ideaModel;
@@ -37,6 +38,7 @@ class Ideas extends Controller {
     private $sponsorCategoryModel;
     private $realizationPhaseModel;
     private $feedbackModel;
+    private $partecipationRequestModel;
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
@@ -45,6 +47,7 @@ class Ideas extends Controller {
         $this->sponsorCategoryModel = $this->model(SponsorCategoryModel::class);
         $this->feedbackModel = $this->model(Feedback::class);
         $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
+        $this->partecipationRequestModel = $this->model(PartecipationRequestModel::class);
     }
 
     public function newIdea(){
@@ -65,7 +68,7 @@ class Ideas extends Controller {
                 $idea_id = $this->ideaModel->createIdea($ideaDTO);
                 if($idea_id){
                     $this->categoriesSave($_POST[CATEGORIES], $idea_id);
-                    flash(IDEA_MESSAGE, "L'idea è stata aggiunta correttamente!");
+                    flash('NEW_IDEA_OK', "L'idea è stata aggiunta correttamente!");
                     redirect(SHOW_IDEA_PATH.$idea_id);
                 }else{
                     die('Qualcosa è andato storto...');
@@ -86,6 +89,7 @@ class Ideas extends Controller {
         if (isLoggedIn()){
             $feedback = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$id);
             $idea[FEEDBACK] = $feedback;
+            $idea[ALLOW_SEND_REQUEST] = !$this->partecipationRequestModel->hasAlreadyRequestedPartecipation($_SESSION['userId'],$id);
         }
 
         if(!empty($idea[IDEADTO])){
@@ -212,7 +216,7 @@ class Ideas extends Controller {
 
             if(empty($data[ERRORS][IDEA_SPONSOR_DATE_FIELD]) && empty($data[ERRORS][IDEA_SPONSOR_CATEGORY_ID_FIELD])) {
                 $this->ideaModel->updateIdea($data[IDEADTO]);
-                flash(IDEA_MESSAGE, "L'idea è stata sponsorizzata correttamente!");
+                flash('SPONSORIZATION_OK', "L'idea è stata sponsorizzata correttamente!");
                 redirect('ideas/showIdea/'.$data[IDEADTO]->getId());
             }
         }
