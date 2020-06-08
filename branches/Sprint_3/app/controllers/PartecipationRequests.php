@@ -6,6 +6,7 @@ define('FIRST_NAME_KEY','firstName');
 define('LAST_NAME_KEY','lastName');
 define('CHECKED', 'checked');
 
+
 class PartecipationRequests extends Controller {
     private $ideaModel;
     private $userModel;
@@ -29,7 +30,7 @@ class PartecipationRequests extends Controller {
         if (!$idea){
             return false;
         }
-        if($_SESSION['userId'] != $idea->getOwnerId()){
+        if($_SESSION[USER_ID] != $idea->getOwnerId()){
             return false;
         }
 
@@ -45,7 +46,7 @@ class PartecipationRequests extends Controller {
             redirect('');
         }
 
-        $data['ideaId'] = $ideaId;
+        $data[IDEA_ID] = $ideaId;
         $this->view('partecipationRequests/manageIdeaPartecipants', $data);
     }
 
@@ -54,7 +55,7 @@ class PartecipationRequests extends Controller {
             redirect('');
         }
 
-        $data = [ USERDTO_KEY =>[], USER_ABILITIES_KEY => [], CHECKED => [], FIRST_NAME_KEY=> "", LAST_NAME_KEY=>"", 'ideaId' => $ideaId ,'post'=>false];
+        $data = [ USERDTO_KEY =>[], USER_ABILITIES_KEY => [], CHECKED => [], FIRST_NAME_KEY=> "", LAST_NAME_KEY=>"", IDEA_ID => $ideaId ,'post'=>false];
         $data[USER_ABILITIES_KEY] = $this->abilityModel->getAllAbilities();
         if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
             $data['post'] = true;
@@ -68,7 +69,7 @@ class PartecipationRequests extends Controller {
         //Rimuovo gli utenti gia invitati
         $count = 0;
         foreach ($data[USERDTO_KEY] as $user){
-            if($this->partecipationrequestModel->isUserAlreadyInvited($user->getId(),$ideaId) || $_SESSION['userId']==$user->getId()){
+            if($this->partecipationrequestModel->isUserAlreadyInvited($user->getId(),$ideaId) || $_SESSION[USER_ID]==$user->getId()){
                 unset($data[USERDTO_KEY][$count]);
             }
             $count++;
@@ -104,12 +105,12 @@ class PartecipationRequests extends Controller {
                 redirect('');
             }
 
-            if($_SESSION['userId'] != $idea->getOwnerId()){
+            if($_SESSION[USER_ID] != $idea->getOwnerId()){
                 redirect('');
             }
 
             //Controllo se l'utente ha gia inviato un invito a quell'utente
-            if($this->partecipationrequestModel->isUserAlreadyInvited($userId,$ideaId) || $_SESSION['userId']==$userId){
+            if($this->partecipationrequestModel->isUserAlreadyInvited($userId,$ideaId) || $_SESSION[USER_ID]==$userId){
                 redirect('');
             }else{
                 //Effettuo l'inserimento
@@ -126,7 +127,7 @@ class PartecipationRequests extends Controller {
         }elseif ($typo=='true'){
             //Sono qui se la richiesta la sta facendo l'utente all'idea
             //Effettuo l'inserimento
-            $partReq = new PartecipationRequestDTO($_SESSION['userId'],$ideaId,true,true);
+            $partReq = new PartecipationRequestDTO($_SESSION[USER_ID],$ideaId,true,true);
             if ($this->partecipationrequestModel->createPartecipationRequest($partReq)){
                 flash('REQUEST_CORRECTLY_SENT', 'Richiesta di partecipazione correttamente inviata!');
                 redirect('ideas/showIdea/'.$ideaId);

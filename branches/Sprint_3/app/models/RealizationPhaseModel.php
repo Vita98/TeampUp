@@ -8,6 +8,8 @@ define('UPDATE_REALIZATION_PHASE',"UPDATE realizationPhase SET name = :name wher
 define('GET_REALIZATION_PHASE_BY_ID', "SELECT * FROM realizationPhase WHERE id = :id");
 define('DELETE_ABILITY_BY_REALIZATION_PHASE', "DELETE FROM realizationPhaseAbilities WHERE realizationphase_id = :realizationphase_id");
 
+define('INSERT_TEAM_ID_QUERY',"UPDATE realizationPhase SET  teamId = :teamId WHERE id = :id");
+
 
 class RealizationPhaseModel
 {
@@ -69,6 +71,14 @@ class RealizationPhaseModel
     public function deleteAbilityByRealizationPhase($id){
         $this->database->query(DELETE_ABILITY_BY_REALIZATION_PHASE);
         $this->database->bind(':realizationphase_id',$id);
+
+        return $this->database->execute();
+    }
+
+    public function assTeamRealizationPhase($teamId,$realizationPhaseId){
+        $this->database->query(INSERT_TEAM_ID_QUERY);
+        $this->database->bind(":teamId" , $teamId);
+        $this->database->bind(":id" , $realizationPhaseId);
 
         return $this->database->execute();
     }

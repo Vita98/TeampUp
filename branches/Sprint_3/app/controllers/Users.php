@@ -366,25 +366,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             }
         }
 
-        /**
-         * Function used to search among users
-         */
-        private function searchUsers(){
-            //public function
-            if(!isLoggedIn()){
-                redirect("");
-            }
-            $data = [ USERDTO_KEY =>[], USER_ABILITIES_KEY => [], CHECKED => [], FIRST_NAME_KEY=> "", LAST_NAME_KEY=>"" ];
-            $data[USER_ABILITIES_KEY] = $this->abilityModel->getAllAbilities();
-            if($_SERVER[REQUEST_METHOD_KEY] == 'POST'){
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-                $data[CHECKED] = isset($_POST[CHECKED]) && !empty($_POST[CHECKED]) ? $_POST[CHECKED] : null;
-                $data[FIRST_NAME_KEY] = isset($_POST[FIRST_NAME_KEY]) && !empty($_POST[FIRST_NAME_KEY]) ? $_POST[FIRST_NAME_KEY] : null;
-                $data[LAST_NAME_KEY] = isset($_POST[LAST_NAME_KEY]) && !empty($_POST[LAST_NAME_KEY]) ? $_POST[LAST_NAME_KEY] : null;
-                $data[USERDTO_KEY] = $this->userModel->getUsersByNameSurnameSkills("%".$_POST[FIRST_NAME_KEY]."%", "%".$_POST[LAST_NAME_KEY]."%", $data[CHECKED]);
-            }
-            $this->view("users/search", $data);
-        }
+
     }
 
 ?>
