@@ -2,6 +2,7 @@
     //
     session_start();
     define("CLASS_ATT", '_class');
+    define('USER_ID','userId');
     //Flash message helper
     function flash($name = '', $message = '', $class = 'alert alert-success'){
         if(!empty($name) && !empty($message)){
@@ -26,5 +27,5 @@
     }
 
     function isLoggedIn(){
-        return isset($_SESSION['userId']);
+        return isset($_SESSION[USER_ID]);
     }

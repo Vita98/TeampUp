@@ -10,9 +10,9 @@ define('EDITMODE', 'editMode');
 
 define('DESCRIPT_FIELD', 'description');
 define('TITLE_FIELD', 'title');
-define('IDEA_ID','ideaId');
+
 define('IDEA_DTO','ideaDTO');
-define('USER_ID','userId');
+
 
 define('REALIZATION_PHASE_NEW_VIEW','realizationPhases/newRealizationPhase');
 define('REALIZATION_PHASE_EDIT_VIEW','realizationPhases/editRealizationPhase');

@@ -1,3 +1,4 @@
+<?php define('STAR_RATING_EDITABLE','starRatingEditable.php')?>
 <?php require APPROOT . '/views/inc/header.php'; ?>
 <div class="row">
     <?php $searchMode = !isset($data[IDEASDTO]); ?>
@@ -46,19 +47,19 @@
                     <div class="col-md-4">
                         <div class="">
                             <label><strong>Innovatività</strong></label>
-                            <div><?php $ratingId = INNOVATIVITY; require ('starRatingEditable.php'); ?></div>
+                            <div><?php $ratingId = INNOVATIVITY; require (STAR_RATING_EDITABLE); ?></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="">
                             <label><strong>Creatività</strong></label>
-                            <div><?php $ratingId = CREATIVITY; require ('starRatingEditable.php'); ?></div>
+                            <div><?php $ratingId = CREATIVITY; require (STAR_RATING_EDITABLE); ?></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="">
                             <label><strong>Media Feedback</strong></label>
-                            <div><?php $ratingId = FEEDBACK_AVG; require ('starRatingEditable.php'); ?></div>
+                            <div><?php $ratingId = FEEDBACK_AVG; require (STAR_RATING_EDITABLE); ?></div>
                         </div>
                     </div>
                 </div>

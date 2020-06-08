@@ -82,7 +82,7 @@
                 </div>
             </div>
         <?php endforeach; ?>
-        <?php elseif (isset($data[USERDTO_KEY]) && empty($data[USERDTO_KEY]) && $data['post']==true): ?>
+        <?php elseif (isset($data[USERDTO_KEY]) && empty($data[USERDTO_KEY]) && $data['post']): ?>
             <div class="alert alert-warning text-center mt-5 mb-5" role="alert">
                 Non puoi invitare nassun utente a partecipare alla tua idea!
             </div>

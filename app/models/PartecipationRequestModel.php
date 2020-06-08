@@ -1,5 +1,6 @@
 <?php
-
+define('USER_ID_QUERY',':userId');
+define('IDEA_ID_QUERY',':ideaId');
 class PartecipationRequestModel{
     protected $database;
 
@@ -9,8 +10,8 @@ class PartecipationRequestModel{
 
     public function createPartecipationRequest($partecReqDTO){
         $this->database->query("INSERT INTO partecipationRequest (userId,ideaId,isPending,isUserRequesting) VALUES (:userId,:ideaId,:isPending,:isUserRequesting)");
-        $this->database->bind(':userId', $partecReqDTO->getUserId());
-        $this->database->bind(':ideaId', $partecReqDTO->getIdeaId());
+        $this->database->bind(USER_ID_QUERY, $partecReqDTO->getUserId());
+        $this->database->bind(IDEA_ID_QUERY, $partecReqDTO->getIdeaId());
         $this->database->bind(':isPending', $partecReqDTO->getIsPending());
         $this->database->bind(':isUserRequesting', $partecReqDTO->getIsUserRequesting());
 
@@ -19,8 +20,8 @@ class PartecipationRequestModel{
 
     public function isUserAlreadyInvited($userId,$ideaId){
         $this->database->query("SELECT * FROM partecipationRequest WHERE userId=:userId AND ideaId=:ideaId AND isUserRequesting=false");
-        $this->database->bind(':userId', $userId);
-        $this->database->bind(':ideaId', $ideaId);
+        $this->database->bind(USER_ID_QUERY, $userId);
+        $this->database->bind(IDEA_ID_QUERY, $ideaId);
 
         $this->database->single();
 
@@ -30,8 +31,8 @@ class PartecipationRequestModel{
 
     public function hasAlreadyRequestedPartecipation($userId,$ideaId){
         $this->database->query("SELECT * FROM partecipationRequest WHERE userId=:userId AND ideaId=:ideaId AND isUserRequesting=true");
-        $this->database->bind(':userId', $userId);
-        $this->database->bind(':ideaId', $ideaId);
+        $this->database->bind(USER_ID_QUERY, $userId);
+        $this->database->bind(IDEA_ID_QUERY, $ideaId);
 
         $this->database->single();
 
