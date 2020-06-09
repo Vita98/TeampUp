@@ -70,7 +70,7 @@
                             </a>
                         </div>
                         <div class="col-4 mt-3 ">
-                            <a href="javascript:updatePopup('<?php echo URLROOT;?>/realizationPhases/deleteRealizationPhase/<?php echo $realizationPhase->getId();?>')" style="color: red" >
+                            <a href ="" data-toggle="modal" data-target="#deletePhaseModal" onclick="updatePopup('<?php echo URLROOT;?>/realizationPhases/deleteRealizationPhase/<?php echo $realizationPhase->getId();?>')" style="color: red" >
                                 <div class="row d-flex justify-content-center">
                                     <svg class="bi bi-trash" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -89,6 +89,26 @@
             <hr>
             <?php endforeach; ?>
             <?php endif;?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deletePhaseModal" tabindex="-1" role="dialog" aria-labelledby="deletePhaseModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePhaseModalTitle">Cancella fase di realizzazione</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler cancellare questa fase di realizzazione?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <a href="" id="ModificationSaveButton" <button type="button" class="btn btn-danger">Elimina</button></a>
+            </div>
         </div>
     </div>
 </div>
