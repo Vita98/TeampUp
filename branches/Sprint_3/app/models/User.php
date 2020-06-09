@@ -7,6 +7,12 @@ define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (u
                 " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
                 " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");
 
+define('FIND_USER_IDEA_PARTICIPANTS', "SELECT user.id, user.firstName, user.lastName ".
+                                       "FROM idea ".
+                                        "JOIN partecipationrequest ON idea.id=partecipationrequest.ideaId ".
+                                        "JOIN user ON partecipationrequest.userId=user.id ".
+                                        "WHERE idea.id=:ideaId and partecipationrequest.isPending = 0");
+
 if (!defined('FIRST_NAME_KEY')) {define('FIRST_NAME_KEY','firstName');}
 if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
 
@@ -127,6 +133,13 @@ if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
             $this->database->bind(':ideaId', $ideaId);
 
             return $this->database->classFromSingle(UserDTO::class);
+        }
+
+        public function getUserIdeaParticipants($ideaId) {
+            $this->database->query(FIND_USER_IDEA_PARTICIPANTS);
+            $this->database->bind(":ideaId", $ideaId);
+
+            return $this->database->classesFromResultSet(UserDTO::class);
         }
     }
 

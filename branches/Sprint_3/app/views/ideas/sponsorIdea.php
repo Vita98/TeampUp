@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
     <div class="row">
         <div class="container text-center">
-            <label class="display-4 ">Sponsorizza IDEA</label>
+            <label class="display-4 ">Sponsorizza idea</label>
         </div>
         <div class="container bg-light border rounded mt-3 col-md-10 p-5">
             <form action="<?php echo URLROOT; ?>/ideas/sponsorIdea/<?php echo $data[IDEADTO]->getId(); ?>" method="post">

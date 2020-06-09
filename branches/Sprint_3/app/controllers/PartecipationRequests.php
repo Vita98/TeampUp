@@ -1,10 +1,15 @@
 <?php
 
 define('USERDTO_KEY','userDTO');
+define('USER_LIST_KEY','userListDTO');
+define('PARTICIPANT_REQUEST_LIST_KEY', 'participantRequestListDTO');
+define('USER_COUNT_KEY', 'userCount');
 define('USER_ABILITIES_KEY','userAbilities');
 define('FIRST_NAME_KEY','firstName');
 define('LAST_NAME_KEY','lastName');
+define('TEAM_LIST_KEY', 'teamListDTO');
 define('CHECKED', 'checked');
+define('TEAM_CHECKED_NAME', 'teams');
 
 
 class PartecipationRequests extends Controller {
@@ -12,12 +17,16 @@ class PartecipationRequests extends Controller {
     private $userModel;
     private $abilityModel;
     private $partecipationrequestModel;
+    private $teamModel;
+    private $memberModel;
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->userModel = $this->model(User::class);
         $this->abilityModel = $this->model(Ability::class);
         $this->partecipationrequestModel = $this->model(PartecipationRequestModel::class);
+        $this->teamModel = $this->model(TeamModel::class);
+        $this->memberModel = $this->model(MemberModel::class);
     }
 
     private function checkIdeaProprety($ideaId){
@@ -47,7 +56,27 @@ class PartecipationRequests extends Controller {
         }
 
         $data[IDEA_ID] = $ideaId;
+        $data[USER_LIST_KEY] = $this->userModel->getUserIdeaParticipants($ideaId);
+        $data[PARTICIPANT_REQUEST_LIST_KEY] = $this->partecipationrequestModel->findParticipantRequestsIdea($ideaId);
+        $data[USER_COUNT_KEY] = count($data[USER_LIST_KEY]);
         $this->view('partecipationRequests/manageIdeaPartecipants', $data);
+    }
+
+    public function addToTeam($participantRequestId, $ideaId) {
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST') {
+            if(isset($_POST[TEAM_CHECKED_NAME]) && is_array($_POST[TEAM_CHECKED_NAME])) {
+                foreach ($_POST[TEAM_CHECKED_NAME] as $teamId) {
+                    $member = new MemberDTO();
+                    $member->setPartecipationRequestId($participantRequestId);
+                    $member->setTeamId($teamId);
+                    $this->memberModel->createMember($member);
+                }
+                flash("add_participant_to_teams", "OPERAZIONE COMPLETATA CON SUCCESSO");
+                redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
+            }
+        }
+        $data[TEAM_LIST_KEY] = $this->teamModel->getByIdeaIdAndParticipantRequestId($ideaId, $participantRequestId);
+        $this->view('partecipationRequests/addToTeam', $data);
     }
 
     public function newPartecipationRequestChooser($ideaId = null){
