@@ -103,6 +103,23 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                         </a>
                     </div>
                 </div>
+
+                <?php elseif ($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId()): ?>
+                    <div class="row mt-4 mb-4">
+                        <div class="col-12">
+                            <div style="color: gray; cursor: not-allowed">
+                                <div class="row d-flex justify-content-center">
+                                    <svg class="bi bi-person-plus-fill" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                        <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+                                    </svg>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">Richiedi di partecipare</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif; ?>
             <?php endif; ?>
 
@@ -173,7 +190,7 @@ $popUpData['modal-title'] = "Sei sicuro?";
 $popUpData['modal-body'] = "Sei sicuro di voler inviare la richiesta di partecipazione?";
 $popUpData['modal-primary'] = "Invia";
 $popUpData['modal-secondary'] = "Annulla";
-require_once APPROOT.'/views/inc/pop-Up.php';
+if ($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId()) {require_once APPROOT.'/views/inc/pop-Up.php';}
 ?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
