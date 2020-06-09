@@ -24,13 +24,29 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-6 mt-3 mb-3">
+                    <a href="<?php echo URLROOT; ?>/partecipationRequests/getPartecipationRequestList/idea/<?php echo $data[IDEA_ID]; ?>" style="">
+                        <div class="row d-flex justify-content-center">
+                            <svg class="bi bi-inboxes-fill" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M.125 11.17A.5.5 0 0 1 .5 11H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0 .5.5 0 0 1 .5-.5h5.5a.5.5 0 0 1 .496.562l-.39 3.124A1.5 1.5 0 0 1 14.117 16H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .121-.393zM3.81.563A1.5 1.5 0 0 1 4.98 0h6.04a1.5 1.5 0 0 1 1.17.563l3.7 4.625a.5.5 0 0 1-.78.624l-3.7-4.624A.5.5 0 0 0 11.02 1H4.98a.5.5 0 0 0-.39.188L.89 5.812a.5.5 0 1 1-.78-.624L3.81.563z"/>
+                                <path fill-rule="evenodd" d="M.125 5.17A.5.5 0 0 1 .5 5H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0A.5.5 0 0 1 10 5h5.5a.5.5 0 0 1 .496.562l-.39 3.124A1.5 1.5 0 0 1 14.117 10H1.883A1.5 1.5 0 0 1 .394 8.686l-.39-3.124a.5.5 0 0 1 .121-.393z"/>
+                            </svg>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">Visualizza tutte le</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">richieste di partecipazione</div>
+                        </div>
+                    </a>
+                </div>
             </div>
             <hr>
             <?php for ($i=0;$i<$data[USER_COUNT_KEY];$i++): ?>
                 <?php $user = $data[USER_LIST_KEY][$i]; ?>
                 <?php $participantRequest = $data[PARTICIPANT_REQUEST_LIST_KEY][$i]; ?>
                 <div class="row mb-3 mt-3">
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-6 mt-3">
                         <kbd style= "color: darkslategray;" class="text-left alert-info"><label for="description"><strong><?php echo $user->getFirstName() . " " . $user->getLastName(); ?></strong></label></kbd>
                     </div>
 

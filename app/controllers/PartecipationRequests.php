@@ -11,6 +11,11 @@ define('TEAM_LIST_KEY', 'teamListDTO');
 define('CHECKED', 'checked');
 define('TEAM_CHECKED_NAME', 'teams');
 
+define('USERTYPE','user');
+define('IDEATYPE','idea');
+
+define('REQUEST_CONTROL_TYPE','request_type');
+
 
 class PartecipationRequests extends Controller {
     private $ideaModel;
@@ -76,6 +81,9 @@ class PartecipationRequests extends Controller {
             }
         }
         $data[TEAM_LIST_KEY] = $this->teamModel->getByIdeaIdAndParticipantRequestId($ideaId, $participantRequestId);
+        $user = $this->userModel->getUserById(($this->partecipationrequestModel->getPartecipationRequestById($participantRequestId))->getUserId());
+        $data['USER_DATA'] = $user->getFirstName() . " " . $user->getLastName();
+
         $this->view('partecipationRequests/addToTeam', $data);
     }
 
@@ -139,11 +147,16 @@ class PartecipationRequests extends Controller {
             }
 
             //Controllo se l'utente ha gia inviato un invito a quell'utente
-            if($this->partecipationrequestModel->isUserAlreadyInvited($userId,$ideaId) || $_SESSION[USER_ID]==$userId){
+            if($this->partecipationrequestModel->isUserAlreadyInvited($userId,$ideaId)){
                 redirect('');
             }else{
                 //Effettuo l'inserimento
-                $partReq = new PartecipationRequestDTO($userId,$ideaId,true,false);
+                $partReq = new PartecipationRequestDTO();
+                $partReq->setUserId($userId);
+                $partReq->setIdeaId($ideaId);
+                $partReq->setIsPending(true);
+                $partReq->setIsUserRequesting(false);
+
                 if($this->partecipationrequestModel->createPartecipationRequest($partReq)){
                     flash('INVITE_CORRECTLY_SENT', 'Invito alla partecipazione correttamente inviato!');
                     redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
@@ -156,7 +169,12 @@ class PartecipationRequests extends Controller {
         }elseif ($typo=='true'){
             //Sono qui se la richiesta la sta facendo l'utente all'idea
             //Effettuo l'inserimento
-            $partReq = new PartecipationRequestDTO($_SESSION[USER_ID],$ideaId,true,true);
+            $partReq = new PartecipationRequestDTO();
+            $partReq->setUserId($_SESSION[USER_ID]);
+            $partReq->setIdeaId($ideaId);
+            $partReq->setIsPending(true);
+            $partReq->setIsUserRequesting(true);
+
             if ($this->partecipationrequestModel->createPartecipationRequest($partReq)){
                 flash('REQUEST_CORRECTLY_SENT', 'Richiesta di partecipazione correttamente inviata!');
                 redirect('ideas/showIdea/'.$ideaId);
@@ -166,10 +184,45 @@ class PartecipationRequests extends Controller {
         }else{
             redirect('');
         }
-
-
-
-
     }
 
+    public function getPartecipationRequestList($requestType = null,$ideaId = null){
+        if(!isLoggedIn() || $requestType == null){
+            redirect('');
+        }
+
+        $outData = [];
+
+        if($requestType == USERTYPE){
+            //Caso in cui voglio visualizzare tutte le richeste di partecipazione di un utente
+            $outData[REQUEST_CONTROL_TYPE] = USERTYPE;
+            $outData['REQUESTS_DTO'] = $this->partecipationrequestModel->getPartecipationRequestByUserId($_SESSION[USER_ID]);
+
+            foreach ($outData['REQUESTS_DTO'] as $request){
+                $outData['ideasDTO'][$request->getPartecipationRequestId()] = $this->ideaModel->getIdeaById($request->getIdeaId());
+                $outData['ideasOwner'][$request->getPartecipationRequestId()] = $this->userModel->getIdeaOwner($request->getIdeaId());
+                $outData['userDTO'][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
+            }
+
+            $this->view('partecipationRequests/partecipationRequestList',$outData);
+
+        }elseif ($requestType == IDEATYPE){
+            //Caso in cui voglio visualizzare tutte le richieste di partecipazione di un'idea
+            if($ideaId == null || $this->ideaModel->getIdeaById($ideaId)->getOwnerId() != $_SESSION[USER_ID]){
+                redirect('');
+            }
+
+            $outData[REQUEST_CONTROL_TYPE] = IDEATYPE;
+            $outData['REQUESTS_DTO'] = $this->partecipationrequestModel->getPartecipationRequestByIdeaId($ideaId);
+            $outData['ideaDTO'] = $this->ideaModel->getIdeaById($ideaId);
+            foreach ($outData['REQUESTS_DTO'] as $request){
+                $outData['userDTO'][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
+            }
+
+            $this->view('partecipationRequests/partecipationRequestList',$outData);
+
+        }else{
+            redirect('');
+        }
+    }
 }
