@@ -50,21 +50,16 @@ class Teams extends Controller{
             $data = null;
             $data[IDEA_ID]=$_POST[IDEA_ID];
             $data[CHECKED] = [];
-            $data[ERRORS] = [TITLE_FIELD => "", CHECKED => ""];
+            $data[ERRORS] = [TITLE_FIELD => ""];
             $teamDTO->setName(trim($_POST[TITLE_FIELD]));
             $data[TEAM_DTO] = $teamDTO;
 
             if (empty($data[TEAM_DTO]->getName())) {
                 $data[ERRORS][TITLE_FIELD] = 'Inserisci un nome valido';
             }
-            if (!isset($_POST[REALIZATION_PHASE])) {
-                $data[ERRORS][CHECKED] = 'Seleziona una fase di realizzazione';
-            }
-
-
 
             //check if errors are present
-            if (empty($data[ERRORS][TITLE_FIELD]) && empty($data[ERRORS][CHECKED])) {
+            if (empty($data[ERRORS][TITLE_FIELD])) {
                 $teamDTO->setIdeaId($data[IDEA_ID]);
                 $team_id = $this->teamModel->createTeam($teamDTO);
                 if($team_id){
@@ -78,7 +73,7 @@ class Teams extends Controller{
                     die('Sembra che qualcosa sia andato storto...');
                 }
             } else{
-                $data[REALIZATION_PHASE] = $this->realizationPhaseModel->getRealizationPhaseByIdea($data[IDEA_ID]);
+                $data[REALIZATION_PHASE] = $this->realizationPhaseModel->getRealizationPhaseByIdeaForTeam($data[IDEA_ID]);
 
                 if (isset($_POST[REALIZATION_PHASE])) {
                     foreach ($_POST[REALIZATION_PHASE] as $checkedRealizationPhase) {
@@ -98,7 +93,7 @@ class Teams extends Controller{
                 ERRORS => [TITLE_FIELD => "", DESCRIPT_FIELD => "", CHECKED => ""],
                 CHECKED => [],
                 TEAM_DTO => $teamDTO,
-                REALIZATION_PHASE => $this->realizationPhaseModel->getRealizationPhaseByIdea($id),
+                REALIZATION_PHASE => $this->realizationPhaseModel->getRealizationPhaseByIdeaForTeam($id),
                 IDEA_ID => $id
             ];
 
