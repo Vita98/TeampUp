@@ -13,7 +13,8 @@
                     <?php echo (!empty($data[ERRORS][TITLE_FIELD])) ? 'is-invalid' : ''; ?>" value="<?php echo $data[TEAM_DTO]->getName(); ?>"/>
                     <span class="invalid-feedback"><?php echo $data[ERRORS][TITLE_FIELD]; ?></span>
                 </div>
-                <strong><label>Fasi di realizzazione*</label></br></strong>
+                <?php if(!empty($data[REALIZATION_PHASE])): ?>
+                <strong><label>Fasi di realizzazione</label></br></strong>
                 <div>
                     <?php foreach($data[REALIZATION_PHASE] as $realizationPhase): ?>
                         <div class='form-check form-check-inline'>
@@ -28,9 +29,11 @@
                             <label for='<?php echo REALIZATION_PHASE."[]"; ?>' class ='form-check-label'> <?php echo $realizationPhase->getName(); ?> </label>
                         </div>
                     <?php endforeach; ?>
+                </div>
+                <?php endif;?>
+                <div>
                     <input type="text" name = "ideaId" hidden = "hidden" value="<?php echo $data[IDEA_ID]?>"/>
                     <input type="text" class= "is-invalid" hidden = "hidden"/>
-                    <span class="invalid-feedback"> <?php echo $data[ERRORS][CHECKED]; ?> </span>
                 </div>
                 <div class="row">
                     <div class="col p-3 mt-4">

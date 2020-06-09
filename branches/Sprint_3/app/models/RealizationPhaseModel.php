@@ -7,8 +7,8 @@ define('GET_REALIZATION_PHASE_BY_IDEA', "SELECT * FROM realizationPhase WHERE id
 define('UPDATE_REALIZATION_PHASE',"UPDATE realizationPhase SET name = :name where id = :id");
 define('GET_REALIZATION_PHASE_BY_ID', "SELECT * FROM realizationPhase WHERE id = :id");
 define('DELETE_ABILITY_BY_REALIZATION_PHASE', "DELETE FROM realizationPhaseAbilities WHERE realizationphase_id = :realizationphase_id");
-
 define('INSERT_TEAM_ID_QUERY',"UPDATE realizationPhase SET  teamId = :teamId WHERE id = :id");
+define('GET_REALIZATION_PHASE_BY_IDEA_FOR_TEAM','SELECT * FROM realizationPhase WHERE ideaId = :ideaId and teamId IS NULL');
 
 
 class RealizationPhaseModel
@@ -81,6 +81,14 @@ class RealizationPhaseModel
         $this->database->bind(":id" , $realizationPhaseId);
 
         return $this->database->execute();
+    }
+
+
+    public function getRealizationPhaseByIdeaForTeam($ideaId){
+        $this->database->query(GET_REALIZATION_PHASE_BY_IDEA_FOR_TEAM);
+        $this->database->bind(":ideaId", $ideaId);
+
+        return $this->database->classesFromResultSet(RealizationPhaseDTO::class);
     }
 
 
