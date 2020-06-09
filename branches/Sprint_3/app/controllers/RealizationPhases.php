@@ -206,6 +206,17 @@ class RealizationPhases extends Controller
         return $data;
     }
 
+    public function deleteRealizationPhase($id){
+        $realizationPhaseDTO = $this->realizationPhaseModel->getRealizationPhaseById($id);
+        if (!$this->ideaModel->getIdeaById($realizationPhaseDTO->getIdeaId()) || $this->ideaModel->getIdeaById($realizationPhaseDTO->getIdeaId())->getOwnerId() != $_SESSION[USER_ID] || !isLoggedIn()) {
+            redirect("");
+        }
+
+        $this->realizationPhaseModel->deleteRealizationPhase($id) or die("Sembra che qualcosa sia andato storto");
+        flash(IDEA_MESSAGE, "La fase di realizzazione è stata eliminata correttamente!");
+        redirect(REALIZATION_PHASES_MANAGE_VIEW. "/" . $realizationPhaseDTO->getIdeaId());
+
+    }
 
 
 }
