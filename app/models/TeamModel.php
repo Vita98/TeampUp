@@ -3,7 +3,17 @@ define('CREATE_TEAM_QUERY','INSERT INTO Team(name,ideaId) VALUES (:name, :id)');
 define('GET_TEAMS_BY_IDEA_QUERY','SELECT * FROM team WHERE ideaId = :id ');
 define('COUNT_MEMBER_BY_TEAM_QUERY','SELECT count(partecipationRequestId) FROM member WHERE teamId = :id ');
 define('IS_MEMBER_QUERY','SELECT * FROM member,partecipationRequest,team WHERE member.partecipationRequestId = partecipationRequest.partecipationRequestId AND team.id = member.teamId AND partecipationRequest.userId = :id AND isPending = false AND team.ideaId = :ideaId');
-
+define(
+    "GET_BY_IDEA_ID_AND_PARTICIPANT_REQUEST_ID",
+    "SELECT * ".
+    "FROM team ".
+    "WHERE team.id not in ( ".
+        "SELECT team.id ".
+        "FROM team ".
+        "JOIN member on team.id = member.teamId ".
+        "WHERE team.ideaId = :ideaId and member.partecipationRequestId = :participationRequestId ".
+    ") and team.ideaId = :ideaId"
+);
 
 class TeamModel{
     private $database;
@@ -49,6 +59,14 @@ class TeamModel{
 
         // Check row
         return ($this->database->rowCount() > 0);
+    }
+
+    public function getByIdeaIdAndParticipantRequestId($ideaId, $participationRequestId) {
+        $this->database->query(GET_BY_IDEA_ID_AND_PARTICIPANT_REQUEST_ID);
+        $this->database->bind("ideaId", $ideaId);
+        $this->database->bind("participationRequestId", $participationRequestId);
+
+        return $this->database->classesFromResultSet(TeamDTO::class);
     }
 
 
