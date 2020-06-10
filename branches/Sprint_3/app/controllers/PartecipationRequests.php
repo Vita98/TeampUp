@@ -13,8 +13,16 @@ define('TEAM_CHECKED_NAME', 'teams');
 
 define('USERTYPE','user');
 define('IDEATYPE','idea');
+define('REQUESTS_DTO','REQUESTS_DTO');
 
 define('REQUEST_CONTROL_TYPE','request_type');
+
+define('REQUEST_RESPONSE_ACCEPT','ACCEPT');
+define('REQUEST_RESPONSE_REJECT','REJECT');
+
+define('SOMETHING_WENT_WRONG','Qualcosa è andato storto!');
+define('FLASH_KEY_PARTECIPATION_REQU_RESPONSE','partecipation_request_response');
+
 
 
 class PartecipationRequests extends Controller {
@@ -68,17 +76,15 @@ class PartecipationRequests extends Controller {
     }
 
     public function addToTeam($participantRequestId, $ideaId) {
-        if($_SERVER[REQUEST_METHOD_KEY] == 'POST') {
-            if(isset($_POST[TEAM_CHECKED_NAME]) && is_array($_POST[TEAM_CHECKED_NAME])) {
-                foreach ($_POST[TEAM_CHECKED_NAME] as $teamId) {
-                    $member = new MemberDTO();
-                    $member->setPartecipationRequestId($participantRequestId);
-                    $member->setTeamId($teamId);
-                    $this->memberModel->createMember($member);
-                }
-                flash("add_participant_to_teams", "OPERAZIONE COMPLETATA CON SUCCESSO");
-                redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
+        if($_SERVER[REQUEST_METHOD_KEY] == 'POST' && isset($_POST[TEAM_CHECKED_NAME]) && is_array($_POST[TEAM_CHECKED_NAME])) {
+            foreach ($_POST[TEAM_CHECKED_NAME] as $teamId) {
+                $member = new MemberDTO();
+                $member->setPartecipationRequestId($participantRequestId);
+                $member->setTeamId($teamId);
+                $this->memberModel->createMember($member);
             }
+            flash("add_participant_to_teams", "Utente assegnato ad i team con successo!");
+            redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
         }
         $data[TEAM_LIST_KEY] = $this->teamModel->getByIdeaIdAndParticipantRequestId($ideaId, $participantRequestId);
         $user = $this->userModel->getUserById(($this->partecipationrequestModel->getPartecipationRequestById($participantRequestId))->getUserId());
@@ -161,7 +167,7 @@ class PartecipationRequests extends Controller {
                     flash('INVITE_CORRECTLY_SENT', 'Invito alla partecipazione correttamente inviato!');
                     redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
                 }else{
-                    die('Qualcosa è andato storto!');
+                    die(SOMETHING_WENT_WRONG);
                 }
 
 
@@ -179,7 +185,7 @@ class PartecipationRequests extends Controller {
                 flash('REQUEST_CORRECTLY_SENT', 'Richiesta di partecipazione correttamente inviata!');
                 redirect('ideas/showIdea/'.$ideaId);
             }else{
-                die('Qualcosa è andato storto!');
+                die(SOMETHING_WENT_WRONG);
             }
         }else{
             redirect('');
@@ -196,12 +202,12 @@ class PartecipationRequests extends Controller {
         if($requestType == USERTYPE){
             //Caso in cui voglio visualizzare tutte le richeste di partecipazione di un utente
             $outData[REQUEST_CONTROL_TYPE] = USERTYPE;
-            $outData['REQUESTS_DTO'] = $this->partecipationrequestModel->getPartecipationRequestByUserId($_SESSION[USER_ID]);
+            $outData[REQUESTS_DTO] = $this->partecipationrequestModel->getPartecipationRequestByUserId($_SESSION[USER_ID]);
 
-            foreach ($outData['REQUESTS_DTO'] as $request){
+            foreach ($outData[REQUESTS_DTO] as $request){
                 $outData['ideasDTO'][$request->getPartecipationRequestId()] = $this->ideaModel->getIdeaById($request->getIdeaId());
                 $outData['ideasOwner'][$request->getPartecipationRequestId()] = $this->userModel->getIdeaOwner($request->getIdeaId());
-                $outData['userDTO'][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
+                $outData[USERDTO_KEY][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
             }
 
             $this->view('partecipationRequests/partecipationRequestList',$outData);
@@ -213,16 +219,84 @@ class PartecipationRequests extends Controller {
             }
 
             $outData[REQUEST_CONTROL_TYPE] = IDEATYPE;
-            $outData['REQUESTS_DTO'] = $this->partecipationrequestModel->getPartecipationRequestByIdeaId($ideaId);
+            $outData[REQUESTS_DTO] = $this->partecipationrequestModel->getPartecipationRequestByIdeaId($ideaId);
             $outData['ideaDTO'] = $this->ideaModel->getIdeaById($ideaId);
-            foreach ($outData['REQUESTS_DTO'] as $request){
-                $outData['userDTO'][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
+            foreach ($outData[REQUESTS_DTO] as $request){
+                $outData[USERDTO_KEY][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
             }
 
             $this->view('partecipationRequests/partecipationRequestList',$outData);
 
         }else{
             redirect('');
+        }
+    }
+
+    public function requestReply($requestId = null, $requestResponse = null){
+
+        if(!isLoggedIn() || $requestResponse == null){
+            redirect('');
+        }
+
+        $request = $this->partecipationrequestModel->getPartecipationRequestById($requestId);
+        if(!$request){
+            redirect('');
+        }
+
+        if(!$request->getIsPending()){
+            redirect('');
+        }
+
+        if($request->getIsUserRequesting()){
+            //Vuol dire che è il proprietario a dover accettare la richiesta e nessun altro
+
+            //Controllo se l'utente loggato è il proprietario dell'idea
+            if($_SESSION['userId'] != ($this->ideaModel->getIdeaById($request->getIdeaId()))->getOwnerId() ){
+                redirect('');
+            }
+
+            if($requestResponse == REQUEST_RESPONSE_ACCEPT){
+                if($this->partecipationrequestModel->editPartecipationRequest($requestId,false)){
+                    flash(FLASH_KEY_PARTECIPATION_REQU_RESPONSE,'La richiesta di partecipazione è stata correttamente accettata!');
+                    redirect('partecipationRequests/getPartecipationRequestList/idea/' . $request->getIdeaId());
+                }else{
+                    die(SOMETHING_WENT_WRONG);
+                }
+            }elseif ($requestResponse == REQUEST_RESPONSE_REJECT){
+                if($this->partecipationrequestModel->deletePartecipationRequest($requestId)){
+                    flash(FLASH_KEY_PARTECIPATION_REQU_RESPONSE,'La richiesta di partecipazione è stata correttamente rigettata!');
+                    redirect('partecipationRequests/getPartecipationRequestList/idea/' . $request->getIdeaId());
+                }else{
+                    die(SOMETHING_WENT_WRONG);
+                }
+            }else{
+                redirect('');
+            }
+        }else{
+            //Vuol dire che è l'utente a dover accettare la richiesta di partecipazione a quella determinata idea
+
+            //Controllo se l'utente loggato è l'utente nella richiesta di partecipazione
+            if($_SESSION['userId'] != $request->getUserId() ){
+                redirect('');
+            }
+
+            if($requestResponse == REQUEST_RESPONSE_ACCEPT){
+                if($this->partecipationrequestModel->editPartecipationRequest($requestId,false)){
+                    flash(FLASH_KEY_PARTECIPATION_REQU_RESPONSE,'La richiesta di partecipazione è stata correttamente accettata!');
+                    redirect('partecipationRequests/getPartecipationRequestList/user');
+                }else{
+                    die(SOMETHING_WENT_WRONG);
+                }
+            }elseif ($requestResponse == REQUEST_RESPONSE_REJECT){
+                if($this->partecipationrequestModel->deletePartecipationRequest($requestId)){
+                    flash(FLASH_KEY_PARTECIPATION_REQU_RESPONSE,'La richiesta di partecipazione è stata correttamente rigettata!');
+                    redirect('partecipationRequests/getPartecipationRequestList/user');
+                }else{
+                    die(SOMETHING_WENT_WRONG);
+                }
+            }else{
+                redirect('');
+            }
         }
     }
 }

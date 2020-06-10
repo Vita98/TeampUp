@@ -1,6 +1,7 @@
 <?php
 define('USER_ID_QUERY',':userId');
-define('IDEA_ID_QUERY',':ideaId');
+if(!defined('IDEA_ID_QUERY')) {define('IDEA_ID_QUERY',':ideaId');}
+define('PARTECIPATION_REQU_ID_QUERY',':partReqId');
 define(
     'FIND_PARTICIPANT_REQUESTS_IDEA',
     "SELECT partecipationRequest.* ".
@@ -71,9 +72,24 @@ class PartecipationRequestModel{
 
     public function getPartecipationRequestById($id){
         $this->database->query("SELECT * FROM partecipationRequest WHERE partecipationRequestId=:partReqId");
-        $this->database->bind(':partReqId', $id);
+        $this->database->bind(PARTECIPATION_REQU_ID_QUERY, $id);
 
         return $this->database->classFromSingle(PartecipationRequestDTO::class);
+    }
+
+    public function editPartecipationRequest($id, $newIsPending){
+        $this->database->query("UPDATE partecipationRequest SET isPending = :newPending WHERE partecipationRequestId = :partReqId");
+        $this->database->bind(PARTECIPATION_REQU_ID_QUERY, $id);
+        $this->database->bind(':newPending', $newIsPending);
+
+        return $this->database->execute();
+    }
+
+    public function deletePartecipationRequest($id){
+        $this->database->query("DELETE FROM partecipationRequest WHERE partecipationRequestId = :partReqId ");
+        $this->database->bind(PARTECIPATION_REQU_ID_QUERY, $id);
+
+        return $this->database->execute();
     }
 }
 

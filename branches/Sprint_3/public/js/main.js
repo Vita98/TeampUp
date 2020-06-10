@@ -2,6 +2,14 @@ function updatePopup(a) {
     document.getElementById('ModificationSaveButton').href = a;
 }
 
+function updateNewPopup(link,saveButton,deleteButton,body,title) {
+    document.getElementById('ModificationSaveButton').href = link;
+    document.getElementById('ModificationSaveButton').innerText = saveButton;
+    document.getElementById('ModificationBody').innerText = body;
+    document.getElementById('ModificationDeleteButton').innerText = deleteButton;
+    document.getElementById('exampleModalLongTitle').innerText = title;
+}
+
 /* STAR RATING*/
 
 var firstStarRating=['ratingInnovativity1','ratingInnovativity2','ratingInnovativity3','ratingInnovativity4','ratingInnovativity5','ratingInnovativity6','ratingInnovativity7','ratingInnovativity8','ratingInnovativity9','ratingInnovativity10'];
