@@ -1,5 +1,7 @@
 <?php
 
+if(!defined('IDEA_ID_QUERY')) {define('IDEA_ID_QUERY',':ideaId');}
+
 define('CREATE_REALIZATION_PHASE_QUERY', 'INSERT INTO realizationPhase(name, ideaId) VALUES (:name, :ideaId)');
 define('INSERT_ABILITY_REALIZATION_PHASE',"INSERT INTO realizationPhaseAbilities(realizationphase_id,ability_id) VALUES (:realizationPhaseId, :abilityId)");
 define('GET_ABILITIES_BY_REALIZATION_PHASE', "SELECT ability.* FROM realizationPhaseAbilities JOIN ability WHERE realizationPhaseAbilities.ability_id = ability.id AND realizationPhase_id = :realizationPhaseId  ");
@@ -23,7 +25,7 @@ class RealizationPhaseModel
     public function createRealizationPhase(RealizationPhaseDTO $realizationPhaseDTO){
         $this->database->query(CREATE_REALIZATION_PHASE_QUERY);
         $this->database->bind(':name', $realizationPhaseDTO->getName());
-        $this->database->bind(':ideaId',$realizationPhaseDTO->getIdeaId());
+        $this->database->bind(IDEA_ID_QUERY,$realizationPhaseDTO->getIdeaId());
 
         if($this->database->execute()){
             return $this->database->lastInsertId();
@@ -55,7 +57,7 @@ class RealizationPhaseModel
 
     public function getRealizationPhaseByIdea($ideaId){
         $this->database->query(GET_REALIZATION_PHASE_BY_IDEA);
-        $this->database->bind(":ideaId", $ideaId);
+        $this->database->bind(IDEA_ID_QUERY, $ideaId);
 
         return $this->database->classesFromResultSet(RealizationPhaseDTO::class);
     }
@@ -86,7 +88,7 @@ class RealizationPhaseModel
 
     public function getRealizationPhaseByIdeaForTeam($ideaId){
         $this->database->query(GET_REALIZATION_PHASE_BY_IDEA_FOR_TEAM);
-        $this->database->bind(":ideaId", $ideaId);
+        $this->database->bind(IDEA_ID_QUERY, $ideaId);
 
         return $this->database->classesFromResultSet(RealizationPhaseDTO::class);
     }

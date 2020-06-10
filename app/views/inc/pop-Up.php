@@ -7,11 +7,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="ModificationBody">
                 <?php if (isset($popUpData)) {echo $popUpData['modal-body'];}?>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php if (isset($popUpData)) {echo $popUpData['modal-secondary'];}?></button>
+                <button type="button" id="ModificationDeleteButton" class="btn btn-secondary" data-dismiss="modal"><?php if (isset($popUpData)) {echo $popUpData['modal-secondary'];}?></button>
                 <a href="" id="ModificationSaveButton" <button type="button" class="btn btn-primary"><?php if (isset($popUpData)) {echo $popUpData['modal-primary'];}?></button></a>
             </div>
         </div>
