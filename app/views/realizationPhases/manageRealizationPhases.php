@@ -44,7 +44,7 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-4 mt-3 ">
-                            <a href="#" style="color: gray">
+                            <a href="<?php echo URLROOT; ?>/RealizationPhases/realizationPhaseTeamAssociation/<?php echo $realizationPhase->getId(); ?>" style="color: forestgreen" >
                                 <div class="row d-flex justify-content-center">
                                     <svg class="bi bi-gear" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
@@ -52,7 +52,7 @@
                                     </svg>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">Gestisci</div>
+                                    <div class="col-md-12">Associa Team</div>
                                 </div>
                             </a>
                         </div>
@@ -70,7 +70,7 @@
                             </a>
                         </div>
                         <div class="col-4 mt-3 ">
-                            <a href ="" data-toggle="modal" data-target="#deletePhaseModal" onclick="updatePopup('<?php echo URLROOT;?>/realizationPhases/deleteRealizationPhase/<?php echo $realizationPhase->getId();?>')" style="color: red" >
+                            <a href="" data-toggle="modal" data-target="#deletePhaseModal" onclick="updatePopup('<?php echo URLROOT;?>/realizationPhases/deleteRealizationPhase/<?php echo $realizationPhase->getId();?>')" style="color: red" >
                                 <div class="row d-flex justify-content-center">
                                     <svg class="bi bi-trash" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
