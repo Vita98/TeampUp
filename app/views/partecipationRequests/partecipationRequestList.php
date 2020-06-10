@@ -1,8 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-<?php
-$flagPopUp = false;
-define('IDEAS_OWNER','ideasOwner');
-?>
+<?php $flagPopUp = false; define('IDEAS_OWNER','ideasOwner'); ?>
 
 <div class="row">
 
@@ -20,7 +17,7 @@ define('IDEAS_OWNER','ideasOwner');
 
         <div class="mt-3 text-center"><?php flash('partecipation_request_response'); ?></div>
 
-        <?php if(!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == USERTYPE): foreach ($data[REQUESTS_DTO] as $request):?>
+        <?php if(!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == USERTYPE): foreach ($data[REQUESTS_DTO] as $request): ?>
         <div class="container card  mt-5 mb-5 col-md-8">
             <div class="row">
                 <div class="col-10 mt-4 mb-4 ">
@@ -53,15 +50,15 @@ define('IDEAS_OWNER','ideasOwner');
                     <?php endif; ?>
                 </div>
             </div>
-            <?php if(!$request->getIsUserRequesting()):?>
+            <?php if(!$request->getIsUserRequesting()): ?>
                 <?php $flagPopUp = true; ?>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col-md-5">
-                        <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT';?>
+                        <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT'; ?>
                         <input type="submit" onclick="updateNewPopup('<?php echo $rejectLink; ?>','Conferma','Annulla','Sei sicuro di voler rifiutare la richiesta di partecipazione?','Sei sicuro?')" value="Rifiuta" class="btn btn-danger btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                     </div>
                     <div class="col-md-5">
-                        <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT';?>
+                        <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
                         <input type="submit" onclick="updateNewPopup('<?php echo $acceptLink; ?>','Conferma','Annulla','Sei sicuro di voler accettare la richiesta di partecipazione?','Sei sicuro?')" value="Accetta" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                     </div>
                 </div>
@@ -75,7 +72,7 @@ define('IDEAS_OWNER','ideasOwner');
         </div>
         <? endforeach; ?>
 
-        <? elseif (!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == IDEATYPE): foreach ($data[REQUESTS_DTO] as $request):?>
+        <? elseif (!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == IDEATYPE): foreach ($data[REQUESTS_DTO] as $request) : ?>
             <div class="container card  mt-5 mb-5 col-md-8">
                 <div class="row">
                     <div class="col-10 mt-4 mb-4 ">
@@ -107,15 +104,15 @@ define('IDEAS_OWNER','ideasOwner');
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php if($request->getIsUserRequesting()):?>
+                <?php if($request->getIsUserRequesting()): ?>
                     <?php $flagPopUp = true; ?>
                     <div class="row d-flex justify-content-center mb-3">
                         <div class="col-md-5">
-                            <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT';?>
+                            <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT'; ?>
                             <input type="submit" onclick="updateNewPopup('<?php echo $rejectLink; ?>','Conferma','Annulla','Sei sicuro di voler rifiutare la richiesta di partecipazione?','Sei sicuro?')" value="Rifiuta" class="btn btn-danger btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                         </div>
                         <div class="col-md-5">
-                            <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT';?>
+                            <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
                             <input type="submit" onclick="updateNewPopup('<?php echo $acceptLink; ?>','Conferma','Annulla','Sei sicuro di voler accettare la richiesta di partecipazione?','Sei sicuro?')" value="Accetta" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                         </div>
                     </div>
@@ -127,30 +124,26 @@ define('IDEAS_OWNER','ideasOwner');
                     </div>
                 <?php endif; ?>
             </div>
-        <? endforeach; ?>
-        <? endif; ?>
+        <?php endforeach; ?>
+        <?php endif; ?>
 
-        <?php if($data[REQUEST_CONTROL_TYPE] == USERTYPE && empty($data[REQUESTS_DTO])):?>
+        <?php if($data[REQUEST_CONTROL_TYPE] == USERTYPE && empty($data[REQUESTS_DTO])): ?>
             <div class="row d-flex justify-content-center">
                 <div class="alert alert-warning col-md-6 mt-4 mb-4 text-center" role="alert">
                     <strong>Non ci sono richieste di partecipazione</strong>
                 </div>
             </div>
-        <?php endif;?>
-        <?php   if($data[REQUEST_CONTROL_TYPE] == IDEATYPE && empty($data[REQUESTS_DTO]) ):?>
+
+        <?php elseif($data[REQUEST_CONTROL_TYPE] == IDEATYPE && empty($data[REQUESTS_DTO]) ): ?>
             <div class="row d-flex justify-content-center">
                 <div class="alert alert-warning col-md-6 mt-4 mb-4 text-center" role="alert">
                     <strong>Non ci sono richieste di partecipazione all'idea</strong>
                 </div>
             </div>
-        <?php endif;?>
+        <?php endif; ?>
     </div>
 </div>
 
-<?php
-    if($flagPopUp){
-        require_once APPROOT . '/views/inc/pop-Up.php';
-    }
-?>
+<?php if($flagPopUp){require APPROOT . '/views/inc/pop-Up.php';} ?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
