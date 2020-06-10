@@ -105,39 +105,30 @@ class Teams extends Controller{
         if (!isLoggedIn()) {
             redirect("");
         }
-        if($id != null){
-
-            if (!$this->ideaModel->getIdeaById($id)) {
-                redirect("");
-            }
-
-            if(!$this->teamModel->isMember($id,$_SESSION[USER_ID]) && $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
-                redirect("");
-            }
-
-            if($this->teamModel->isMember($id,$_SESSION[USER_ID])){
-                 $data[ROLE] = MEMBER;
-            }else{
-                $data[ROLE] = OWNER;
-            }
 
 
-            $data[IDEA_DTO] = $this->ideaModel->getIdeaById($id);
-            $data[TEAM_DTO] = $this->teamModel->getTeamsByIdeaId($id);
-
-            foreach ($data[TEAM_DTO] as $team){
-                $team->setNumberOfMember( $this->teamModel->countMemberByTeam($team->getId()));
-            }
-
-            $this->view(TEAM_MANAGE_VIEW,$data);
-        } else {
-
-            if (!$this->ideaModel->getIdeaById($id) || $this->ideaModel->getIdeaById($data[IDEA_DTO]->getId())->getOwnerId() != $_SESSION[USER_ID]) {
-                redirect("");
-            }
-            $data[TEAM_DTO] = $this->realizationPhaseModel->getTeamsByIdeaId($id);
-            $this->view(TEAM_MANAGE_VIEW,$data);
+        if (!$this->ideaModel->getIdeaById($id)) {
+            redirect("");
         }
+
+        if(!$this->teamModel->isMember($id,$_SESSION[USER_ID]) && $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
+            redirect("");
+        }
+
+        if($this->teamModel->isMember($id,$_SESSION[USER_ID])){
+             $data[ROLE] = MEMBER;
+        }else{
+            $data[ROLE] = OWNER;
+        }
+
+        $data[IDEA_DTO] = $this->ideaModel->getIdeaById($id);
+        $data[TEAM_DTO] = $this->teamModel->getTeamsByIdeaId($id);
+
+        foreach ($data[TEAM_DTO] as $team){
+            $team->setNumberOfMember( $this->teamModel->countMemberByTeam($team->getId()));
+        }
+
+        $this->view(TEAM_MANAGE_VIEW,$data);
 
     }
 
