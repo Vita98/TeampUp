@@ -169,22 +169,13 @@ class RealizationPhases extends Controller
         if (!isLoggedIn()) {
             redirect("");
         }
-        if($id != null){
-            if (!$this->ideaModel->getIdeaById($id) || $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
-                redirect("");
-            }
-            $data[IDEA_DTO] = $this->ideaModel->getIdeaById($id);
-            $data[REALIZATION_PHASE_DTO] = $this->realizationPhaseModel->getRealizationPhaseByIdea($id);
-            $this->view(REALIZATION_PHASES_MANAGE_VIEW,$data);
-        } else {
 
-            if (!$this->ideaModel->getIdeaById($id) || $this->ideaModel->getIdeaById($data[IDEA_DTO]->getId())->getOwnerId() != $_SESSION[USER_ID]) {
-                redirect("");
-            }
-            $data[REALIZATION_PHASE_DTO] = $this->realizationPhaseModel->getRealizationPhaseByIdea($id);
-            $this->view(REALIZATION_PHASES_MANAGE_VIEW,$data);
+        if (!$this->ideaModel->getIdeaById($id) || $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
+            redirect("");
         }
-
+        $data[IDEA_DTO] = $this->ideaModel->getIdeaById($id);
+        $data[REALIZATION_PHASE_DTO] = $this->realizationPhaseModel->getRealizationPhaseByIdea($id);
+        $this->view(REALIZATION_PHASES_MANAGE_VIEW,$data);
     }
 
     private function realizationPhaseDataFromPost($data ,$realizationPhaseDTO){
