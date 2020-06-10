@@ -1,5 +1,4 @@
 <?php
-define('TEAM_DTO','TeamDTO');
 define('IDEA_DTO','ideaDTO');
 define('NEW_TEAM_VIEW','/teams/newTeam');
 define('TEAM_MANAGE_VIEW','/teams/manageTeam');

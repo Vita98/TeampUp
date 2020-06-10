@@ -19,18 +19,20 @@ define('REALIZATION_PHASE_EDIT_VIEW','realizationPhases/editRealizationPhase');
 define('REALIZATION_PHASES_MANAGE_VIEW', 'realizationPhases/manageRealizationPhases');
 define('SHOW_IDEA_VIEW','ideas/showIdea/');
 
-
+define("CHOOSED_TEAM_KEY", "choosedTeam");
 class RealizationPhases extends Controller
 {
     private $ideaModel;
     private $realizationPhaseModel;
     private $abilityModel;
+    private $teamModel;
 
     public function __construct()
     {
-       $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
+        $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->abilityModel = $this->model(Ability::class);
+        $this->teamModel = $this->model(TeamModel::class);
     }
 
 
@@ -218,5 +220,30 @@ class RealizationPhases extends Controller
 
     }
 
+    private function teamPhaseAssociationDataInit(){
+        return [REALIZATION_PHASE_DTO, TEAM_DTO=>[]];
+    }
+    public function realizationPhaseTeamAssociation($id){
+        $data = $this->teamPhaseAssociationDataInit();
+        $data[REALIZATION_PHASE_DTO] = $this->realizationPhaseModel->getRealizationPhaseById($id);
+        if (!$this->ideaModel->getIdeaById($data[REALIZATION_PHASE_DTO]->getIdeaId()) ||
+            $this->ideaModel->getIdeaById($data[REALIZATION_PHASE_DTO]->getIdeaId())->getOwnerId() != $_SESSION[USER_ID]
+            || !isLoggedIn()) {
+            redirect("");
+        }
+        $data[TEAM_DTO] = $this->teamModel->getTeamsByIdeaId($data[REALIZATION_PHASE_DTO]->getIdeaId());
+
+        if(isset($_POST) && isset($_POST[CHOOSED_TEAM_KEY])){
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            if($this->realizationPhaseModel->setTeam($id, $_POST[CHOOSED_TEAM_KEY])){
+                flash(IDEA_MESSAGE, "Il team associato è stato aggiornato correttamente!");
+            } else {
+                flash(IDEA_MESSAGE, "Errore nell'aggiornamento del team!", "alert alert-danger");
+            }
+            redirect(REALIZATION_PHASES_MANAGE_VIEW. "/" . $data[REALIZATION_PHASE_DTO]->getIdeaId());
+        }
+        $this->view("realizationPhases/assteamphase", $data);
+
+    }
 
 }

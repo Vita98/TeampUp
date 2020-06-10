@@ -12,6 +12,7 @@ define('DELETE_ABILITY_BY_REALIZATION_PHASE', "DELETE FROM realizationPhaseAbili
 define('INSERT_TEAM_ID_QUERY',"UPDATE realizationPhase SET  teamId = :teamId WHERE id = :id");
 define('GET_REALIZATION_PHASE_BY_IDEA_FOR_TEAM','SELECT * FROM realizationPhase WHERE ideaId = :ideaId and teamId IS NULL');
 define('DELETE_REALIZATION_PHASE',"DELETE FROM realizationPhase WHERE id = :id");
+define('ASS_TEAM_QUERY',"UPDATE realizationPhase SET teamId = :teamId WHERE id = :id");
 
 class RealizationPhaseModel
 {
@@ -96,6 +97,14 @@ class RealizationPhaseModel
     public function deleteRealizationPhase($id){
         $this->database->query(DELETE_REALIZATION_PHASE);
         $this->database->bind(":id", $id);
+
+        return $this->database->execute();
+    }
+
+    public function setTeam($id, $teamId){
+        $this->database->query(ASS_TEAM_QUERY);
+        $this->database->bind(":id", $id);
+        $this->database->bind(":teamId", $teamId);
 
         return $this->database->execute();
     }
