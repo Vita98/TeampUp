@@ -6,8 +6,8 @@ define(
     'FIND_PARTICIPANT_REQUESTS_IDEA',
     "SELECT partecipationRequest.* ".
     "FROM idea ".
-    "JOIN partecipationrequest ON idea.id=partecipationrequest.ideaId ".
-    "WHERE idea.id=:ideaId and partecipationrequest.isPending = 0"
+    "JOIN partecipationRequest ON idea.id=partecipationRequest.ideaId ".
+    "WHERE idea.id=:ideaId and partecipationRequest.isPending = 0"
 );
 
 class PartecipationRequestModel{

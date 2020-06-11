@@ -2,16 +2,16 @@
 
 define('EMAIL_BIND_TOKEN',':email');
 define('SEARCH', "SELECT DISTINCT user.id, user.firstName, user.lastName FROM (user " .
-                " LEFT JOIN userabilities ON user.id = userabilities.userId ) " .
+                " LEFT JOIN userAbilities ON user.id = userAbilities.userId ) " .
                 " WHERE ( :firstName IS NULL OR user.firstName LIKE :firstName ) " .
                 " AND ( :lastName IS NULL OR user.lastName LIKE :lastName ) " .
                 " AND ( :ab1 IS NULL OR userAbilities.abilityId IN ");
 
 define('FIND_USER_IDEA_PARTICIPANTS', "SELECT user.id, user.firstName, user.lastName ".
                                        "FROM idea ".
-                                        "JOIN partecipationrequest ON idea.id=partecipationrequest.ideaId ".
-                                        "JOIN user ON partecipationrequest.userId=user.id ".
-                                        "WHERE idea.id=:ideaId and partecipationrequest.isPending = 0");
+                                        "JOIN partecipationRequest ON idea.id=partecipationRequest.ideaId ".
+                                        "JOIN user ON partecipationRequest.userId=user.id ".
+                                        "WHERE idea.id=:ideaId and partecipationRequest.isPending = 0");
 
 if (!defined('FIRST_NAME_KEY')) {define('FIRST_NAME_KEY','firstName');}
 if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
