@@ -17,7 +17,7 @@
                       <div class="dropdown-menu">
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/myProfile">Visualizza Profilo</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/editMyProfile">Modifica Profilo</a>
-                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/partecipationrequests/getPartecipationRequestList/user">Richieste ricevute</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/partecipationRequests/getPartecipationRequestList/user">Richieste ricevute</a>
                       </div>
                   </li>
                   <li class="nav-item dropdown">
