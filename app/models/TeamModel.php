@@ -23,6 +23,7 @@ define(
     "join team on member.teamId = team.id ".
     "where user.id = :userId"
 );
+define('REMOVE_MEMBER_QUERY','REMOVE FROM member WHERE partecipationRequestId = :partecipationRequestId');
 
 class TeamModel{
     private $database;
@@ -82,6 +83,13 @@ class TeamModel{
         $this->database->query(GET_MY_TEAMS);
         $this->database->bind("userId", $userId);
         return $this->database->classesFromResultSet(TeamParticipationRequestDTO::class);
+    }
+
+    public function removeMember($id){
+        $this->database->query(REMOVE_MEMBER_QUERY);
+        $this->database->bind(":partecipationRequestId",$id);
+
+        return $this->database->execute();
     }
 
 
