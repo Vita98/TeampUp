@@ -2,6 +2,10 @@
 
 define('NEW_MEMBER_QUERY', "INSERT INTO member (partecipationRequestId, teamId) " .
     "VALUES (:partecipationRequestId, :teamId)");
+define(
+    'DELETE_MEMBER_FOR_LEAVE_TEAM',
+    'DELETE FROM member WHERE member.partecipationRequestId = :participationRequestId AND member.teamId = :teamId'
+);
 
 class MemberModel {
     private $database;
@@ -18,6 +22,13 @@ class MemberModel {
         $this->database->query(NEW_MEMBER_QUERY);
         $this->database->bind("partecipationRequestId", $memberDTO->getPartecipationRequestId());
         $this->database->bind("teamId", $memberDTO->getTeamId());
+        $this->database->execute();
+    }
+
+    public function leaveTeam($participationRequestId, $teamId) {
+        $this->database->query(DELETE_MEMBER_FOR_LEAVE_TEAM);
+        $this->database->bind("participationRequestId", $participationRequestId);
+        $this->database->bind("teamId", $teamId);
         $this->database->execute();
     }
 }
