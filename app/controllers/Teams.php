@@ -2,6 +2,8 @@
 define('IDEA_DTO','ideaDTO');
 define('NEW_TEAM_VIEW','/teams/newTeam');
 define('TEAM_MANAGE_VIEW','/teams/manageTeam');
+define('TEAM_SHOW_MY_TEAMS', '/teams/showMyTeams');
+define('TEAM_LEAVE', '/teams/leaveTeam');
 
 define('ERRORS', 'errors');
 define('CHECKED', 'checked');
@@ -11,11 +13,13 @@ define('TEAM_MESSAGE','teamMessage');
 define('DESCRIPT_FIELD', 'description');
 define('TITLE_FIELD', 'title');
 define('TEAM_ID','teamid');
+define('PARTICIPANT_REQUEST_ID', 'participantRequestId');
 define('NUMBER_OF_MEMBER','numberOfMember');
 define('TEAM','team');
 define('ROLE','role');
 define('MEMBER','member');
 define('OWNER','owner');
+define('TEAM_LIST_KEY', 'teamDTOList');
 
 define('REALIZATION_PHASE','realizationPhase');
 
@@ -24,12 +28,14 @@ class Teams extends Controller{
     private $teamModel;
     private $realizationPhaseModel;
     private $ideaModel;
+    private $memberModel;
 
     public function __construct()
     {
         $this->teamModel = $this->model(TeamModel::class);
         $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
         $this->ideaModel = $this->model(IdeaModel::class);
+        $this->memberModel = $this->model(MemberModel::class);
     }
 
     public function newTeam($id = null){
@@ -132,4 +138,34 @@ class Teams extends Controller{
 
     }
 
+    public function showMyTeams() {
+        if(!isLoggedIn()) {
+            redirect("");
+        }
+
+        $data = [
+            TEAM_LIST_KEY => $this->teamModel->getMyTeams($_SESSION[USER_ID])
+        ];
+
+        $this->view(TEAM_SHOW_MY_TEAMS, $data);
+    }
+
+    public function leaveTeam($teamId, $participantRequestId) {
+        if(!isLoggedIn()) {
+            redirect("");
+        }
+
+        $this->view(TEAM_LEAVE, [
+            TEAM_ID => $teamId,
+            PARTICIPANT_REQUEST_ID => $participantRequestId
+        ]);
+    }
+
+    public function doLeaveTeam($teamId, $participantRequestId) {
+        $this->memberModel->leaveTeam($participantRequestId, $teamId);
+
+        flash(TEAM_MESSAGE, "Sei uscito dal Team correttemente");
+
+        redirect(TEAM_SHOW_MY_TEAMS);
+    }
 }
