@@ -89,7 +89,7 @@ class Ideas extends Controller {
         if (isLoggedIn()){
             $feedback = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$id);
             $idea[FEEDBACK] = $feedback;
-            $idea[ALLOW_SEND_REQUEST] = !$this->partecipationRequestModel->hasAlreadyRequestedPartecipation($_SESSION['userId'],$id);
+            $idea[ALLOW_SEND_REQUEST] = !$this->partecipationRequestModel->isUserAlreadyInvited($_SESSION['userId'],$id);
         }
 
         if(!empty($idea[IDEADTO])){

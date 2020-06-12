@@ -7,6 +7,7 @@
         <p>In questa sezione è possibile gestire le partecipazioni all'idea</p>
     </div>
     <?php flash('add_participant_to_teams'); ?>
+    <?php flash('REMOVE_PARTECIPATION_SUCCESS') ?>
     <div class="container bg-light rounded mt-2 col-md-10">
         <div class="container text-center">
             <div class="d-flex justify-content-center mt-4"><?php flash('INVITE_CORRECTLY_SENT') ?></div>
@@ -42,6 +43,11 @@
                 </div>
             </div>
             <hr>
+            <?php if($data[USER_COUNT_KEY] == 0):?>
+                <div class="alert alert-warning text-center mt-5 mb-5" role="alert">
+                    Non ci sono partecipanti a questa idea!
+                </div>
+            <?php endif;?>
             <?php for ($i=0;$i<$data[USER_COUNT_KEY];$i++): ?>
                 <?php $user = $data[USER_LIST_KEY][$i]; ?>
                 <?php $participantRequest = $data[PARTICIPANT_REQUEST_LIST_KEY][$i]; ?>
@@ -50,7 +56,7 @@
                         <kbd style= "color: darkslategray;" class="text-left alert-info"><label for="description"><strong><?php echo $user->getFirstName() . " " . $user->getLastName(); ?></strong></label></kbd>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <a href="<?php echo URLROOT; ?>/partecipationRequests/addToTeam/<?php echo $participantRequest->getPartecipationRequestId(); ?>/<?php echo $data['ideaId']; ?>" style="color: gray">
                             <div class="row d-flex justify-content-center">
                                 <svg class="bi bi-gear" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -63,11 +69,27 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-md-3">
+                        <?php $link = URLROOT . "/partecipationRequests/removePartecipation/" . $data['ideaId'] . "/idea/" . $participantRequest->getPartecipationRequestId();?>
+                        <a href="" data-toggle="modal" data-target="#exampleModalCenter" onclick="updateNewPopup('<?php echo $link; ?>','Conferma','Annulla','Sei sicuro di voler eliminare questo partecipante?','Sei sicuro?')" style="color: red">
+                            <div class="row d-flex justify-content-center">
+                                <svg class="bi bi-trash" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">Rimuovi</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
                 <hr>
             <?php endfor; ?>
         </div>
     </div>
 </div>
+
+<?php require_once APPROOT . '/views/inc/pop-Up.php'; ?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>

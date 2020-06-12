@@ -18,7 +18,6 @@
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/myProfile">Visualizza Profilo</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/editMyProfile">Modifica Profilo</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/partecipationRequests/getPartecipationRequestList/user">Richieste ricevute</a>
-                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/teams/showMyTeams">I miei Team</a>
                       </div>
                   </li>
                   <li class="nav-item dropdown">
@@ -27,7 +26,9 @@
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByOwnerId">Mie idee</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/newIdea">Nuova Idea</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/searchIdea">Ricerca Idea</a>
-                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByPartecipant">Visualizza le idee a cui partecipi</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByPartecipant">Mie partecipazioni</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/teams/showMyTeams">Miei Team</a>
                       </div>
                   </li>
                   <li class="nav-item">

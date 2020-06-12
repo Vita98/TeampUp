@@ -5,7 +5,7 @@
             <p>Questo è il tuo profilo</p>
         </div>
         <div class="container bg-light rounded mt-3 col-md-10 p-3">
-            <?php flash('profile_edit_success'); ?>
+            <div class="row justify-content-center"><?php flash('profile_edit_success'); ?></div>
 
             <div class="row justify-content-center ">
                 <div class="col-dm-12 mt-2 ">

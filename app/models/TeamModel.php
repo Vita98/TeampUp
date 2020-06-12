@@ -16,7 +16,7 @@ define(
 );
 define(
     "GET_MY_TEAMS",
-    "select team.*, partecipationrequest.partecipationRequestId ".
+    "select team.*, partecipationrequest.partecipationRequestId AS partecipationRequestId ".
     "from user ".
     "join partecipationrequest on user.id = partecipationrequest.userId ".
     "join member on partecipationrequest.partecipationRequestId = member.partecipationRequestId ".
@@ -95,13 +95,12 @@ class TeamModel{
 
 }
 
-class TeamParticipationRequestDTO
+class TeamDTO
 {
-    private $id;
-    private $name;
-    private $ideaId;
-    private $numberOfMember;
-    private $partecipationRequestId;
+    protected $id;
+    protected $name;
+    protected $ideaId;
+    protected $numberOfMember;
 
     /**
      * @return mixed
@@ -166,6 +165,10 @@ class TeamParticipationRequestDTO
     {
         $this->numberOfMember = $numberOfMember;
     }
+}
+
+class TeamParticipationRequestDTO extends TeamDTO{
+    protected $partecipationRequestId;
 
     /**
      * @return mixed
@@ -182,81 +185,6 @@ class TeamParticipationRequestDTO
     {
         $this->partecipationRequestId = $partecipationRequestId;
     }
-
-
-}
-
-class TeamDTO
-{
-    private $id;
-    private $name;
-    private $ideaId;
-    private $numberOfMember;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdeaId()
-    {
-        return $this->ideaId;
-    }
-
-    /**
-     * @param mixed $ideaId
-     */
-    public function setIdeaId($ideaId)
-    {
-        $this->ideaId = $ideaId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNumberOfMember()
-    {
-        return $this->numberOfMember;
-    }
-
-    /**
-     * @param mixed $numberOfMember
-     */
-    public function setNumberOfMember($numberOfMember)
-    {
-        $this->numberOfMember = $numberOfMember;
-    }
-
 
 
 }
