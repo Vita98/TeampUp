@@ -21,6 +21,7 @@ define ("SEARCH_QUERY_HAVING", " ) ) " .
     " ORDER BY CASE WHEN (idea.sponsorEndDate >= CURRENT_TIMESTAMP() AND idea.sponsorCategoryid IS NOT NULL) " .
     " THEN FIELD(idea.sponsorCategoryid, '3', '1') " .
     " ELSE idea.id END ASC " );
+define('GET_IDEAS_BY_PARTECIPANT_ID_QUERY', 'SELECT idea.* FROM idea,partecipationrequest WHERE idea.id = partecipationRequest.ideaId AND partecipationrequest.userId = :userId AND partecipationRequest.isPending = 0');
 
 class IdeaModel{
     private $database;
@@ -117,6 +118,13 @@ class IdeaModel{
         } else {
             $this->database->bind(":cat1", null);
         }
+
+        return $this->database->classesFromResultSet(IdeaDTO::class);
+    }
+
+    public function getIdeasByPartecipantId($userId){
+        $this->database->query(GET_IDEAS_BY_PARTECIPANT_ID_QUERY);
+        $this->database->bind(':userId',$userId);
 
         return $this->database->classesFromResultSet(IdeaDTO::class);
     }

@@ -70,9 +70,9 @@
                 </div>
             <?php endif; ?>
         </div>
-        <? endforeach; ?>
+        <?php endforeach; ?>
 
-        <? elseif (!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == IDEATYPE): foreach ($data[REQUESTS_DTO] as $request) : ?>
+        <?php elseif (!empty($data[REQUEST_CONTROL_TYPE]) && $data[REQUEST_CONTROL_TYPE] == IDEATYPE): foreach ($data[REQUESTS_DTO] as $request) : ?>
             <div class="container card  mt-5 mb-5 col-md-8">
                 <div class="row">
                     <div class="col-10 mt-4 mb-4 ">
@@ -124,7 +124,7 @@
                     </div>
                 <?php endif; ?>
             </div>
-        <?php endforeach; ?>
+         <?php endforeach; ?>
         <?php endif; ?>
 
         <?php if($data[REQUEST_CONTROL_TYPE] == USERTYPE && empty($data[REQUESTS_DTO])): ?>

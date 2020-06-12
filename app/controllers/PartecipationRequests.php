@@ -209,7 +209,6 @@ class PartecipationRequests extends Controller {
                 $outData['ideasOwner'][$request->getPartecipationRequestId()] = $this->userModel->getIdeaOwner($request->getIdeaId());
                 $outData[USERDTO_KEY][$request->getPartecipationRequestId()] = $this->userModel->getUserById($request->getUserId());
             }
-
             $this->view('partecipationRequests/partecipationRequestList',$outData);
 
         }elseif ($requestType == IDEATYPE){
@@ -298,5 +297,22 @@ class PartecipationRequests extends Controller {
                 redirect('');
             }
         }
+    }
+
+    public function removePartecipation($id ){
+        if(!isLoggedIn()){
+            redirect(" ");
+        }
+        if(!$this->ideaModel->getIdeaById($id)){
+            redirect("");
+        }
+        if($this->teamModel->isMember($id,$_SESSION[USER_ID])){
+
+            $partecipationRequest = $this->partecipationrequestModel->getPartecipationRequestByUserIdAndIdeaId($id,$_SESSION[USER_ID]);
+            $this->teamModel->removeMember($partecipationRequest->getId);
+        }
+
+        $this->partecipationrequestModel->deletePartecipationRequestByUserId($id,$_SESSION['userId']);
+        redirect('/ideas/getIdeasByPartecipant', null );
     }
 }
