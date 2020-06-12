@@ -18,6 +18,7 @@
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/myProfile">Visualizza Profilo</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/users/editMyProfile">Modifica Profilo</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/partecipationRequests/getPartecipationRequestList/user">Richieste ricevute</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/teams/showMyTeams">I miei Team</a>
                       </div>
                   </li>
                   <li class="nav-item dropdown">
