@@ -39,17 +39,6 @@ class PartecipationRequestModel{
         return ($this->database->rowCount() > 0);
     }
 
-    public function hasAlreadyRequestedPartecipation($userId,$ideaId){
-        $this->database->query("SELECT * FROM partecipationRequest WHERE userId=:userId AND ideaId=:ideaId AND isUserRequesting=true");
-        $this->database->bind(USER_ID_QUERY, $userId);
-        $this->database->bind(IDEA_ID_QUERY, $ideaId);
-
-        $this->database->single();
-
-        // Check row
-        return ($this->database->rowCount() > 0);
-    }
-
     public function findParticipantRequestsIdea($ideaId) {
         $this->database->query(FIND_PARTICIPANT_REQUESTS_IDEA);
         $this->database->bind(":ideaId", $ideaId);

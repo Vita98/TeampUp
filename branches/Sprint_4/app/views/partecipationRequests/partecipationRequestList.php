@@ -1,5 +1,8 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php $flagPopUp = false; define('IDEAS_OWNER','ideasOwner'); ?>
+<?php define('REQUEST_REPLY_LINK','/partecipationRequests/requestReply/');
+if(!defined('USER_DTO')){define('USER_DTO','userDTO');}
+?>
 
 <div class="row">
 
@@ -28,8 +31,15 @@
                         <div class="mt-2"><strong>Inviata a: </strong><?php echo $data[IDEAS_OWNER][$request->getPartecipationRequestId()]->getFirstName() . " " . $data[IDEAS_OWNER][$request->getPartecipationRequestId()]->getLastName(); ?></div>
                     <?php endif; ?>
                     <div class="mt-3">
-                        <div><strong>Abilità in comune: </strong>
-
+                        <div class="row">
+                            <div class="col-md-12 d-flex justify-content-start"><strong>Abilità in comune: </strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php foreach ($data['COMMON_ABILITIES'][$request->getPartecipationRequestId()] as $ability) : ?>
+                                    <kbd><?php echo $ability->getDescription()?></kbd>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,11 +64,11 @@
                 <?php $flagPopUp = true; ?>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col-md-5">
-                        <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT'; ?>
+                        <?php $rejectLink = URLROOT . REQUEST_REPLY_LINK . $request->getPartecipationRequestId() . '/REJECT'; ?>
                         <input type="submit" onclick="updateNewPopup('<?php echo $rejectLink; ?>','Conferma','Annulla','Sei sicuro di voler rifiutare la richiesta di partecipazione?','Sei sicuro?')" value="Rifiuta" class="btn btn-danger btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                     </div>
                     <div class="col-md-5">
-                        <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
+                        <?php $acceptLink = URLROOT . REQUEST_REPLY_LINK . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
                         <input type="submit" onclick="updateNewPopup('<?php echo $acceptLink; ?>','Conferma','Annulla','Sei sicuro di voler accettare la richiesta di partecipazione?','Sei sicuro?')" value="Accetta" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                     </div>
                 </div>
@@ -77,13 +87,20 @@
                 <div class="row">
                     <div class="col-10 mt-4 mb-4 ">
                         <?php if($request->getIsUserRequesting()): ?>
-                            <div class="mt-2"><strong>Richiedente: </strong><?php echo $data['userDTO'][$request->getPartecipationRequestId()]->getFirstName() . " " . $data['userDTO'][$request->getPartecipationRequestId()]->getLastName(); ?></div>
+                            <div class="mt-2"><strong>Richiedente: </strong><?php echo $data[USER_DTO][$request->getPartecipationRequestId()]->getFirstName() . " " . $data[USER_DTO][$request->getPartecipationRequestId()]->getLastName(); ?></div>
                         <?php else: ?>
-                            <div class="mt-2"><strong>Inviata a: </strong><?php echo $data['userDTO'][$request->getPartecipationRequestId()]->getFirstName() . " " . $data['userDTO'][$request->getPartecipationRequestId()]->getLastName(); ?></div>
+                            <div class="mt-2"><strong>Inviata a: </strong><?php echo $data[USER_DTO][$request->getPartecipationRequestId()]->getFirstName() . " " . $data[USER_DTO][$request->getPartecipationRequestId()]->getLastName(); ?></div>
                         <?php endif; ?>
                         <div class="mt-3">
-                            <div><strong>Abilità in comune: </strong>
-
+                            <div class="row">
+                                <div class="col-md-12 d-flex justify-content-start"><strong>Abilità in comune: </strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php foreach ($data['COMMON_ABILITIES'][$request->getPartecipationRequestId()] as $ability) : ?>
+                                        <kbd><?php echo $ability->getDescription()?></kbd>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,11 +125,11 @@
                     <?php $flagPopUp = true; ?>
                     <div class="row d-flex justify-content-center mb-3">
                         <div class="col-md-5">
-                            <?php $rejectLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/REJECT'; ?>
+                            <?php $rejectLink = URLROOT . REQUEST_REPLY_LINK . $request->getPartecipationRequestId() . '/REJECT'; ?>
                             <input type="submit" onclick="updateNewPopup('<?php echo $rejectLink; ?>','Conferma','Annulla','Sei sicuro di voler rifiutare la richiesta di partecipazione?','Sei sicuro?')" value="Rifiuta" class="btn btn-danger btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                         </div>
                         <div class="col-md-5">
-                            <?php $acceptLink = URLROOT . "/partecipationRequests/requestReply/" . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
+                            <?php $acceptLink = URLROOT . REQUEST_REPLY_LINK . $request->getPartecipationRequestId() . '/ACCEPT'; ?>
                             <input type="submit" onclick="updateNewPopup('<?php echo $acceptLink; ?>','Conferma','Annulla','Sei sicuro di voler accettare la richiesta di partecipazione?','Sei sicuro?')" value="Accetta" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModalCenter">
                         </div>
                     </div>

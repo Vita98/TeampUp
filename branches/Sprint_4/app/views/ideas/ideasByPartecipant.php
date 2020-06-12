@@ -5,6 +5,8 @@
                 <label class="display-4 "><strong>Le mie partecipazioni</strong></label>
                 <p><strong>Queste sono tutte le idee a cui partecipi</strong></p>
             </div>
+            <div class="d-flex justify-content-center mt-5"><?php flash('REMOVE_PARTECIPATION_SUCCESS') ?></div>
+            <div class="d-flex justify-content-center mt-3"><?php flash('partecipation_request_response'); ?></div>
             <?php if(isset($data) && !empty($data)) : foreach($data as $dto): ?>
                 <div class="card card-body rounded bg-light mt-5">
                     <div class="justify-center">
@@ -28,7 +30,7 @@
                             <div class="row text-center">
 
                                 <div class="col-6 mt-3 ">
-                                    <a href="<?php echo URLROOT; ?>/ideas/showIdea/<?php echo $dto[IDEADTO]->getId(); ?>" style="color: #1d70ff">
+                                    <a href="/ideas/showIdea/<?php echo $dto[IDEADTO]->getId(); ?>" style="color: #1d70ff">
                                         <div class="row d-flex justify-content-center">
                                             <svg class="bi bi-card-text" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
@@ -41,8 +43,8 @@
                                     </a>
                                 </div>
 
-                                <div class="col-4 mt-3 ">
-                                    <?php $rejectLink = URLROOT . "/partecipationRequests/removePartecipation/" . $dto[IDEADTO]->getId() . '/REJECT'; ?>
+                                <div class="col-6 mt-3 ">
+                                    <?php $rejectLink = "/partecipationRequests/removePartecipation/" . $dto[IDEADTO]->getId() . '/user'; ?>
                                     <a href="" data-toggle="modal" data-target="#exampleModalCenter" onclick="updateNewPopup('<?php echo $rejectLink; ?>','Conferma','Annulla','Sei sicuro di eliminare la tua partecipazione da questa idea?','Sei sicuro?')" style="color: red" >
                                         <div class="row d-flex justify-content-center">
                                             <svg class="bi bi-trash" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

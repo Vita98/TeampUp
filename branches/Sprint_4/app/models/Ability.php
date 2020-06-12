@@ -1,6 +1,11 @@
 <?php
 
 define('USERID_BIND_TOKEN',':userId');
+define('COMMON_ABILITIES_QUERY',"SELECT ability.* FROM ability JOIN userAbilities ON ability.id=userAbilities.abilityId" .
+                                " WHERE userId = :userId AND ability.id IN " . 
+                                "(SELECT ability_Id from realizationPhaseAbilities JOIN realizationPhase ON realizationPhaseAbilities.realizationPhase_Id=realizationPhase.id " . 
+                                "WHERE ideaId = :ideaId)");
+
 
 class Ability {
     protected $database;
@@ -34,6 +39,14 @@ class Ability {
         $this->database->bind(':abilityId', $abilityId);
 
         return $this->database->execute();
+    }
+
+    public function getCommonAbilities($userId,$ideaId){
+        $this->database->query(COMMON_ABILITIES_QUERY);
+        $this->database->bind(USERID_BIND_TOKEN, $userId);
+        $this->database->bind(':ideaId', $ideaId);
+
+        return $this->database->classesFromResultSet(AbilityDTO::class);
     }
 
 }
