@@ -416,4 +416,24 @@ class Ideas extends Controller {
         }
         $this->view("ideas/search", $data);
     }
+
+    public function getIdeasByPartecipant(){
+        if(!isLoggedIn()){
+            redirect("");
+        }
+
+        $data = [];
+        $dto =[IDEADTO, CATEGORIES];
+        $ideas = $this->ideaModel->getIdeasByPartecipantId($_SESSION[USER_ID_KEY]);
+        foreach ($ideas as $idea){
+            $dto[IDEADTO] = null;
+            $dto[CATEGORIES] = null;
+            $dto[IDEADTO] = $idea;
+            $dto[CATEGORIES] = $this->categoryModel->getCategoryByIdea($idea->getId());
+            array_push($data,$dto);
+        }
+
+        $this->view('ideas/ideasByPartecipant', $data);
+
+    }
 }

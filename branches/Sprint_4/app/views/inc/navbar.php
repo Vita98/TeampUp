@@ -27,6 +27,7 @@
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByOwnerId">Mie idee</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/newIdea">Nuova Idea</a>
                           <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/searchIdea">Ricerca Idea</a>
+                          <a class="dropdown-item" href="<?php echo URLROOT; ?>/ideas/getIdeasByPartecipant">Visualizza le idee a cui partecipi</a>
                       </div>
                   </li>
                   <li class="nav-item">
