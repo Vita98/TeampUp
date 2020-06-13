@@ -5,10 +5,10 @@
                 <label class="display-4 "><strong>Le mie partecipazioni</strong></label>
                 <p><strong>Queste sono tutte le idee a cui partecipi</strong></p>
             </div>
-            <div class="d-flex justify-content-center mt-5"><?php flash('REMOVE_PARTECIPATION_SUCCESS') ?></div>
-            <div class="d-flex justify-content-center mt-3"><?php flash('partecipation_request_response'); ?></div>
+            <div class="d-flex justify-content-center "><?php flash('REMOVE_PARTECIPATION_SUCCESS') ?></div>
+            <div class="d-flex justify-content-center "><?php flash('partecipation_request_response'); ?></div>
             <?php if(isset($data) && !empty($data)) : foreach($data as $dto): ?>
-                <div class="card card-body rounded bg-light mt-5">
+                <div class="card card-body rounded bg-light mt-3">
                     <div class="justify-center">
                         <div class="form-group mt-3 ">
                             <label for="title" class="display-5 font-weight-bolder">Titolo: </label>
@@ -59,8 +59,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             <?php endforeach; ?>

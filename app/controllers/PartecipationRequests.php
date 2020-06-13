@@ -31,7 +31,6 @@ class PartecipationRequests extends Controller {
     private $abilityModel;
     private $partecipationrequestModel;
     private $teamModel;
-    private $memberModel;
 
     public function __construct(){
         $this->ideaModel = $this->model(IdeaModel::class);
@@ -39,7 +38,6 @@ class PartecipationRequests extends Controller {
         $this->abilityModel = $this->model(Ability::class);
         $this->partecipationrequestModel = $this->model(PartecipationRequestModel::class);
         $this->teamModel = $this->model(TeamModel::class);
-        $this->memberModel = $this->model(MemberModel::class);
     }
 
     private function checkIdeaProprety($ideaId){
@@ -81,7 +79,7 @@ class PartecipationRequests extends Controller {
                 $member = new MemberDTO();
                 $member->setPartecipationRequestId($participantRequestId);
                 $member->setTeamId($teamId);
-                $this->memberModel->createMember($member);
+                $this->teamModel->newMember($member);
             }
             flash("add_participant_to_teams", "Utente assegnato ad i team con successo!");
             redirect('partecipationRequests/manageIdeaPartecipants/'.$ideaId);
