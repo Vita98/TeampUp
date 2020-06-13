@@ -16,9 +16,7 @@ define('TEAM_ID','teamid');
 define('PARTICIPANT_REQUEST_ID', 'participantRequestId');
 define('NUMBER_OF_MEMBER','numberOfMember');
 define('TEAM','team');
-define('ROLE','role');
-define('MEMBER','member');
-define('OWNER','owner');
+
 define('TEAM_LIST_KEY', 'teamDTOList');
 
 define('REALIZATION_PHASE','realizationPhase');
@@ -29,6 +27,7 @@ class Teams extends Controller{
     private $realizationPhaseModel;
     private $ideaModel;
     private $memberModel;
+    private $partecipationRequestModel;
 
     public function __construct()
     {
@@ -36,6 +35,7 @@ class Teams extends Controller{
         $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
         $this->ideaModel = $this->model(IdeaModel::class);
         $this->memberModel = $this->model(MemberModel::class);
+        $this->partecipationRequestModel = $this->model(PartecipationRequestModel::class);
     }
 
     public function newTeam($id = null){
@@ -117,12 +117,12 @@ class Teams extends Controller{
             redirect("");
         }
 
-        if(!$this->teamModel->isMember($id,$_SESSION[USER_ID]) && $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
+        if(!$this->partecipationRequestModel->isUserParticipant($id,$_SESSION[USER_ID]) && $this->ideaModel->getIdeaById($id)->getOwnerId() != $_SESSION[USER_ID]) {
             redirect("");
         }
 
-        if($this->teamModel->isMember($id,$_SESSION[USER_ID])){
-             $data[ROLE] = MEMBER;
+        if($this->partecipationRequestModel->isUserParticipant($id,$_SESSION[USER_ID])){
+             $data[ROLE] = PARTICIPANT;
         }else{
             $data[ROLE] = OWNER;
         }
