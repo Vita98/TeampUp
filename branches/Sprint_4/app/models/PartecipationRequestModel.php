@@ -9,7 +9,7 @@ define(
     "JOIN partecipationRequest ON idea.id=partecipationRequest.ideaId ".
     "WHERE idea.id=:ideaId and partecipationRequest.isPending = 0"
 );
-define('DELETE_PARTECIPATION_REQUEST_BY_USERID_QUERY',"DELETE FROM partecipationrequest WHERE userId = :userId AND ideaId = :ideaId ");
+define('DELETE_PARTECIPATION_REQUEST_BY_USERID_QUERY',"DELETE FROM partecipationRequest WHERE userId = :userId AND ideaId = :ideaId ");
 define('IS_USER_PARTICIPANT_QUERY', "SELECT * FROM partecipationRequest WHERE ideaId = :ideaId AND userId = :userId AND isPending = 0");
 
 class PartecipationRequestModel{
@@ -92,7 +92,7 @@ class PartecipationRequestModel{
     }
 
     public function getPartecipationRequestByUserIdAndIdeaId($ideaId,$userId){
-        $this->database->query('SELECT FROM partecipationRequest WHERE ideaId = :ideaId and userId = :userId');
+        $this->database->query('SELECT partecipationRequest.* FROM partecipationRequest WHERE ideaId = :ideaId and userId = :userId');
         $this->database->bind(IDEA_ID_QUERY,$ideaId);
         $this->database->bind(USER_ID_QUERY,$userId);
 

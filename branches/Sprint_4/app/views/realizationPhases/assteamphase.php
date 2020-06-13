@@ -5,7 +5,7 @@
     <p>In questa sezione è associare un team alla fase di realizzazione <strong><?php echo $data[REALIZATION_PHASE_DTO]->getName();?></strong></p>
 </div>
 <?php   if(empty($data[TEAM_DTO])):?>
-    <div class="alert alert-danger" role="alert">
+    <div class="alert text-center" role="alert">
         <strong>Questa idea non possiede team</strong>
     </div>
 <?php else :?>
