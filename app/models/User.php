@@ -13,6 +13,11 @@ define('FIND_USER_IDEA_PARTICIPANTS', "SELECT user.id, user.firstName, user.last
                                         "JOIN user ON partecipationRequest.userId=user.id ".
                                         "WHERE idea.id=:ideaId and partecipationRequest.isPending = 0");
 
+define('GET_MEMBER_LIST', " SELECT user.* FROM user, member, partecipationRequest " .
+                          " WHERE user.id = partecipationRequest.userId " .
+                          " AND member.partecipationRequestId = partecipationRequest.partecipationRequestId " .
+                          " AND member.teamId = :teamId " );
+
 if (!defined('FIRST_NAME_KEY')) {define('FIRST_NAME_KEY','firstName');}
 if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
 
@@ -141,6 +146,12 @@ if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
 
             return $this->database->classesFromResultSet(UserDTO::class);
         }
+
+        public function getUsersByTeamId($teamId){
+            $this->database->query(GET_MEMBER_LIST);
+            $this->database->bind(":teamId", $teamId);
+            return $this->database->classesFromResultSet(UserDTO::class);
+        }
     }
 
     class UserDTO {
@@ -149,6 +160,8 @@ if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
         private $lastName;
         private $email;
         private $psw;
+        private $reqId;
+        private $teamId;
 
         public function __construct(){
         }
@@ -200,6 +213,31 @@ if (!defined('LAST_NAME_KEY')) {define('LAST_NAME_KEY','lastName');}
         public function setPsw($psw){
             $this->psw = $psw;
         }
+
+
+        public function getReqId()
+        {
+            return $this->reqId;
+        }
+
+
+        public function setReqId($reqId)
+        {
+            $this->reqId = $reqId;
+        }
+
+
+        public function getTeamId()
+        {
+            return $this->teamId;
+        }
+
+
+        public function setTeamId($teamId)
+        {
+            $this->teamId = $teamId;
+        }
+
 
     }
 

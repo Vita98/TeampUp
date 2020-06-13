@@ -2,8 +2,8 @@
     <div class="row">
         <div class="container rounded mt-3 col-md-8">
             <div class="container text-center">
-                <label class="display-4 "><strong>Le mie partecipazioni</strong></label>
-                <p><strong>Queste sono tutte le idee a cui partecipi</strong></p>
+                <label class="display-4 ">Idee di cui sono partecipante</label>
+                <p>Queste sono tutte le idee a cui partecipi</p>
             </div>
             <div class="d-flex justify-content-center "><?php flash('REMOVE_PARTECIPATION_SUCCESS') ?></div>
             <div class="d-flex justify-content-center "><?php flash('partecipation_request_response'); ?></div>

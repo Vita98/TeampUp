@@ -12,7 +12,6 @@ define('TEAM_MESSAGE','teamMessage');
 
 define('DESCRIPT_FIELD', 'description');
 define('TITLE_FIELD', 'title');
-define('TEAM_ID','teamid');
 define('PARTICIPANT_REQUEST_ID', 'participantRequestId');
 define('NUMBER_OF_MEMBER','numberOfMember');
 define('TEAM','team');
@@ -145,7 +144,6 @@ class Teams extends Controller{
 
         foreach ($data['ideasDTO'] as $idea){
             $data[$idea->getId()] = $this->teamModel->getMyTeamsByIdeaId($_SESSION['userId'],$idea->getId());
-            //var_dump($data[$idea->getId()]);
         }
 
         $this->view(TEAM_SHOW_MY_TEAMS, $data);
@@ -164,9 +162,17 @@ class Teams extends Controller{
 
     public function doLeaveTeam($teamId, $participantRequestId) {
         $this->teamModel->deleteMember($participantRequestId, $teamId);
-
         flash(TEAM_MESSAGE, "Sei uscito dal Team correttemente");
-
         redirect(TEAM_SHOW_MY_TEAMS);
     }
+
+    public function removeMemberFromTeam($ideaId, $teamId, $participantReqId){
+        if(!isLoggedIn() || $this->ideaModel->getIdeaByID($ideaId)->getOwnerId() != $_SESSION[USER_ID]){
+            redirect("");
+        }
+        $this->teamModel->deleteMember($participantReqId, $teamId);
+        flash("remove_member_message", "Membro rimosso con successo!");
+        redirect("users/getMembersList/".$ideaId."/".$teamId);
+    }
+
 }

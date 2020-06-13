@@ -26,10 +26,12 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
     class Users extends Controller{
         private $userModel;
         private $abilityModel;
-
+        private $partecipationRequestModel;
         public function __construct() {
             $this->userModel = $this->model('User');
             $this->abilityModel = $this->model('Ability');
+            $this->partecipationRequestModel = $this->model(PartecipationRequestModel::class);
+            $this->ideaModel = $this->model(IdeaModel::class);
         }
 
         /**
@@ -366,7 +368,17 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             }
         }
 
+        public function getMembersList($ideaId, $teamId){
+            $data = [USERDTO_KEY => [], TEAM_ID => $teamId, IDEA_ID => $ideaId, OWNER => false];
+            $data[USERDTO_KEY] = $this->userModel->getUsersByTeamId($teamId);
+            $data[OWNER] = $this->ideaModel->getIdeaById($ideaId)->getOwnerId() == $_SESSION[USER_ID];
+            foreach($data[USERDTO_KEY] as $user){
+                $request = $this->partecipationRequestModel->getPartecipationRequestByUserIdAndIdeaId($ideaId, $user->getId());
+                $user->setReqId($request->getPartecipationRequestId());
+            }
+            $this->view("teams/members", $data);
+
+        }
 
     }
 
-?>
