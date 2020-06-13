@@ -3,7 +3,7 @@ define('IDEA_DTO','ideaDTO');
 define('NEW_TEAM_VIEW','/teams/newTeam');
 define('TEAM_MANAGE_VIEW','/teams/manageTeam');
 define('TEAM_SHOW_MY_TEAMS', '/teams/showMyTeams');
-define('TEAM_LEAVE', '/teams/leaveTeam');
+define('TEAM_LEAVE', '/teams/removeMember');
 
 define('ERRORS', 'errors');
 define('CHECKED', 'checked');
@@ -26,7 +26,6 @@ class Teams extends Controller{
     private $teamModel;
     private $realizationPhaseModel;
     private $ideaModel;
-    private $memberModel;
     private $partecipationRequestModel;
 
     public function __construct()
@@ -34,7 +33,6 @@ class Teams extends Controller{
         $this->teamModel = $this->model(TeamModel::class);
         $this->realizationPhaseModel = $this->model(RealizationPhaseModel::class);
         $this->ideaModel = $this->model(IdeaModel::class);
-        $this->memberModel = $this->model(MemberModel::class);
         $this->partecipationRequestModel = $this->model(PartecipationRequestModel::class);
     }
 
@@ -143,14 +141,17 @@ class Teams extends Controller{
             redirect("");
         }
 
-        $data = [
-            TEAM_LIST_KEY => $this->teamModel->getMyTeams($_SESSION[USER_ID])
-        ];
+        $data['ideasDTO'] = $this->ideaModel->getIdeasByPartecipantId($_SESSION[USER_ID]);
+
+        foreach ($data['ideasDTO'] as $idea){
+            $data[$idea->getId()] = $this->teamModel->getMyTeamsByIdeaId($_SESSION['userId'],$idea->getId());
+            //var_dump($data[$idea->getId()]);
+        }
 
         $this->view(TEAM_SHOW_MY_TEAMS, $data);
     }
 
-    public function leaveTeam($teamId, $participantRequestId) {
+    public function removeMember($teamId, $participantRequestId) {
         if(!isLoggedIn()) {
             redirect("");
         }
@@ -162,7 +163,7 @@ class Teams extends Controller{
     }
 
     public function doLeaveTeam($teamId, $participantRequestId) {
-        $this->memberModel->leaveTeam($participantRequestId, $teamId);
+        $this->teamModel->deleteMember($participantRequestId, $teamId);
 
         flash(TEAM_MESSAGE, "Sei uscito dal Team correttemente");
 

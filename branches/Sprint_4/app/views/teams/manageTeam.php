@@ -20,7 +20,7 @@
             <div class="container text-center">
                 <div class="d-flex justify-content-center mt-4"><?php flash(IDEA_MESSAGE) ?></div>
                 <div class="row mt-3 justify-content-md-center">
-                    <div class="col-6 mt-3 mb-3">
+                    <div class="col-12 mt-3 mb-3">
                         <a href="<?php echo URLROOT; ?>/teams/newTeam/<?php echo $data[IDEA_DTO]->getId(); ?>" style="">
                             <div class="row d-flex justify-content-center">
                                 <svg class="bi bi-file-plus" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
                         </a>
                     </div>
                 </div>
-    <?php endif;?>
+            <?php endif;?>
             <?php flash(TEAM_MESSAGE); ?>
             <hr>
             <?php   if(empty($data[TEAM_DTO])):?>
