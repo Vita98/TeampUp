@@ -23,7 +23,24 @@ define(
     "join team on member.teamId = team.id ".
     "where user.id = :userId"
 );
+
+define(
+    "GET_MY_TEAMS_BY_IDEA",
+    "select team.*, partecipationrequest.partecipationRequestId AS partecipationRequestId ".
+    "from user ".
+    "join partecipationrequest on user.id = partecipationrequest.userId ".
+    "join member on partecipationrequest.partecipationRequestId = member.partecipationRequestId ".
+    "join team on member.teamId = team.id ".
+    "where user.id = :userId AND team.ideaId=:ideaId"
+);
 define('REMOVE_MEMBER_QUERY','REMOVE FROM member WHERE partecipationRequestId = :partecipationRequestId');
+
+define('NEW_MEMBER_QUERY', "INSERT INTO member (partecipationRequestId, teamId) " .
+    "VALUES (:partecipationRequestId, :teamId)");
+define(
+    'DELETE_MEMBER_FOR_LEAVE_TEAM',
+    'DELETE FROM member WHERE member.partecipationRequestId = :participationRequestId AND member.teamId = :teamId'
+);
 
 class TeamModel{
     private $database;
@@ -73,8 +90,8 @@ class TeamModel{
 
     public function getByIdeaIdAndParticipantRequestId($ideaId, $participationRequestId) {
         $this->database->query(GET_BY_IDEA_ID_AND_PARTICIPANT_REQUEST_ID);
-        $this->database->bind("ideaId", $ideaId);
-        $this->database->bind("participationRequestId", $participationRequestId);
+        $this->database->bind(":ideaId", $ideaId);
+        $this->database->bind(":participationRequestId", $participationRequestId);
 
         return $this->database->classesFromResultSet(TeamDTO::class);
     }
@@ -85,11 +102,25 @@ class TeamModel{
         return $this->database->classesFromResultSet(TeamParticipationRequestDTO::class);
     }
 
-    public function removeMember($id){
-        $this->database->query(REMOVE_MEMBER_QUERY);
-        $this->database->bind(":partecipationRequestId",$id);
+    public function getMyTeamsByIdeaId($userId,$ideaId) {
+        $this->database->query(GET_MY_TEAMS_BY_IDEA);
+        $this->database->bind(":userId", $userId);
+        $this->database->bind(":ideaId", $ideaId);
+        return $this->database->classesFromResultSet(TeamParticipationRequestDTO::class);
+    }
 
-        return $this->database->execute();
+    public function newMember(MemberDTO $memberDTO) {
+        $this->database->query(NEW_MEMBER_QUERY);
+        $this->database->bind("partecipationRequestId", $memberDTO->getPartecipationRequestId());
+        $this->database->bind("teamId", $memberDTO->getTeamId());
+        $this->database->execute();
+    }
+
+    public function deleteMember($participationRequestId, $teamId) {
+        $this->database->query(DELETE_MEMBER_FOR_LEAVE_TEAM);
+        $this->database->bind("participationRequestId", $participationRequestId);
+        $this->database->bind("teamId", $teamId);
+        $this->database->execute();
     }
 
 
@@ -187,4 +218,41 @@ class TeamParticipationRequestDTO extends TeamDTO{
     }
 
 
+}
+
+class MemberDTO {
+    private $partecipationRequestId;
+    private $teamId;
+
+    /**
+     * @return mixed
+     */
+    public function getPartecipationRequestId()
+    {
+        return $this->partecipationRequestId;
+    }
+
+    /**
+     * @param mixed $partecipationRequestId
+     */
+    public function setPartecipationRequestId($partecipationRequestId)
+    {
+        $this->partecipationRequestId = $partecipationRequestId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTeamId()
+    {
+        return $this->teamId;
+    }
+
+    /**
+     * @param mixed $teamId
+     */
+    public function setTeamId($teamId)
+    {
+        $this->teamId = $teamId;
+    }
 }
