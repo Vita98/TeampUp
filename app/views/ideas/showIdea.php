@@ -21,10 +21,10 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
             <?php flash('REQUEST_CORRECTLY_SENT'); ?>
             <?php flash('NEW_IDEA_OK'); ?>
             <?php flash('SPONSORIZATION_OK'); ?>
-
+            <?php flash(IDEA_MESSAGE); ?>
             <hr>
             <div class="pt-3 pb-3">
-                <label for="description"><?php echo $data[IDEADTO]->getDescription();?></label>
+                <?php echo nl2br($data[IDEADTO]->getDescription());?>
             </div>
             <hr>
             <div class="pt-3">

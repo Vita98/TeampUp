@@ -98,7 +98,7 @@ class TeamModel{
 
     public function getMyTeams($userId) {
         $this->database->query(GET_MY_TEAMS);
-        $this->database->bind("userId", $userId);
+        $this->database->bind(":userId", $userId);
         return $this->database->classesFromResultSet(TeamParticipationRequestDTO::class);
     }
 
@@ -111,15 +111,15 @@ class TeamModel{
 
     public function newMember(MemberDTO $memberDTO) {
         $this->database->query(NEW_MEMBER_QUERY);
-        $this->database->bind("partecipationRequestId", $memberDTO->getPartecipationRequestId());
-        $this->database->bind("teamId", $memberDTO->getTeamId());
+        $this->database->bind(":partecipationRequestId", $memberDTO->getPartecipationRequestId());
+        $this->database->bind(":teamId", $memberDTO->getTeamId());
         $this->database->execute();
     }
 
     public function deleteMember($participationRequestId, $teamId) {
         $this->database->query(DELETE_MEMBER_FOR_LEAVE_TEAM);
-        $this->database->bind("participationRequestId", $participationRequestId);
-        $this->database->bind("teamId", $teamId);
+        $this->database->bind(":participationRequestId", $participationRequestId);
+        $this->database->bind(":teamId", $teamId);
         $this->database->execute();
     }
 
