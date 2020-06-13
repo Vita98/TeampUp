@@ -87,9 +87,9 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                     <?php endif; ?>
                 </div>
             </form>
+        <div class ="row mt-4 mb-4">
                 <?php if($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId() && $data[ALLOW_SEND_REQUEST] ):?>
-                <div class="row mt-4 mb-4">
-                    <div class="col-12">
+                        <div class="<?php echo "".($data[ROLE] == PARTICIPANT) ?  "col-6" :  "col-12"; ?>">
                         <a href="#" onclick="updatePopup('<?php echo URLROOT; ?>/partecipationRequests/sendPartecipationRequest/<?php echo $data[IDEADTO]->getId(); ?>/true')"  data-toggle="modal" data-target="#exampleModalCenter">
                             <div class="row d-flex justify-content-center">
                                 <svg class="bi bi-person-plus-fill" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -102,11 +102,12 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                             </div>
                         </a>
                     </div>
-                </div>
+
+
 
                 <?php elseif ($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId()): ?>
-                    <div class="row mt-4 mb-4">
-                        <div class="col-12">
+
+                     <div class="<?php echo "".($data[ROLE] == PARTICIPANT) ?  "col-6" :  "col-12"; ?>">
                             <div style="color: gray; cursor: not-allowed">
                                 <div class="row d-flex justify-content-center">
                                     <svg class="bi bi-person-plus-fill" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -119,9 +120,28 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 <?php endif; ?>
+                <?php if(isset($_SESSION[USER_ID_KEY]) && ($data[ROLE] == PARTICIPANT)): ?>
+
+                    <div class="col-6 ">
+                        <a href="<?php echo URLROOT; ?>/teams/manageTeam/<?php echo $data[IDEADTO]->getId(); ?>" style="color:black ">
+                            <div class="row d-flex justify-content-center">
+                                <svg class="bi bi-people" width="1.8em" height="1.8em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.995-.944v-.002.002zM7.022 13h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zm7.973.056v-.002.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                                </svg>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">Visualizza teams</div>
+                            </div>
+                        </a>
+                    </div>
+
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
+
+
 
             <?php if(isset($_SESSION[USER_ID_KEY]) && ($_SESSION[USER_ID_KEY] == $data[IDEADTO]->getOwnerId())): ?>
                 <div class="row mb-3">
@@ -164,7 +184,6 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                         </div>
                     </a>
                 </div>
-
                 <div class="col-3 mt-3 ">
                     <a href="<?php echo URLROOT; ?>/teams/manageTeam/<?php echo $data[IDEADTO]->getId(); ?>" style="color:black ">
                         <div class="row d-flex justify-content-center">
@@ -179,7 +198,9 @@ define('STAR_RATING_FIXED','starRatingFixed.php');
                 </div>
                 </div>
 
+            </div>
             <?php endif;?>
+
 
         </div>
     </div>

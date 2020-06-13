@@ -90,6 +90,13 @@ class Ideas extends Controller {
             $feedback = $this->feedbackModel->existFeedback($_SESSION[USER_ID_KEY],$id);
             $idea[FEEDBACK] = $feedback;
             $idea[ALLOW_SEND_REQUEST] = !$this->partecipationRequestModel->isUserAlreadyInvited($_SESSION['userId'],$id);
+            $idea[ROLE] = 'user';
+            if($idea[USERDTO]->getId() == $_SESSION[USER_ID_KEY]){
+                $idea[ROLE] = OWNER;
+            }
+            elseif($this->partecipationRequestModel->isUserParticipant($id,$_SESSION[USER_ID_KEY])){
+                $idea[ROLE] = PARTICIPANT;
+            }
         }
 
         if(!empty($idea[IDEADTO])){
