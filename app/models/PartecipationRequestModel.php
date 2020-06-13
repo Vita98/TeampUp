@@ -10,6 +10,7 @@ define(
     "WHERE idea.id=:ideaId and partecipationRequest.isPending = 0"
 );
 define('DELETE_PARTECIPATION_REQUEST_BY_USERID_QUERY',"DELETE FROM partecipationrequest WHERE userId = :userId AND ideaId = :ideaId ");
+define('IS_USER_PARTICIPANT_QUERY', "SELECT * FROM partecipationRequest WHERE ideaId = :ideaId AND userId = :userId AND isPending = 0");
 
 class PartecipationRequestModel{
     protected $database;
@@ -96,6 +97,16 @@ class PartecipationRequestModel{
         $this->database->bind(USER_ID_QUERY,$userId);
 
         return $this->database->classFromSingle(PartecipationRequestDTO::class);
+    }
+
+    public function isUserParticipant($ideaId,$userId){
+        $this->database->query(IS_USER_PARTICIPANT_QUERY);
+        $this->database->bind(IDEA_ID_QUERY,$ideaId);
+        $this->database->bind(USER_ID_QUERY,$userId);
+        $this->database->single();
+
+        // Check row
+        return ($this->database->rowCount() > 0);
     }
 }
 

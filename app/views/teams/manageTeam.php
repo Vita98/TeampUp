@@ -7,7 +7,7 @@
         </div>
 
         <div class="container text-center mt-3">
-            <?php if($data[ROLE] == MEMBER):?>
+            <?php if($data[ROLE] == PARTICIPANT):?>
             <label class="display-4">Visualizza i team</label>
             <p>In questa sezione è possibile visualizzare i team relativi all'idea <strong><?php echo $data[IDEA_DTO]->getTitle();?></strong></p>
             <?php elseif($data[ROLE] == OWNER):?>
@@ -46,13 +46,13 @@
                 <?php foreach ($data[TEAM_DTO] as $team): ?>
 
                     <div class="row mb-3 mt-3">
-                        <div class="col-md-3 mt-4">
+                        <div class="<?php echo "".($data[ROLE] == OWNER) ?  "col-md-3" : "col-md-6"?> mt-4">
                             <kbd style= "color: darkslategray;" class="text-left alert-info"><label for="description"><strong><?php echo $team->getName(); ?></strong></label></kbd>
                         </div>
-                        <div class="col-md-3 mt-4">
+                        <div class="<?php echo "".($data[ROLE] == OWNER) ?  "col-md-3" : "col-md-6"?> mt-4">
                                 Numero di membri:<?php echo $team->getNumberOfMember()?>
                         </div>
-
+                        <?php if($data[ROLE] == OWNER): ?>
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-4 mt-3 ">
@@ -97,6 +97,7 @@
 
                             </div>
                         </div>
+                    <?php endif; ?>
                     </div>
                     <hr>
                 <?php endforeach; ?>
