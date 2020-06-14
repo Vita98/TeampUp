@@ -17,10 +17,7 @@ define ("SEARCH_QUERY_HAVING", " ) ) " .
     " GROUP BY idea.id HAVING " .
     " (:avgInnovativity IS NULL OR AVG(feedback.innovativityVote) >= :avgInnovativity) AND " .
     " (:avgCreativity IS NULL OR AVG(feedback.creativityVote) >= :avgCreativity) AND " .
-    " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote) " .
-    " ORDER BY CASE WHEN (idea.sponsorEndDate >= CURRENT_TIMESTAMP() AND idea.sponsorCategoryid IS NOT NULL) " .
-    " THEN FIELD(idea.sponsorCategoryid, '3', '1') " .
-    " ELSE idea.id END ASC " );
+    " (:avgVote IS NULL OR AVG( (feedback.creativityVote + feedback.innovativityVote) / 2 ) >= :avgVote) ");
 define('GET_IDEAS_BY_PARTECIPANT_ID_QUERY', 'SELECT idea.* FROM idea,partecipationRequest WHERE idea.id = partecipationRequest.ideaId AND partecipationRequest.userId = :userId AND partecipationRequest.isPending = 0');
 
 class IdeaModel{
