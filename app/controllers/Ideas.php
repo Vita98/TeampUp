@@ -314,7 +314,7 @@ class Ideas extends Controller {
             }
 
         }else{
-            $this->view('pages/index', null);
+            redirect("");
         }
 
     }
@@ -364,6 +364,7 @@ class Ideas extends Controller {
             default:
                 $ideas = null;
         }
+        $data = null;
 
         if($ideas){
 
@@ -378,13 +379,9 @@ class Ideas extends Controller {
                 $avgVotes[$idea->id] = $this->feedbackModel->getAvgVoteByIdeaId($idea->id,$bestIdeaTypeQuery);
             }
             $data = [BEST_IDEA_TYPE=>$bestIdeaType,IDEASDTO=>$ideas,CATEGORIES=>$categories,OWNERS=>$owners,FEEDBACK_AVG=>$avgVotes];
-
-            $this->view('ideas/bestIdeas',$data);
-        }else{
-            /*Se inserisco come parametro un valore non valido
-              lo reindirizzo alla pagina con le idee migliori*/
-            redirect('ideas/bestIdeas/');
         }
+
+        $this->view('ideas/bestIdeas',$data);
     }
 
     private function initSearchData(){
