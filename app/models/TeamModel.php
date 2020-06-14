@@ -16,20 +16,20 @@ define(
 );
 define(
     "GET_MY_TEAMS",
-    "select team.*, partecipationrequest.partecipationRequestId AS partecipationRequestId ".
+    "select team.*, partecipationRequest.partecipationRequestId AS partecipationRequestId ".
     "from user ".
-    "join partecipationrequest on user.id = partecipationrequest.userId ".
-    "join member on partecipationrequest.partecipationRequestId = member.partecipationRequestId ".
+    "join partecipationRequest on user.id = partecipationRequest.userId ".
+    "join member on partecipationRequest.partecipationRequestId = member.partecipationRequestId ".
     "join team on member.teamId = team.id ".
     "where user.id = :userId"
 );
 
 define(
     "GET_MY_TEAMS_BY_IDEA",
-    "select team.*, partecipationrequest.partecipationRequestId AS partecipationRequestId ".
+    "select team.*, partecipationRequest.partecipationRequestId AS partecipationRequestId ".
     "from user ".
-    "join partecipationrequest on user.id = partecipationrequest.userId ".
-    "join member on partecipationrequest.partecipationRequestId = member.partecipationRequestId ".
+    "join partecipationRequest on user.id = partecipationRequest.userId ".
+    "join member on partecipationRequest.partecipationRequestId = member.partecipationRequestId ".
     "join team on member.teamId = team.id ".
     "where user.id = :userId AND team.ideaId=:ideaId"
 );
