@@ -329,11 +329,13 @@ class Ideas extends Controller {
             $idea[FEEDBACK_AVG] = $this->feedbackModel->getAvgVoteByIdeaId($idea[IDEADTO]->getId(),BEST);
             $idea[REALIZATION_PHASE] = $this->realizationPhaseModel->getRealizationPhaseByIdea($id);
             $idea[ROLE] = 'user';
-            if($idea[USERDTO]->getId() == $_SESSION[USER_ID_KEY]){
-                $idea[ROLE] = OWNER;
-            }
-            elseif($this->partecipationRequestModel->isUserParticipant($id,$_SESSION[USER_ID_KEY])){
-                $idea[ROLE] = PARTICIPANT;
+            if(isLoggedIn()){
+                if($idea[USERDTO]->getId() == $_SESSION[USER_ID_KEY]){
+                    $idea[ROLE] = OWNER;
+                }
+                elseif($this->partecipationRequestModel->isUserParticipant($id,$_SESSION[USER_ID_KEY])){
+                    $idea[ROLE] = PARTICIPANT;
+                }
             }
             return $idea;
         }else{
