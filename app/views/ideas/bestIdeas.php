@@ -1,27 +1,25 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
 <div class="row">
-    <div class="container rounded mt-5 col-md-8">
+    <div class="container rounded mt-3 col-md-8">
         <div class="container text-center">
-            <label class="display-4 ">
-            <?php
-            if(!empty($data) && isset($data[BEST_IDEA_TYPE])){
-                switch ($data[BEST_IDEA_TYPE]){
-                    case BEST_IDEA_INNOVATIVITY:
-                        echo "Idee più Innovative";
-                        break;
-                    case BEST_IDEA_CREATIVITY:
-                        echo "Idee più Creative";
-                        break;
-                    case BEST_IDEA:
-                        echo "Idee Migliori";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            ?>
-            </label>
+            <label class="display-3 ">TeamUp</label>
+            <p>La piattaforma dove ogni tua idea può prendere forma!</p>
+        </div>
+        <div class="mt-5 text-center">
+            <div class="d-flex justify-content-center">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/INNOVATIVITY">Idee più creative</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/">Idee Migliori</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/CREATIVITY">Idee più innovative</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <?php if(!empty($data) && !empty($data[IDEASDTO])) : foreach($data[IDEASDTO] as $dto): ?>
             <div class="card card-body rounded bg-light mt-5 m-4">
