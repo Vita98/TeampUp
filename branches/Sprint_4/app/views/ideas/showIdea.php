@@ -211,7 +211,7 @@ $popUpData['modal-title'] = "Sei sicuro?";
 $popUpData['modal-body'] = "Sei sicuro di voler inviare la richiesta di partecipazione?";
 $popUpData['modal-primary'] = "Invia";
 $popUpData['modal-secondary'] = "Annulla";
-if ($_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId()) {require_once APPROOT.'/views/inc/pop-Up.php';}
+if (isLoggedIn() && $_SESSION[USER_ID_KEY] != $data[IDEADTO]->getOwnerId()) {require_once APPROOT.'/views/inc/pop-Up.php';}
 ?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
