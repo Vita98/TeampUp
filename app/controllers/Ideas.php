@@ -419,8 +419,25 @@ class Ideas extends Controller {
             $data[IDEASDTO] = $this->ideaModel->filteredSearch(
                 $data[TITLE_FIELD], $data[CHECKED], $data[FEEDBACK_AVG], $data[INNOVATIVITY], $data[CREATIVITY]
             );
+            usort($data[IDEASDTO], function (IdeaDTO $idea1, IdeaDTO $idea2 ){
+                    if(self::isSponsored($idea1) && !self::isSponsored($idea2)){
+                        return -1;
+                    }
+
+                    if(!self::isSponsored($idea1) && self::isSponsored($idea2)){
+                        return 1;
+                    }
+                    return 0;
+                });
         }
         $this->view("ideas/search", $data);
+    }
+
+
+    private static function isSponsored(IdeaDTO $idea) {
+        return in_array($idea->getSponsorCategoryid(), SPONSORED_ID)
+            && ( date_format(new DateTime($idea->getSponsorEndDate()), DATE_FORMAT) >=
+                 date_format(new DateTime(), DATE_FORMAT));
     }
 
     public function getIdeasByPartecipant(){

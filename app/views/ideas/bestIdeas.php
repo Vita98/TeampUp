@@ -49,11 +49,11 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <label><strong><?php
-                                if((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY))   {
+                                if(isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY)   {
                                     echo "Media feedback Innovatività";
-                                }elseif ((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY)){
+                                }elseif (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY){
                                     echo "Media feedback Creatività";
-                                }elseif ((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA)){
+                                }elseif (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA){
                                     echo "Media feedback";
                                 }
 

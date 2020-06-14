@@ -24,3 +24,5 @@
     define('ROLE','role');
     define('PARTICIPANT','participant');
     define('OWNER','owner');
+
+    define("SPONSORED_ID", ['1', '3']);
