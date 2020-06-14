@@ -1,6 +1,5 @@
 <?php
 
-define('INDEX_PAGE','pages/index');
 define('LOGIN_PAGE','users/login');
 
 define('FIRST_NAME_KEY','firstName');
@@ -40,7 +39,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         public function signUp(){
             //Check if the user is logged in
             if(isLoggedIn()){
-                redirect(INDEX_PAGE);
+                redirect("");
             }
 
             //preparing the error vector
@@ -143,7 +142,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
         public function login(){
             //Check if the user is logged in
             if(isLoggedIn()){
-                redirect(INDEX_PAGE);
+                redirect("");
             }
 
             //preparing the error vector
@@ -216,7 +215,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
             unset($_SESSION['userEmail']);
             unset($_SESSION['userFirstName']);
             session_destroy();
-            redirect(INDEX_PAGE);
+            redirect("");
         }
 
         /**
@@ -224,7 +223,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
          */
         public function myProfile(){
             if(!isLoggedIn()){
-                redirect(INDEX_PAGE);
+                redirect("");
             }
 
             //Getting all the user information
@@ -239,7 +238,7 @@ define('PSW_NOT_THE_SAME_ERROR','La password non corrisponde!');
          */
         public function editMyProfile(){
             if(!isLoggedIn()){
-                redirect(INDEX_PAGE);
+                redirect("");
             }
 
             //preparing the error vector

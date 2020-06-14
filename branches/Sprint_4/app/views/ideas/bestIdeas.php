@@ -10,13 +10,13 @@
             <div class="d-flex justify-content-center">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/INNOVATIVITY">Idee più creative</a>
+                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/CREATIVITY">Idee più creative</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/">Idee Migliori</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/CREATIVITY">Idee più innovative</a>
+                        <a class="nav-link <?php echo "" . (isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY) ? "active" : "" ?>"  href="<?php echo URLROOT?>/ideas/bestIdeas/INNOVATIVITY">Idee più innovative</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +48,16 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <label><strong>Media Feedback: </strong></label>
+                            <label><strong><?php
+                                if((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_INNOVATIVITY))   {
+                                    echo "Media feedback Innovatività";
+                                }elseif ((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA_CREATIVITY)){
+                                    echo "Media feedback Creatività";
+                                }elseif ((isset($data[BEST_IDEA_TYPE]) && $data[BEST_IDEA_TYPE] == BEST_IDEA)){
+                                    echo "Media feedback";
+                                }
+
+                            ?> </strong></label>
                             <div><?php if (!empty($data[FEEDBACK_AVG])) {
                                     $feedbackVote = $data[FEEDBACK_AVG][$dto->id];
                                     require('starRatingFixed.php');
