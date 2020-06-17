@@ -1,5 +1,5 @@
 <?php
-define('CREATE_TEAM_QUERY','INSERT INTO Team(name,ideaId) VALUES (:name, :id)');
+define('CREATE_TEAM_QUERY','INSERT INTO team(name,ideaId) VALUES (:name, :id)');
 define('GET_TEAMS_BY_IDEA_QUERY','SELECT * FROM team WHERE ideaId = :id ');
 define('COUNT_MEMBER_BY_TEAM_QUERY','SELECT count(partecipationRequestId) FROM member WHERE teamId = :id ');
 define('IS_MEMBER_QUERY','SELECT * FROM member, partecipationRequest, team WHERE member.partecipationRequestId = partecipationRequest.partecipationRequestId AND team.id = member.teamId AND partecipationRequest.userId = :id AND isPending = false AND team.ideaId = :ideaId');
