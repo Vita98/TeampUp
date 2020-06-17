@@ -39,6 +39,9 @@ if(!defined('USER_DTO')){define('USER_DTO','userDTO');}
                                 <?php foreach ($data['COMMON_ABILITIES'][$request->getPartecipationRequestId()] as $ability) : ?>
                                     <kbd><?php echo $ability->getDescription()?></kbd>
                                 <?php endforeach; ?>
+                                <?php if(!$data['COMMON_ABILITIES'][$request->getPartecipationRequestId()]) : ?>
+                                    <kbd>Non ci sono abilità in comune</kbd>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -100,6 +103,9 @@ if(!defined('USER_DTO')){define('USER_DTO','userDTO');}
                                     <?php foreach ($data['COMMON_ABILITIES'][$request->getPartecipationRequestId()] as $ability) : ?>
                                         <kbd><?php echo $ability->getDescription()?></kbd>
                                     <?php endforeach; ?>
+                                    <?php if(!$data['COMMON_ABILITIES'][$request->getPartecipationRequestId()]) : ?>
+                                        <kbd>Non ci sono abilità in comune</kbd>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
